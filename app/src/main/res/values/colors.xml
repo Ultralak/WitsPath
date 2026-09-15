@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Background, cool-toned ink rather than flat black -->
+    <color name="colorInk">#0D1013</color>
+
+    <!-- Row/surface fill -->
+    <color name="colorPlate">#15181C</color>
+
+    <!-- Sheets, elevated surfaces -->
+    <color name="colorPlateRaised">#1C2126</color>
+
+    <!-- Hairline dividers, default vs. emphasis -->
+    <color name="colorRule">#262B31</color>
+    <color name="colorRuleStrong">#3A414A</color>
+
+    <!-- Primary/secondary text -->
+    <color name="colorInkText">#F2F4F6</color>
+    <color name="colorInkTextMuted">#8D96A1</color>
+
+    <!-- Warm amber, the one accent, used only for the active path and primary actions -->
+    <color name="colorRoute">#F2A93B</color>
+
+    <!-- Semantic teal, step-free/accessible indicator -->
+    <color name="colorAccessible">#34C29B</color>
+
+    <!-- Semantic red, reported/blocked-path indicator -->
+    <color name="colorFlag">#E5594F</color>
+
+    <!-- Compatibility mappings for existing layouts if needed,
+         though we are rewriting them to use the new names -->
+    <color name="colorBackground">@color/colorInk</color>
+    <color name="colorSurface">@color/colorPlate</color>
+    <color name="colorOnBackground">@color/colorInkText</color>
+    <color name="colorOnBackgroundMuted">@color/colorInkTextMuted</color>
+    <color name="colorAccent">@color/colorRoute</color>
+    <color name="colorOutline">@color/colorRule</color>
 </resources>

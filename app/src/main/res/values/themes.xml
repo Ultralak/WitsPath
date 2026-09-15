@@ -1,9 +1,37 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.WitsPath" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">@color/colorInk</item>
+        <item name="colorPrimary">@color/colorRoute</item>
+        <item name="colorOnPrimary">@color/colorInk</item>
+        <item name="colorSurface">@color/colorPlate</item>
+        <item name="colorOnSurface">@color/colorInkText</item>
+        <item name="colorOutline">@color/colorRule</item>
+
+        <!-- Signage Typography -->
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.WitsPath.Header</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.WitsPath.Header</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.WitsPath.Code</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.WitsPath.Body</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.WitsPath.Body</item>
     </style>
 
     <style name="Theme.WitsPath" parent="Base.Theme.WitsPath" />
+
+    <style name="TextAppearance.WitsPath.Header" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorInkText</item>
+    </style>
+
+    <style name="TextAppearance.WitsPath.Code" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorInkText</item>
+    </style>
+
+    <style name="TextAppearance.WitsPath.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/colorInkTextMuted</item>
+    </style>
 </resources>
