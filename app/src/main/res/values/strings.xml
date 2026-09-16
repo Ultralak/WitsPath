@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">WitsPath</string>
     <string name="greeting_format">Good Afternoon, %1$s!</string>
     <string name="last_visited_format">Last Visited on: %1$s</string>
     <string name="auto_detected">Auto detected</string>

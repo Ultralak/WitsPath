@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "559692559984",
+    "project_id": "wavelets-wits-nav",
+    "storage_bucket": "wavelets-wits-nav.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559692559984:android:bd6bc2c248edd8145ba6b5",
+        "android_client_info": {
+          "package_name": "com.example.witspath"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSrPBdPZ7k_tSxyehRJLz2rxxw1pNtaYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
