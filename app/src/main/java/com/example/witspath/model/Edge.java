@@ -1,14 +1,14 @@
-package com.example.witspath;
+package com.example.witspath.model;
 
 public class Edge
 {
-    Node node1;
-    Node node2;
-    double distance;
-    boolean ramp;
-    boolean stairs;
-    boolean elevator;
-    boolean status;
+    public Node node1;
+    public Node node2;
+    public double distance;
+    public boolean ramp;
+    public boolean stairs;
+    public boolean elevator;
+    public boolean status;
 
     public Edge(Node n1, Node n2, double d, boolean r, boolean s, boolean e, boolean st)
     {
@@ -25,6 +25,4 @@ public class Edge
         n1.addEdge(this);
         n2.addEdge(this);
     }
-
-
 }

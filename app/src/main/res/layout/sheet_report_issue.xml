@@ -48,7 +48,7 @@
             android:layout_marginBottom="8dp"
             android:buttonTint="@color/colorAccent"
             android:textColor="@color/colorOnBackground"
-            android:text="Broken lift" />
+            android:text="@string/broken_lift" />
 
         <RadioButton
             android:id="@+id/issueBlockedRampRadio"
@@ -57,7 +57,7 @@
             android:layout_marginBottom="8dp"
             android:buttonTint="@color/colorAccent"
             android:textColor="@color/colorOnBackground"
-            android:text="Blocked or broken ramp" />
+            android:text="@string/blocked_or_broken_ramp" />
 
         <RadioButton
             android:id="@+id/issuePathObstructedRadio"
@@ -66,7 +66,7 @@
             android:layout_marginBottom="8dp"
             android:buttonTint="@color/colorAccent"
             android:textColor="@color/colorOnBackground"
-            android:text="Path obstructed" />
+            android:text="@string/path_obstructed" />
 
         <RadioButton
             android:id="@+id/issueOtherRadio"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/colorAccent"
             android:textColor="@color/colorOnBackground"
-            android:text="Other" />
+            android:text="@string/other" />
 
     </RadioGroup>
 
@@ -84,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_marginTop="20dp"
-        android:text="Submit report"
+        android:text="@string/submit_report"
         android:textColor="@color/colorBackground"
         android:enabled="false"
         app:backgroundTint="@color/colorOnBackground"

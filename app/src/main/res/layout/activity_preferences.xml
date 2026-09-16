@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Team Wavelets - WitsPath
+    activity_preferences.xml - the user's *stored* preferences (places and history),
+    as opposed to activity_settings.xml which holds app behaviour toggles.
+    Saved places live in users/{uid}/savedPlaces in Firestore, cached in SharedPreferences
+    so a signed-out/guest user still gets their list.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/preferencesRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorInk">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/preferencesToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/colorInkText"
+        app:title="@string/preferences_title"
+        app:titleTextColor="@color/colorInkText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="32dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/preferencesToolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ============================ MY PLACES ============================ -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/preferences_section_places" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <LinearLayout
+                    android:id="@+id/preferencesHomeLocationRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_home" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preferences_home_location_title" />
+
+                        <TextView
+                            android:id="@+id/preferencesHomeLocationValueText"
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preferences_not_set" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/preferencesDefaultEntranceRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_pin" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preferences_default_entrance_title" />
+
+                        <TextView
+                            android:id="@+id/preferencesDefaultEntranceValueText"
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preferences_default_entrance_value" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ========================== SAVED PLACES ========================== -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/preferences_section_saved" />
+
+            <!-- Inflate item_saved_place.xml into this container -->
+            <LinearLayout
+                android:id="@+id/preferencesSavedPlacesContainer"
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/preferencesSavedEmptyText"
+                style="@style/TextAppearance.WitsPath.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPlate"
+                android:padding="20dp"
+                android:text="@string/preferences_saved_empty"
+                android:visibility="gone" />
+
+            <!-- ============================= HISTORY ============================= -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/preferences_section_history" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_sync" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preferences_track_frequent_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preferences_track_frequent_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/preferencesTrackFrequentSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/preferencesClearHistoryRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_delete" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preferences_clear_history_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preferences_clear_history_subtitle" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ============================== RESET ============================== -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/preferencesResetButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="sans-serif-condensed"
+                android:letterSpacing="0.05"
+                android:text="@string/preferences_reset_all"
+                android:textColor="@color/colorFlag"
+                android:textStyle="bold"
+                app:cornerRadius="4dp"
+                app:icon="@drawable/ic_delete"
+                app:iconGravity="textStart"
+                app:iconTint="@color/colorFlag"
+                app:strokeColor="@color/colorFlag" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

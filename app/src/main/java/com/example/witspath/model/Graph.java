@@ -1,5 +1,8 @@
-package com.example.witspath;
+package com.example.witspath.model;
 
+import android.content.Context;
+
+import java.io.FileInputStream;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -30,13 +33,6 @@ public class Graph
             double x = n.getDouble("x");
             double y = n.getDouble("y");
             String type = n.getString("type");
-
-            /*if (Node.getByName(name) != null)
-            {
-                System.out.println("Warning: duplicate node name '" + name
-                        + "' in JSON, skipping re-creation.");
-                continue;
-            }*/
 
             new Node(name, area, x, y, type);
         }
@@ -69,7 +65,7 @@ public class Graph
         }
     }
 
-    public static void loadFromAssets(android.content.Context context, String assetFileName)
+    public static void loadFromAssets(Context context, String assetFileName)
     {
         try (InputStream is = context.getAssets().open(assetFileName))
         {
@@ -88,7 +84,7 @@ public class Graph
 
     public static void loadFromFile(String filePath)
     {
-        try (InputStream is = new java.io.FileInputStream(filePath))
+        try (InputStream is = new FileInputStream(filePath))
         {
             String json = readStream(is);
             loadFromJson(json);
@@ -128,5 +124,3 @@ public class Graph
         return obj.optBoolean(key);
     }
 }
-
-

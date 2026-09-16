@@ -1,146 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+    Team Wavelets - WitsPath
+    activity_home.xml, now wrapped in a DrawerLayout. Original content is unchanged;
+    the hamburger (homeToolbar navigationIcon) opens homeDrawerLayout.
+-->
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/homeRootLayout"
+    android:id="@+id/homeDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorInk">
+    android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/homeToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
-        app:navigationIcon="@drawable/ic_menu"
-        app:navigationIconTint="@color/colorInkText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/greetingText"
-        style="@style/TextAppearance.WitsPath.Header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
-        android:text="Good Afternoon, Ailton!"
-        app:layout_constraintTop_toBottomOf="@id/homeToolbar"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/currentLocationLabel"
-        style="@style/TextAppearance.WitsPath.Header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="32dp"
-        android:text="CURRENT LOCATION"
-        android:textSize="14sp"
-        android:letterSpacing="0.1"
-        android:textColor="@color/colorInkTextMuted"
-        app:layout_constraintTop_toBottomOf="@id/greetingText"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- Directory-board style current location plate -->
+    <!-- ============================ MAIN CONTENT ============================ -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/currentLocationPlate"
+        android:id="@+id/homeRootLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/colorPlate"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/currentLocationLabel">
+        android:layout_height="match_parent"
+        android:background="@color/colorInk">
 
-        <!-- The 3dp amber tick -->
-        <View
-            android:layout_width="3dp"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/homeToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:navigationIcon="@drawable/ic_menu"
+            app:navigationIconTint="@color/colorInkText"
+            app:navigationContentDescription="@string/cd_open_menu"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/greetingText"
+            style="@style/TextAppearance.WitsPath.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:text="Good Afternoon, Ailton!"
+            app:layout_constraintTop_toBottomOf="@id/homeToolbar"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/currentLocationLabel"
+            style="@style/TextAppearance.WitsPath.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/current_location"
+            android:textSize="14sp"
+            android:letterSpacing="0.1"
+            android:textColor="@color/colorInkTextMuted"
+            app:layout_constraintTop_toBottomOf="@id/greetingText"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Directory-board style current location plate -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/currentLocationPlate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorPlate"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            app:layout_constraintTop_toBottomOf="@id/currentLocationLabel">
+
+            <!-- The 3dp amber tick -->
+            <View
+                android:layout_width="3dp"
+                android:layout_height="0dp"
+                android:background="@color/colorRoute"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/currentLocationNameText"
+                style="@style/TextAppearance.WitsPath.Code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="MHR"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/autoDetectedLabel"
+                style="@style/TextAppearance.WitsPath.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/auto_detected"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/frequentedLocationsLabel"
+            style="@style/TextAppearance.WitsPath.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/frequented_locations"
+            android:textSize="14sp"
+            android:letterSpacing="0.1"
+            android:textColor="@color/colorInkTextMuted"
+            app:layout_constraintTop_toBottomOf="@id/currentLocationPlate"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/frequentedLocationsScrollView"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/colorRoute"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp"
+            android:clipToPadding="false"
+            android:scrollbars="none"
+            app:layout_constraintTop_toBottomOf="@id/frequentedLocationsLabel"
+            app:layout_constraintBottom_toTopOf="@id/navigateButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/currentLocationNameText"
-            style="@style/TextAppearance.WitsPath.Code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="MHR"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <LinearLayout
+                android:id="@+id/frequentedLocationsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorRule"
+                android:divider="@drawable/directory_divider"
+                android:showDividers="middle" />
 
-        <TextView
-            android:id="@+id/autoDetectedLabel"
-            style="@style/TextAppearance.WitsPath.Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/auto_detected"
-            app:layout_constraintTop_toTopOf="parent"
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/navigateButton"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/start_navigation"
+            android:textColor="@color/colorInk"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            app:backgroundTint="@color/colorRoute"
+            app:cornerRadius="4dp"
+            app:layout_constraintWidth_percent="0.8"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/frequentedLocationsLabel"
-        style="@style/TextAppearance.WitsPath.Header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="32dp"
-        android:text="FREQUENTED LOCATIONS"
-        android:textSize="14sp"
-        android:letterSpacing="0.1"
-        android:textColor="@color/colorInkTextMuted"
-        app:layout_constraintTop_toBottomOf="@id/currentLocationPlate"
-        app:layout_constraintStart_toStartOf="parent" />
+    <!-- ============================== DRAWER ============================== -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/homeNavigationView"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/colorInk"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/frequentedLocationsScrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="20dp"
-        android:clipToPadding="false"
-        android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/frequentedLocationsLabel"
-        app:layout_constraintBottom_toTopOf="@id/navigateButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <include layout="@layout/nav_drawer_content" />
 
-        <LinearLayout
-            android:id="@+id/frequentedLocationsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/colorRule"
-            android:divider="@drawable/directory_divider"
-            android:showDividers="middle" />
+    </com.google.android.material.navigation.NavigationView>
 
-    </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/navigateButton"
-        style="@style/Widget.Material3.Button"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:layout_marginBottom="24dp"
-        android:text="START NAVIGATION"
-        android:textColor="@color/colorInk"
-        android:fontFamily="sans-serif-condensed"
-        android:textStyle="bold"
-        android:letterSpacing="0.05"
-        app:backgroundTint="@color/colorRoute"
-        app:cornerRadius="4dp"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

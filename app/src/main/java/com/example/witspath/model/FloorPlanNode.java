@@ -1,9 +1,9 @@
-package com.example.witspath;
+package com.example.witspath.model;
 
 /**
  * A single node on the floor-plan graph (junction, ramp, lift, room entrance, etc).
  * Coordinates are in the floor plan's intrinsic pixel space (imageWidth/imageHeight
- * from the graph JSON), NOT screen pixels — {@link FloorPlanRouteView} maps them.
+ * from the graph JSON), NOT screen pixels — {@link com.example.witspath.ui.FloorPlanRouteView} maps them.
  */
 public class FloorPlanNode {
 

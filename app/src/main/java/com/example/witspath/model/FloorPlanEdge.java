@@ -1,4 +1,4 @@
-package com.example.witspath;
+package com.example.witspath.model;
 
 /**
  * A single edge on the floor-plan graph, connecting two {@link FloorPlanNode}s.

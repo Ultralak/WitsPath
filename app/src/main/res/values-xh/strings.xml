@@ -1,12 +1,11 @@
-    <!--
+<!--
         Team Wavelets - WitsPath
         Merge these into res/values/strings.xml. Nothing in the new layouts is hard-coded,
         so translating the app is just copying this file into res/values-zu, values-st,
         values-tn, values-xh, values-af and translating the values.
      -->
 <resources>
-    <string name="app_name" translatable="false">WitsPath</string>
-    <string name="app_version" translatable="false">WitsPath v1.0.0 (MVP)</string>
+    <string name="app_version">WitsPath v1.0.0 (MVP)</string>
     <!--  Existing home screen strings, moved out of the layout so they translate  -->
     <string name="current_location">CURRENT LOCATION</string>
     <string name="frequented_locations">FREQUENTED LOCATIONS</string>
@@ -156,8 +155,8 @@
     <string name="dialog_reset_confirm">Reset</string>
     <string name="toast_logged_out">You are logged out</string>
     <string name="auto_detected">auto-detected</string>
-    <string name="search_room">Search room…</string>
-    <string name="default_from_location">Default from</string>
+    <string name="default_from_location">default from</string>
+    <string name="search_room">Search room...</string>
     <string name="route_options">ROUTE OPTIONS</string>
     <string name="last_visited_on">Last Visited on:</string>
     <string name="route_1_most_accessible">ROUTE 1 · MOST ACCESSIBLE</string>

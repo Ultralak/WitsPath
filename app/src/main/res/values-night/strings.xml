@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auto_detected">auto-detected</string>
+    <string name="default_from_location">default from</string>
+    <string name="route_options">ROUTE OPTIONS</string>
+    <string name="last_visited_on">Last Visited on:</string>
+    <string name="route_1_most_accessible">ROUTE 1 · MOST ACCESSIBLE</string>
+    <string name="broken_lift">Broken lift</string>
+    <string name="blocked_or_broken_ramp">Blocked or broken ramp</string>
+    <string name="path_obstructed">Path obstructed</string>
+    <string name="other">Other</string>
+    <string name="submit_report">Submit report</string>
+</resources>

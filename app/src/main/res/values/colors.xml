@@ -34,4 +34,41 @@
     <color name="colorOnBackgroundMuted">@color/colorInkTextMuted</color>
     <color name="colorAccent">@color/colorRoute</color>
     <color name="colorOutline">@color/colorRule</color>
+    <color name="colorOutlineVariant">#4D4D4D</color>
+
+        <!-- System default - deliberately hueless, it is not a language -->
+        <color name="colorLangSystem">#9BA7B5</color>
+        <color name="colorLangSystemDim">#339BA7B5</color>
+
+        <!-- English - blue, 220 -->
+        <color name="colorLangEnglish">#5B93F0</color>
+        <color name="colorLangEnglishDim">#335B93F0</color>
+
+        <!-- isiZulu - violet, 265 -->
+        <color name="colorLangZulu">#A47BF0</color>
+        <color name="colorLangZuluDim">#33A47BF0</color>
+
+        <!-- Sesotho - pink, 325 -->
+        <color name="colorLangSesotho">#EC6EA9</color>
+        <color name="colorLangSesothoDim">#33EC6EA9</color>
+
+        <!-- Setswana - lime, 85 -->
+        <color name="colorLangSetswana">#A3CE4E</color>
+        <color name="colorLangSetswanaDim">#33A3CE4E</color>
+
+        <!-- isiXhosa - cyan, 195 -->
+        <color name="colorLangXhosa">#3EB8E0</color>
+        <color name="colorLangXhosaDim">#333EB8E0</color>
+
+        <!-- Afrikaans - green, 130 -->
+        <color name="colorLangAfrikaans">#63C55F</color>
+        <color name="colorLangAfrikaansDim">#3363C55F</color>
+
+        <!-- Spare hues if you add more languages later:
+             Xitsonga  #D98CE8 (290, orchid)
+             Tshivenda #7FD4C0 (168 - too close to colorAccessible, avoid)
+             Sepedi    #6FA8F5 (215 - too close to English, avoid)
+             siSwati   #C9A227 (45 - too close to colorRoute, avoid)
+             Prefer 240 (#7C85F2) and 305 (#C978E8) next. -->
+
 </resources>

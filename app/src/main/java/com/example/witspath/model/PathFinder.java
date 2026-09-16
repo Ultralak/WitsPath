@@ -1,4 +1,4 @@
-package com.example.witspath;
+package com.example.witspath.model;
 
 import java.util.*;
 
@@ -203,4 +203,3 @@ public class PathFinder {
         return null;
     }
 }
-

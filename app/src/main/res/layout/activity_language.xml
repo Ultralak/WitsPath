@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Team Wavelets - WitsPath
+    activity_language.xml - UI language picker.
+    Apply with AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag))
+    and persist the tag in SharedPreferences (key: pref_ui_language).
+    Rows are static here so the list reads correctly to TalkBack; if you prefer, inflate
+    item_language_option.xml into languageListContainer from a String[] of BCP-47 tags.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/languageRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorInk">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/languageToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/colorInkText"
+        app:title="@string/language_title"
+        app:titleTextColor="@color/colorInkText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/languageHintText"
+        style="@style/TextAppearance.WitsPath.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/language_hint"
+        app:layout_constraintTop_toBottomOf="@id/languageToolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/languageHintText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/languageListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorRule"
+            android:divider="@drawable/directory_divider"
+            android:orientation="vertical"
+            android:showDividers="middle">
+
+            <!-- tag: system default -->
+            <LinearLayout
+                android:id="@+id/languageSystemRow"
+                style="@style/WitsPath.LanguageRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/languageSystemTick"
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorLangSystem" />
+
+                <LinearLayout
+                    style="@style/WitsPath.LanguageRow.TextGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_system_default" />
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_system_default_native" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/languageSystemCheck"
+                    style="@style/WitsPath.LanguageRow.Check"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:tint="@color/colorLangSystem" />
+
+            </LinearLayout>
+
+            <!-- tag: en -->
+            <LinearLayout
+                android:id="@+id/languageEnglishRow"
+                style="@style/WitsPath.LanguageRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/languageEnglishTick"
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorLangEnglish" />
+
+                <LinearLayout
+                    style="@style/WitsPath.LanguageRow.TextGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_english" />
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_english_native" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/languageEnglishCheck"
+                    style="@style/WitsPath.LanguageRow.Check"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_check"
+                    app:tint="@color/colorLangEnglish" />
+
+            </LinearLayout>
+
+            <!-- tag: zu -->
+            <LinearLayout
+                android:id="@+id/languageZuluRow"
+                style="@style/WitsPath.LanguageRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/languageZuluTick"
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorLangZulu" />
+
+                <LinearLayout
+                    style="@style/WitsPath.LanguageRow.TextGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_zulu" />
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_zulu_native" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/languageZuluCheck"
+                    style="@style/WitsPath.LanguageRow.Check"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:tint="@color/colorLangZulu" />
+
+            </LinearLayout>
+
+            <!-- tag: st -->
+            <LinearLayout
+                android:id="@+id/languageSesothoRow"
+                style="@style/WitsPath.LanguageRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/languageSesothoTick"
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorLangSesotho" />
+
+                <LinearLayout
+                    style="@style/WitsPath.LanguageRow.TextGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_sesotho" />
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_sesotho_native" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/languageSesothoCheck"
+                    style="@style/WitsPath.LanguageRow.Check"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:tint="@color/colorLangSesotho" />
+
+            </LinearLayout>
+
+            <!-- tag: tn -->
+            <LinearLayout
+                android:id="@+id/languageSetswanaRow"
+                style="@style/WitsPath.LanguageRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/languageSetswanaTick"
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorLangSetswana" />
+
+                <LinearLayout
+                    style="@style/WitsPath.LanguageRow.TextGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_setswana" />
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_setswana_native" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/languageSetswanaCheck"
+                    style="@style/WitsPath.LanguageRow.Check"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:tint="@color/colorLangSetswana" />
+
+            </LinearLayout>
+
+            <!-- tag: xh -->
+            <LinearLayout
+                android:id="@+id/languageXhosaRow"
+                style="@style/WitsPath.LanguageRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/languageXhosaTick"
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorLangXhosa" />
+
+                <LinearLayout
+                    style="@style/WitsPath.LanguageRow.TextGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_xhosa" />
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_xhosa_native" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/languageXhosaCheck"
+                    style="@style/WitsPath.LanguageRow.Check"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:tint="@color/colorLangXhosa" />
+
+            </LinearLayout>
+
+            <!-- tag: af -->
+            <LinearLayout
+                android:id="@+id/languageAfrikaansRow"
+                style="@style/WitsPath.LanguageRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/languageAfrikaansTick"
+                    android:layout_width="4dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorLangAfrikaans" />
+
+                <LinearLayout
+                    style="@style/WitsPath.LanguageRow.TextGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_afrikaans" />
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language_afrikaans_native" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/languageAfrikaansCheck"
+                    style="@style/WitsPath.LanguageRow.Check"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:tint="@color/colorLangAfrikaans" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
