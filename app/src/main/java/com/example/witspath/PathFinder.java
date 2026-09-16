@@ -4,6 +4,7 @@ import java.util.*;
 
 public class PathFinder {
 
+    public static String errorMessage = "";
     static class NodeDetails {
         Node parent = null;
         double f = Double.MAX_VALUE;
@@ -21,7 +22,8 @@ public class PathFinder {
         }
 
         @Override
-        public int compareTo(PQNode other) {
+        public int compareTo(PQNode other)
+        {
             if (this.f != other.f)
                 return Double.compare(this.f, other.f);
             return Integer.compare(this.node.id, other.node.id);
@@ -31,55 +33,69 @@ public class PathFinder {
         return node.edges;
     }
 
-    List<Edge> getSuccessors(Node node, boolean requireAccessible) {
-        if (!requireAccessible) {
-            return node.edges;
-        }
-        List<Edge> accessible = new ArrayList<>();
-        for (Edge e : node.edges) {
-            if (!e.stairs || e.ramp || e.elevator) {
-                accessible.add(e);
+    List<Edge> getSuccessors(Node node, boolean requireAccessible)
+    {
+        List<Edge> result = new ArrayList<>();
+        for (Edge e : node.edges)
+        {
+            if (!e.status)
+            {
+                continue;
+            }
+
+            if (!requireAccessible)
+            {
+                result.add(e);
+                continue;
+            }
+
+            if (!e.stairs || e.ramp || e.elevator)
+            {
+                result.add(e);
             }
         }
-        return accessible;
+        return result;
     }
-    double calculateHValue(Node node, Node goal) {
-        if (node.point == null || goal.point == null) {
+    double calculateHValue(Node node, Node goal)
+    {
+        if (node.point == null || goal.point == null)
+        {
             return 0.0;
         }
+
         double dx = node.point.x - goal.point.x;
         double dy = node.point.y - goal.point.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    void tracePath(Map<Node, NodeDetails> details, Node src, Node goal) {
-        System.out.println("The Path is:");
-
+    public LinkedList<Node> tracePath(Map<Node, NodeDetails> details, Node src, Node goal)
+    {
         LinkedList<Node> path = new LinkedList<>();
         Node current = goal;
 
-        while (current != null && current != src) {
+        while (current != null && current != src)
+        {
             path.addFirst(current);
-            current = details.get(current).parent;
+            current = Objects.requireNonNull(details.get(current)).parent;
         }
         path.addFirst(src);
 
-        StringBuilder sb = new StringBuilder();
-        for (Node node : path) {
-            sb.append("-> ").append(node.name).append(" ");
-        }
-        System.out.println(sb.toString());
+        return path;
     }
 
-    void aStarSearch(String srcName, String goalName, boolean requireAccessible) {
+    void aStarSearch(String srcName, String goalName, boolean requireAccessible)
+    {
         Node src = Node.getByName(srcName);
         Node goal = Node.getByName(goalName);
 
-        if (src == null) {
+        if (src == null)
+        {
             System.out.println("Source node '" + srcName + "' does not exist.");
             return;
         }
-        if (goal == null) {
+
+        if (goal == null)
+        {
             System.out.println("Destination node '" + goalName + "' does not exist.");
             return;
         }
@@ -87,19 +103,22 @@ public class PathFinder {
         aStarSearch(src, goal, requireAccessible);
     }
 
-    void aStarSearch(String srcName, String goalName) {
+    void aStarSearch(String srcName, String goalName)
+    {
         aStarSearch(srcName, goalName, false);
     }
 
-    void aStarSearch(Node src, Node goal) {
+    void aStarSearch(Node src, Node goal)
+    {
         aStarSearch(src, goal, false);
     }
 
-    void aStarSearch(Node src, Node goal, boolean requireAccessible) {
+    public LinkedList<Node> aStarSearch(Node src, Node goal, boolean requireAccessible)
+    {
 
-        if (src == goal) {
-            System.out.println("We are already at the destination.");
-            return;
+        if (src == goal)
+        {
+            return null;
         }
 
         Set<Node> closedSet = new HashSet<>();
@@ -117,9 +136,11 @@ public class PathFinder {
 
         boolean foundDest = false;
 
-        while (!openList.isEmpty()) {
+        while (!openList.isEmpty())
+        {
 
             PQNode current = openList.poll();
+            assert current != null;
             Node currentNode = current.node;
 
             if (closedSet.contains(currentNode))
@@ -127,31 +148,35 @@ public class PathFinder {
 
             closedSet.add(currentNode);
 
-            for (Edge edge : getSuccessors(currentNode, requireAccessible)) {
+            for (Edge edge : getSuccessors(currentNode, requireAccessible))
+            {
 
                 Node neighbour = currentNode.other(edge);
-                if (neighbour == null) continue;
-
-                if (neighbour == goal) {
-                    NodeDetails goalDetails = details.computeIfAbsent(goal, k -> new NodeDetails());
-                    goalDetails.parent = currentNode;
-                    System.out.println("The destination node is found.");
-                    tracePath(details, src, goal);
-                    foundDest = true;
-                    return;
+                if (neighbour == null)
+                {
+                    continue;
                 }
 
-                if (!closedSet.contains(neighbour)) {
+                if (neighbour == goal)
+                {
+                    NodeDetails goalDetails = details.computeIfAbsent(goal, k -> new NodeDetails());
+                    goalDetails.parent = currentNode;
+                    foundDest = true;
+                    return tracePath(details, src, goal);
+                }
 
-                    double gNew = details.get(currentNode).g + edge.distance;
+                if (!closedSet.contains(neighbour))
+                {
+
+                    double gNew = Objects.requireNonNull(details.get(currentNode)).g + edge.distance;
                     double hNew = calculateHValue(neighbour, goal);
                     double fNew = gNew + hNew;
 
                     NodeDetails neighbourDetails = details.computeIfAbsent(neighbour, k -> new NodeDetails());
 
                     if (neighbourDetails.f == Double.MAX_VALUE
-                            || neighbourDetails.f > fNew) {
-
+                            || neighbourDetails.f > fNew)
+                    {
                         openList.offer(new PQNode(fNew, neighbour));
 
                         neighbourDetails.f = fNew;
@@ -163,14 +188,19 @@ public class PathFinder {
             }
         }
 
-        if (!foundDest) {
-            if (requireAccessible) {
-                System.out.println("Failed to find an accessible route to the destination node "
-                        + "(a path may exist, but only via stairs with no ramp/elevator).");
-            } else {
-                System.out.println("Failed to find the destination node.");
+        if (!foundDest)
+        {
+            if (requireAccessible)
+            {
+                errorMessage = "Failed to find an accessible route to the destination node "
+                        + "(a path may exist, but only via stairs with no ramp/elevator).";
+            }
+            else
+            {
+                errorMessage = "Failed to find the destination node.";
             }
         }
+        return null;
     }
 }
 

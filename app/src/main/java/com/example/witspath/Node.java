@@ -8,7 +8,8 @@ enum NodeType
     BATHROOM,
     DISABILITY_BATHROOM,
     CLASSROOM,
-    BUILDING
+    BUILDING,
+    RAMP
 }
 
 enum Area
@@ -83,7 +84,7 @@ public class Node
 
         if(e.node2 == this)
         {
-            return e.node2;
+            return e.node1;
         }
 
         return null;
