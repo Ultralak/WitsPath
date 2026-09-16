@@ -1,7 +1,6 @@
-package com.example.witspath;
+package com.example.witspath.model;
 
 import android.util.Log;
-import com.example.witspath.model.EdgeDTO;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 

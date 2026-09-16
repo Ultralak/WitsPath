@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:background="@android:color/transparent"
-            android:hint="Search room..."
+            android:hint="@string/search_room"
             android:textColor="@color/colorInkText"
             android:textColorHint="@color/colorInkTextMuted"
             android:inputType="text"

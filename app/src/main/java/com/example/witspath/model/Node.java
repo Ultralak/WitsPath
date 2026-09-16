@@ -1,37 +1,41 @@
-package com.example.witspath;
+package com.example.witspath.model;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-enum NodeType
-{
-    ENTRANCE,
-    BATHROOM,
-    DISABILITY_BATHROOM,
-    CLASSROOM,
-    BUILDING,
-    RAMP
-}
-
-enum Area
-{
-    WSS,
-    ARM,
-    COMMERCE,
-    NCB,
-    TOWER
-}
 public class Node
 {
     private static final AtomicInteger count = new AtomicInteger(0);
-    int id;
-    String name;
-    Area area;
-    Point point;
-    NodeType type;
+    public int id;
+    public String name;
+    public Area area;
+    public Point point;
+    public NodeType type;
 
-    ArrayList<Node> neighbours;
-    ArrayList<Edge> edges;
-    static java.util.Map<String, Node> nodes = new java.util.HashMap<>();
+    public ArrayList<Node> neighbours;
+    public ArrayList<Edge> edges;
+    static Map<String, Node> nodes = new HashMap<>();
+
+    public enum NodeType
+    {
+        ENTRANCE,
+        BATHROOM,
+        DISABILITY_BATHROOM,
+        CLASSROOM,
+        BUILDING,
+        RAMP
+    }
+
+    public enum Area
+    {
+        WSS,
+        ARM,
+        COMMERCE,
+        NCB,
+        TOWER
+    }
 
     public Node(String n, String a, double x, double y, String t)
     {
@@ -62,12 +66,7 @@ public class Node
 
     public boolean isNeighbour(Node n)
     {
-        if(neighbours.contains(n))
-        {
-            return true;
-        }
-
-        return false;
+        return neighbours.contains(n);
     }
 
     public void addEdge(Edge e)
@@ -108,6 +107,4 @@ public class Node
 
         return matchingNodes;
     }
-
-
 }

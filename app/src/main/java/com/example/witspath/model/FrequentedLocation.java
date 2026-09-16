@@ -1,4 +1,4 @@
-package com.creativedisability.app.model;
+package com.example.witspath.model;
 
 public class FrequentedLocation {
 

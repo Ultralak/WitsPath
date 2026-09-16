@@ -47,7 +47,7 @@
                 android:textColor="@color/colorRoute"
                 android:textSize="12sp"
                 android:letterSpacing="0.05"
-                android:text="ROUTE 1 · MOST ACCESSIBLE"
+                android:text="@string/route_1_most_accessible"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

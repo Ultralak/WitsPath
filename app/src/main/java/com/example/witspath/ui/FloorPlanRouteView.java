@@ -1,7 +1,8 @@
-package com.example.witspath;
+package com.example.witspath.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -10,6 +11,10 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
+
+import com.example.witspath.R;
+import com.example.witspath.model.FloorPlanEdge;
+import com.example.witspath.model.FloorPlanNode;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,19 +27,9 @@ import java.util.Set;
  * Draws the floor-plan graph (all edges, junctions, ramps/lifts), the currently
  * highlighted route, and current-position/destination markers, on top of
  * {@code floorPlanImageView}.
- *
- * Node coordinates in {@link FloorPlanNode} are in the floor plan's own intrinsic
- * pixel space (see imageWidth/imageHeight in the graph JSON). This view computes a
- * "fit matrix" mapping that space onto its own measured bounds the same way
- * ImageView's fitCenter would, and exposes it via
- * {@link #setOnFitMatrixChangeListener} so the hosting screen can apply the
- * identical matrix to the ImageView (which uses scaleType="matrix"). Both views
- * then sit inside the same {@link ZoomableFrameLayout}, so pinch/pan is applied to
- * both automatically and they stay aligned at every zoom level.
  */
 public class FloorPlanRouteView extends View {
 
-    /** Notified whenever the fit matrix is (re)computed, so the ImageView can match it. */
     public interface OnFitMatrixChangeListener {
         void onFitMatrixChanged(Matrix fitMatrix);
     }
@@ -88,7 +83,7 @@ public class FloorPlanRouteView extends View {
         blockedEdgePaint.setStrokeWidth(dp(2));
         blockedEdgePaint.setStyle(Paint.Style.STROKE);
         blockedEdgePaint.setStrokeCap(Paint.Cap.ROUND);
-        blockedEdgePaint.setPathEffect(new android.graphics.DashPathEffect(new float[]{dp(4), dp(4)}, 0));
+        blockedEdgePaint.setPathEffect(new DashPathEffect(new float[]{dp(4), dp(4)}, 0));
         blockedEdgePaint.setAlpha(160);
 
         routePaint.setColor(ContextCompat.getColor(context, R.color.colorRoute));
@@ -126,7 +121,6 @@ public class FloorPlanRouteView extends View {
         }
     }
 
-    /** Intrinsic size of the floor plan image, e.g. imageWidth/imageHeight from the graph JSON. */
     public void setFloorPlanSize(int widthPx, int heightPx) {
         this.floorPlanWidth = widthPx;
         this.floorPlanHeight = heightPx;
@@ -143,7 +137,6 @@ public class FloorPlanRouteView extends View {
         invalidate();
     }
 
-    /** Ordered node IDs along the currently selected route, start to end. */
     public void setHighlightedRoute(List<String> orderedNodeIds) {
         this.highlightedRouteNodeIds = (orderedNodeIds != null) ? orderedNodeIds : Collections.<String>emptyList();
         this.highlightedRouteNodeIdSet = new HashSet<>(this.highlightedRouteNodeIds);
@@ -177,7 +170,6 @@ public class FloorPlanRouteView extends View {
         }
         RectF source = new RectF(0, 0, floorPlanWidth, floorPlanHeight);
         RectF dest = new RectF(0, 0, getWidth(), getHeight());
-        // CENTER == ImageView's fitCenter, so the overlay lines up with the bitmap.
         fitMatrix.setRectToRect(source, dest, Matrix.ScaleToFit.CENTER);
         if (fitMatrixListener != null) {
             fitMatrixListener.onFitMatrixChanged(new Matrix(fitMatrix));
@@ -239,8 +231,6 @@ public class FloorPlanRouteView extends View {
 
     private void drawNodeMarkers(Canvas canvas) {
         for (FloorPlanNode node : nodes) {
-            // Junctions on the highlighted route are already implied by the route line;
-            // skip plain junctions there to avoid visual clutter, but still show ramps/lifts.
             boolean isAccessibilityFeature = "ramp".equals(node.getType()) || "lift".equals(node.getType());
             boolean onRoute = highlightedRouteNodeIdSet.contains(node.getNodeId());
             if (onRoute && !isAccessibilityFeature) continue;

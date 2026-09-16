@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Team Wavelets - WitsPath
+    Hamburger drawer contents. Every row has a drawable; log out is red (@color/colorFlag).
+    Rows are plain clickable LinearLayouts (not a menu resource) so the log-out row can
+    carry its own colour and so Java wiring is a straight findViewById + setOnClickListener.
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorInk"
+    android:scrollbars="none"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
+
+        <!-- ============================ HEADER / ACCOUNT ============================ -->
+        <LinearLayout
+            android:id="@+id/navHeaderAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/colorPlate"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="20dp">
+
+            <ImageView
+                android:id="@+id/navAvatarImage"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_avatar_circle"
+                android:padding="12dp"
+                android:src="@drawable/ic_account"
+                android:importantForAccessibility="no" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/navUserNameText"
+                    style="@style/TextAppearance.WitsPath.Code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="@string/nav_guest_title" />
+
+                <TextView
+                    android:id="@+id/navUserEmailText"
+                    style="@style/TextAppearance.WitsPath.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="@string/nav_guest_subtitle" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:alpha="0.5"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="@color/colorInkText"
+                android:importantForAccessibility="no" />
+
+        </LinearLayout>
+
+        <!-- ============================== NAVIGATE ============================== -->
+        <TextView
+            style="@style/TextAppearance.WitsPath.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="4dp"
+            android:letterSpacing="0.1"
+            android:text="@string/nav_section_navigate"
+            android:textColor="@color/colorInkTextMuted"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/navHomeRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_home" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navDirectoryRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_search"
+                app:tint="@color/colorInkText" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_directory" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navSavedPlacesRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_bookmark" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_saved_places" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navMyReportsRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_flag" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_my_reports" />
+
+            <TextView
+                android:id="@+id/navMyReportsCount"
+                style="@style/TextAppearance.WitsPath.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_value_pill"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:textColor="@color/colorRoute"
+                android:text="3" />
+
+        </LinearLayout>
+
+        <!-- ============================== SETTINGS ============================== -->
+        <TextView
+            style="@style/TextAppearance.WitsPath.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="4dp"
+            android:letterSpacing="0.1"
+            android:text="@string/nav_section_settings"
+            android:textColor="@color/colorInkTextMuted"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/navSettingsRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_settings" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navLanguageRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_language" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_language" />
+
+            <View
+                android:id="@+id/navLanguageSwatch"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_language_swatch"
+                android:backgroundTint="@color/colorLangEnglish" />
+
+            <TextView
+                android:id="@+id/navLanguageValueText"
+                style="@style/TextAppearance.WitsPath.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/language_english" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navAccessibilityRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_accessible" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_accessibility" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navPreferencesRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_tune" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_preferences" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navNotificationsRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_notifications" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_notifications" />
+
+        </LinearLayout>
+
+        <!-- =============================== ACCOUNT =============================== -->
+        <TextView
+            style="@style/TextAppearance.WitsPath.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="4dp"
+            android:letterSpacing="0.1"
+            android:text="@string/nav_section_account"
+            android:textColor="@color/colorInkTextMuted"
+            android:textSize="12sp" />
+
+        <!-- Show navLogInRow + navSignUpRow when signed out; hide them and show
+             navLogOutRow when FirebaseAuth.getInstance().getCurrentUser() != null. -->
+        <LinearLayout
+            android:id="@+id/navLogInRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_login" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_log_in" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navSignUpRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_person_add" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_sign_up" />
+
+        </LinearLayout>
+
+        <!-- =============================== SUPPORT =============================== -->
+        <TextView
+            style="@style/TextAppearance.WitsPath.Header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="4dp"
+            android:letterSpacing="0.1"
+            android:text="@string/nav_section_support"
+            android:textColor="@color/colorInkTextMuted"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/navHelpRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_help" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_help" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navAboutRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_info" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_about" />
+
+        </LinearLayout>
+
+        <!-- ================================ LOG OUT ================================ -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorRule" />
+
+        <LinearLayout
+            android:id="@+id/navLogOutRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:minHeight="56dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp">
+
+            <!-- Red tint is baked into ic_logout, so no app:tint needed here. -->
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_logout"
+                android:importantForAccessibility="no" />
+
+            <TextView
+                style="@style/TextAppearance.WitsPath.Code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:letterSpacing="0.05"
+                android:text="@string/nav_log_out"
+                android:textColor="@color/colorFlag"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/navVersionText"
+            style="@style/TextAppearance.WitsPath.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/app_version"
+            android:textColor="@color/colorInkTextMuted"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

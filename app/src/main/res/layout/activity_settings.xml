@@ -1,0 +1,1171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Team Wavelets - WitsPath
+    activity_settings.xml
+    Every switch/chip here maps to a SharedPreferences key (see PrefKeys in the notes) and,
+    when the user is signed in, mirrors to users/{uid}/preferences in Firestore.
+    The routing switches feed directly into the accessibilityCost weighting used by
+    Dijkstra/Yen's, so changing them must trigger a re-route.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settingsRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorInk">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/settingsToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/colorInkText"
+        app:title="@string/settings_title"
+        app:titleTextColor="@color/colorInkText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="32dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/settingsToolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ============================== ACCOUNT ============================== -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_account" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/settingsAccountRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_account" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/settingsAccountNameText"
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nav_guest_title" />
+
+                        <TextView
+                            android:id="@+id/settingsAccountEmailText"
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nav_guest_subtitle" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/settingsSyncRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_sync" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_sync_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_sync_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsSyncSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ========================= LANGUAGE & DISPLAY ========================= -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_language_display" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/settingsLanguageRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_language" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_language_title" />
+
+                        <TextView
+                            android:id="@+id/settingsLanguageValueText"
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/language_english" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/settingsLanguageSwatch"
+                        android:layout_width="8dp"
+                        android:layout_height="13dp"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/bg_language_swatch"
+                        android:backgroundTint="@color/colorLangEnglish" />
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+                <!-- Text size -->
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow.Column"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            style="@style/WitsPath.SettingRow.Icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_text_size" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:text="@string/settings_text_size_title" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/settingsTextSizeChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:singleLine="true"
+                        app:singleSelection="true"
+                        app:selectionRequired="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/textSizeSmallChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_size_small" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/textSizeDefaultChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/text_size_default" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/textSizeLargeChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_size_large" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/textSizeHugeChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_size_huge" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_contrast" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_high_contrast_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_high_contrast_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsHighContrastSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_accessible" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_screen_reader_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_screen_reader_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsScreenReaderSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ====================== ACCESSIBILITY & ROUTING ====================== -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_routing" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Mobility profile: seeds the default accessibilityCost weights -->
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow.Column"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_mobility_profile_title" />
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_mobility_profile_subtitle" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/settingsMobilityChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:singleSelection="true"
+                        app:selectionRequired="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/mobilityWheelchairChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/mobility_wheelchair" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/mobilityWalkingAidChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mobility_walking_aid" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/mobilityLowVisionChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mobility_low_vision" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/mobilityNoneChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mobility_none" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_accessible" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_step_free_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_step_free_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsStepFreeSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_lift"
+                        app:tint="@color/colorInkText" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_prefer_lifts_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_prefer_lifts_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsPreferLiftsSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_flag" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_avoid_steep_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_avoid_steep_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsAvoidSteepSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <!-- Max walking/rolling distance before the router prefers a longer step-free leg -->
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow.Column"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_max_distance_title" />
+
+                        <TextView
+                            android:id="@+id/settingsMaxDistanceValueText"
+                            style="@style/TextAppearance.WitsPath.Code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorRoute"
+                            android:textSize="16sp"
+                            android:text="600 m" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/settingsMaxDistanceSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:contentDescription="@string/settings_max_distance_title"
+                        android:stepSize="50"
+                        android:value="600"
+                        android:valueFrom="100"
+                        android:valueTo="2000"
+                        app:thumbColor="@color/colorRoute"
+                        app:trackColorActive="@color/colorRoute"
+                        app:trackColorInactive="@color/colorPlateRaised" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ============================= NAVIGATION ============================= -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_navigation" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_volume_up" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_voice_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_voice_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsVoiceSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_vibration" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_haptics_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_haptics_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsHapticsSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_my_location"
+                        app:tint="@color/colorInkText" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_auto_locate_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_auto_locate_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsAutoLocateSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/settingsDefaultBuildingRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_building" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_default_building_title" />
+
+                        <TextView
+                            android:id="@+id/settingsDefaultBuildingValueText"
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_default_building_value" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow.Column"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/WitsPath.SettingRow.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_units_title" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/settingsUnitsChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:singleLine="true"
+                        app:singleSelection="true"
+                        app:selectionRequired="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/unitsMetresChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/units_metres" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/unitsFeetChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/units_feet" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/unitsMinutesChip"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/units_minutes" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ========================= REPORTS & ALERTS ========================= -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_reports" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_flag" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_show_flagged_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_show_flagged_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsShowFlaggedSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_notifications" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_alerts_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_alerts_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsAlertsSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/settingsMyReportsRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_edit" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_my_reports_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_my_reports_subtitle" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- =========================== PRIVACY & DATA =========================== -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_privacy" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_shield" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_anon_usage_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_anon_usage_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsAnonUsageSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/settingsClearCacheRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_delete" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_clear_cache_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_clear_cache_subtitle" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/settingsPrivacyPolicyRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_lock" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_privacy_policy_title" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- =============================== ABOUT =============================== -->
+            <TextView
+                style="@style/WitsPath.SectionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_section_about" />
+
+            <LinearLayout
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/settingsHelpRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_help" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nav_help" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/settingsAboutRow"
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_info" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nav_about" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/app_version" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        style="@style/WitsPath.SettingRow.Chevron"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/colorInkText" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ============================== LOG OUT ============================== -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settingsLogOutButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="sans-serif-condensed"
+                android:letterSpacing="0.05"
+                android:text="@string/nav_log_out"
+                android:textColor="@color/colorFlag"
+                android:textStyle="bold"
+                app:cornerRadius="4dp"
+                app:icon="@drawable/ic_logout"
+                app:iconGravity="textStart"
+                app:iconTint="@color/colorFlag"
+                app:strokeColor="@color/colorFlag" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

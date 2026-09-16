@@ -1,4 +1,4 @@
-package com.example.witspath;
+package com.example.witspath.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,23 +9,12 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.FrameLayout;
 
-/**
- * A FrameLayout that supports pinch-to-zoom and one-finger pan over its children,
- * double-tap to reset. Used to host {@code floorPlanImageView} and
- * {@code floorPlanRouteView} together so they zoom/pan as one unit and stay
- * pixel-aligned (both are transformed by the same canvas matrix in dispatchDraw).
- *
- * All touch handling happens here — children are treated as display-only. If a
- * child later needs its own taps (e.g. a tappable room pin), onInterceptTouchEvent
- * will need to become conditional instead of unconditional.
- */
 public class ZoomableFrameLayout extends FrameLayout {
 
     private static final float MIN_SCALE = 1f;
     private static final float MAX_SCALE = 4f;
     private static final float DOUBLE_TAP_SCALE = 2.5f;
 
-    /** Notified whenever the zoom/pan matrix changes, in case something outside needs it. */
     public interface OnTransformChangeListener {
         void onTransformChanged(Matrix matrix);
     }
@@ -68,7 +57,6 @@ public class ZoomableFrameLayout extends FrameLayout {
         this.transformListener = listener;
     }
 
-    /** Snaps back to the un-zoomed, centred state. */
     public void resetZoom() {
         scale = MIN_SCALE;
         translateX = 0f;
@@ -82,7 +70,6 @@ public class ZoomableFrameLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        // Floor plan + route overlay are display-only, so this view always owns touch.
         return true;
     }
 
@@ -118,7 +105,6 @@ public class ZoomableFrameLayout extends FrameLayout {
                 int pointerIndex = event.getActionIndex();
                 int pointerId = event.getPointerId(pointerIndex);
                 if (pointerId == activePointerId) {
-                    // The finger driving the drag lifted — hand off to whichever finger remains.
                     int newIndex = (pointerIndex == 0) ? 1 : 0;
                     if (newIndex < event.getPointerCount()) {
                         activePointerId = event.getPointerId(newIndex);
@@ -184,7 +170,6 @@ public class ZoomableFrameLayout extends FrameLayout {
             float newScale = scale * detector.getScaleFactor();
             newScale = Math.max(MIN_SCALE, Math.min(newScale, MAX_SCALE));
 
-            // Keep the point under the fingers fixed in place while scaling.
             float focusX = detector.getFocusX();
             float focusY = detector.getFocusY();
             float scaleDelta = newScale / scale;
