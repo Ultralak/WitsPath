@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/reportIssueSheetRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="24dp">
+
+    <View
+        android:layout_width="36dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorOutlineVariant" />
+
+    <TextView
+        style="@style/TextAppearance.Material3.TitleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/colorOnBackground"
+        android:text="Report a blocked path" />
+
+    <TextView
+        style="@style/TextAppearance.Material3.BodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/colorOnBackgroundMuted"
+        android:text="This segment of your route will be flagged for other users once 3 people report the same issue." />
+
+    <!-- One issueType per Firestore reports/{reportId}.issueType -->
+    <RadioGroup
+        android:id="@+id/issueTypeRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/issueBrokenLiftRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:buttonTint="@color/colorAccent"
+            android:textColor="@color/colorOnBackground"
+            android:text="Broken lift" />
+
+        <RadioButton
+            android:id="@+id/issueBlockedRampRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:buttonTint="@color/colorAccent"
+            android:textColor="@color/colorOnBackground"
+            android:text="Blocked or broken ramp" />
+
+        <RadioButton
+            android:id="@+id/issuePathObstructedRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:buttonTint="@color/colorAccent"
+            android:textColor="@color/colorOnBackground"
+            android:text="Path obstructed" />
+
+        <RadioButton
+            android:id="@+id/issueOtherRadio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"
+            android:textColor="@color/colorOnBackground"
+            android:text="Other" />
+
+    </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitReportButton"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="20dp"
+        android:text="Submit report"
+        android:textColor="@color/colorBackground"
+        android:enabled="false"
+        app:backgroundTint="@color/colorOnBackground"
+        app:cornerRadius="26dp" />
+
+</LinearLayout>

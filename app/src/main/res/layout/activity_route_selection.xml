@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/routeSelectionRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorInk">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorInk"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/routeSelectionToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/colorInkText">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fromText"
+                        style="@style/TextAppearance.WitsPath.Header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MHR"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorInkTextMuted" />
+
+                    <TextView
+                        android:id="@+id/toText"
+                        style="@style/TextAppearance.WitsPath.Header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="WSS 102"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@color/colorRoute" />
+            </LinearLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/routeOptionsLabel"
+        style="@style/TextAppearance.WitsPath.Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="32dp"
+        android:text="ROUTE OPTIONS"
+        android:textSize="14sp"
+        android:letterSpacing="0.1"
+        android:textColor="@color/colorInkTextMuted"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/routeOptionsContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/routeOptionsLabel"
+        app:layout_constraintBottom_toTopOf="@id/startNavigationButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/startNavigationButton"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="24dp"
+        android:text="START NAVIGATION"
+        android:textColor="@color/colorInk"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:letterSpacing="0.05"
+        app:backgroundTint="@color/colorRoute"
+        app:cornerRadius="4dp"
+        app:layout_constraintWidth_percent="0.8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
