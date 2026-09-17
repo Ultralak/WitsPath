@@ -105,7 +105,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_home" />
+                android:src="@drawable/ic_home"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -126,7 +128,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_search"
-                app:tint="@color/colorInkText" />
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -146,7 +149,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_bookmark" />
+                android:src="@drawable/ic_bookmark"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -166,13 +171,16 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_flag" />
+                android:src="@drawable/ic_flag"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/nav_my_reports" />
+                android:text="@string/nav_my_reports"
+                />
 
             <TextView
                 android:id="@+id/navMyReportsCount"
@@ -213,13 +221,16 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_settings" />
+                android:src="@drawable/ic_settings"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/nav_settings" />
+                android:text="@string/nav_settings"
+                />
 
         </LinearLayout>
 
@@ -233,7 +244,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_language" />
+                android:src="@drawable/ic_language"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -269,7 +282,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_accessible" />
+                android:src="@drawable/ic_accessible"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1"/>
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -289,7 +304,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_tune" />
+                android:src="@drawable/ic_tune"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -309,7 +326,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_notifications" />
+                android:src="@drawable/ic_notifications"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -344,7 +363,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_login" />
+                android:src="@drawable/ic_login"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -364,7 +385,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_person_add" />
+                android:src="@drawable/ic_person_add"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -397,7 +420,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_help" />
+                android:src="@drawable/ic_help"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -417,7 +442,9 @@
                 style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_info" />
+                android:src="@drawable/ic_info"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -452,7 +479,9 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_logout"
-                android:importantForAccessibility="no" />
+                android:importantForAccessibility="no"
+                app:tint="@color/colorInkText"
+                android:scaleY="-1" />
 
             <TextView
                 style="@style/TextAppearance.WitsPath.Code"
