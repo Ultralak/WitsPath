@@ -65,7 +65,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_account" />
+                        android:src="@drawable/ic_account"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -93,7 +95,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleX="-1"/>
 
                 </LinearLayout>
 
@@ -107,7 +110,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_sync" />
+                        android:src="@drawable/ic_sync"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -161,7 +166,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_language" />
+                        android:src="@drawable/ic_language"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -196,7 +203,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleX="-1" />
 
                 </LinearLayout>
 
@@ -216,7 +224,9 @@
                             style="@style/WitsPath.SettingRow.Icon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_text_size" />
+                            android:src="@drawable/ic_text_size"
+                            app:tint="@color/colorInkText"
+                            android:scaleY="-1" />
 
                         <TextView
                             style="@style/WitsPath.SettingRow.Title"
@@ -279,7 +289,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_contrast" />
+                        android:src="@drawable/ic_contrast"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -317,7 +329,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_accessible" />
+                        android:src="@drawable/ic_accessible"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -429,7 +443,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_accessible" />
+                        android:src="@drawable/ic_accessible"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -469,7 +485,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_lift"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -508,7 +525,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_flag" />
+                        android:src="@drawable/ic_flag"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -606,7 +625,10 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_volume_up" />
+                        android:src="@drawable/ic_volume_up"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
+
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -645,7 +667,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_vibration" />
+                        android:src="@drawable/ic_vibration"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -685,7 +709,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_my_location"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -725,7 +750,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_building" />
+                        android:src="@drawable/ic_building"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -752,7 +779,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleX="-1"/>
 
                 </LinearLayout>
 
@@ -825,7 +853,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_flag" />
+                        android:src="@drawable/ic_flag"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -864,7 +894,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_notifications" />
+                        android:src="@drawable/ic_notifications"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -904,7 +936,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_edit" />
+                        android:src="@drawable/ic_edit"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -930,7 +964,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleX="-1" />
 
                 </LinearLayout>
 
@@ -957,7 +992,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_shield" />
+                        android:src="@drawable/ic_shield"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -997,7 +1034,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_delete" />
+                        android:src="@drawable/ic_delete"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1030,7 +1069,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_lock" />
+                        android:src="@drawable/ic_lock"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1050,7 +1091,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleX="-1" />
 
                 </LinearLayout>
 
@@ -1078,7 +1120,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_help" />
+                        android:src="@drawable/ic_help"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1098,7 +1142,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleX="-1" />
 
                 </LinearLayout>
 
@@ -1112,7 +1157,9 @@
                         style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_info" />
+                        android:src="@drawable/ic_info"
+                        app:tint="@color/colorInkText"
+                        android:scaleY="-1" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1138,7 +1185,8 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText" />
+                        app:tint="@color/colorInkText"
+                        android:scaleX="-1" />
 
                 </LinearLayout>
 
