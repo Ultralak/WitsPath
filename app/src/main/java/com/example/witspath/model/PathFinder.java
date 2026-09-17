@@ -12,11 +12,13 @@ public class PathFinder {
         double h = Double.MAX_VALUE;
     }
 
-    static class PQNode implements Comparable<PQNode> {
+    static class PQNode implements Comparable<PQNode>
+    {
         double f;
         Node node;
 
-        PQNode(double f, Node node) {
+        PQNode(double f, Node node)
+        {
             this.f = f;
             this.node = node;
         }
@@ -25,7 +27,10 @@ public class PathFinder {
         public int compareTo(PQNode other)
         {
             if (this.f != other.f)
+            {
                 return Double.compare(this.f, other.f);
+            }
+
             return Integer.compare(this.node.id, other.node.id);
         }
     }
@@ -54,8 +59,10 @@ public class PathFinder {
                 result.add(e);
             }
         }
+
         return result;
     }
+
     double calculateHValue(Node node, Node goal)
     {
         if (node.point == null || goal.point == null)
@@ -78,6 +85,7 @@ public class PathFinder {
             path.addFirst(current);
             current = Objects.requireNonNull(details.get(current)).parent;
         }
+
         path.addFirst(src);
 
         return path;
@@ -144,9 +152,17 @@ public class PathFinder {
             Node currentNode = current.node;
 
             if (closedSet.contains(currentNode))
+            {
                 continue;
+            }
 
             closedSet.add(currentNode);
+
+            if (currentNode == goal)
+            {
+                foundDest = true;
+                return tracePath(details, src, goal);
+            }
 
             for (Edge edge : getSuccessors(currentNode, requireAccessible))
             {
@@ -157,18 +173,10 @@ public class PathFinder {
                     continue;
                 }
 
-                if (neighbour == goal)
-                {
-                    NodeDetails goalDetails = details.computeIfAbsent(goal, k -> new NodeDetails());
-                    goalDetails.parent = currentNode;
-                    foundDest = true;
-                    return tracePath(details, src, goal);
-                }
-
                 if (!closedSet.contains(neighbour))
                 {
 
-                    double gNew = Objects.requireNonNull(details.get(currentNode)).g + (edge.distance * edge.accessibilityCost);
+                    double gNew = Objects.requireNonNull(details.get(currentNode)).g + edge.distance;
                     double hNew = calculateHValue(neighbour, goal);
                     double fNew = gNew + hNew;
 
