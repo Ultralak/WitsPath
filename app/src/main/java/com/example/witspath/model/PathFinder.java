@@ -168,7 +168,7 @@ public class PathFinder {
                 if (!closedSet.contains(neighbour))
                 {
 
-                    double gNew = Objects.requireNonNull(details.get(currentNode)).g + edge.distance;
+                    double gNew = Objects.requireNonNull(details.get(currentNode)).g + (edge.distance * edge.accessibilityCost);
                     double hNew = calculateHValue(neighbour, goal);
                     double fNew = gNew + hNew;
 

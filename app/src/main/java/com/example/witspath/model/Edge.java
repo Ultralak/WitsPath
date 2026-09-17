@@ -5,16 +5,18 @@ public class Edge
     public Node node1;
     public Node node2;
     public double distance;
+    public double accessibilityCost;
     public boolean ramp;
     public boolean stairs;
     public boolean elevator;
     public boolean status;
 
-    public Edge(Node n1, Node n2, double d, boolean r, boolean s, boolean e, boolean st)
+    public Edge(Node n1, Node n2, double d, double ac, boolean r, boolean s, boolean e, boolean st)
     {
         node1 = n1;
         node2 = n2;
         distance = d;
+        accessibilityCost = ac;
         ramp = r;
         stairs = s;
         elevator = e;

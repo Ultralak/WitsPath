@@ -4,6 +4,9 @@ import android.app.Application;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 
+import com.example.witspath.model.EdgeUpdateListener;
+import com.example.witspath.model.FirestoreGraphConverter;
+import com.example.witspath.model.Graph;
 import com.example.witspath.util.Prefs;
 
 /**
@@ -21,5 +24,11 @@ public class WitsPathApplication extends Application {
         if (!tag.isEmpty()) {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag));
         }
+
+        new EdgeUpdateListener(null).listenForEdgeUpdates();
+
+        // Load graph data at startup
+        Graph.loadFromAssets(this, "wavelets-graph.json");
+        FirestoreGraphConverter.fetchGraphFromFirestore();
     }
 }

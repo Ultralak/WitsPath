@@ -155,6 +155,16 @@
     <string name="dialog_reset_message">This clears your saved places, history and accessibility settings on this device.</string>
     <string name="dialog_reset_confirm">Reset</string>
     <string name="toast_logged_out">You are logged out</string>
+    <string name="login_error_empty">Email and password are required.</string>
+    <string name="login_error_guest_failed">Guest sign-in failed.</string>
+    <string name="login_success">Sign-in successful</string>
+    <string name="login_reset_sent">Reset email sent.</string>
+    <string name="signup_error_empty">All fields are required.</string>
+    <string name="signup_error_password_mismatch">Passwords do not match.</string>
+    <string name="signup_error_terms">Please accept the terms.</string>
+    <string name="signup_error_failed">Registration failed.</string>
+    <string name="report_success">Obstacle reported. Thank you!</string>
+    <string name="report_failed">Failed to report obstacle.</string>
     <string name="auto_detected">Auto-Detected</string>
     <string name="search_room">Search room…</string>
     <string name="default_from_location">From</string>
