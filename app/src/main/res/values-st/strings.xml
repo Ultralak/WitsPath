@@ -165,4 +165,8 @@
     <string name="path_obstructed">Path obstructed</string>
     <string name="other">Other</string>
     <string name="submit_report">Submit report</string>
+    <string name="report_issue_on_path">REPORT ISSUE ON PATH</string>
+    <string name="floor_plan">Floor plan</string>
+    <string name="report_issue_hint">This segment of your route will be flagged for other users once 3 people report the same issue.</string>
+    <string name="report_a_blocked_path">Report a blocked path</string>
 </resources>

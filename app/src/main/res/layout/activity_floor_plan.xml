@@ -154,7 +154,7 @@
 
     </HorizontalScrollView>
 
-    <com.example.witspath.ZoomableFrameLayout
+    <com.example.witspath.ui.ZoomableFrameLayout
         android:id="@+id/floorPlanZoomContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -169,14 +169,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="matrix"
-            android:contentDescription="Floor plan" />
+            android:contentDescription="@string/floor_plan" />
 
-        <com.example.witspath.FloorPlanRouteView
+        <com.example.witspath.ui.FloorPlanRouteView
             android:id="@+id/floorPlanRouteView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.example.witspath.ZoomableFrameLayout>
+    </com.example.witspath.ui.ZoomableFrameLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/reportIssueButton"
@@ -186,7 +186,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:text="REPORT ISSUE ON PATH"
+        android:text="@string/report_issue_on_path"
         android:textColor="@color/colorFlag"
         android:fontFamily="sans-serif-condensed"
         android:textStyle="bold"

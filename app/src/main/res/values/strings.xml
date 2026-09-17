@@ -155,9 +155,9 @@
     <string name="dialog_reset_message">This clears your saved places, history and accessibility settings on this device.</string>
     <string name="dialog_reset_confirm">Reset</string>
     <string name="toast_logged_out">You are logged out</string>
-    <string name="auto_detected">auto-detected</string>
+    <string name="auto_detected">Auto-Detected</string>
     <string name="search_room">Search room…</string>
-    <string name="default_from_location">Default from</string>
+    <string name="default_from_location">From</string>
     <string name="route_options">ROUTE OPTIONS</string>
     <string name="last_visited_on">Last Visited on:</string>
     <string name="route_1_most_accessible">ROUTE 1 · MOST ACCESSIBLE</string>
@@ -166,4 +166,8 @@
     <string name="path_obstructed">Path obstructed</string>
     <string name="other">Other</string>
     <string name="submit_report">Submit report</string>
+    <string name="report_issue_on_path">REPORT ISSUE ON PATH</string>
+    <string name="floor_plan">Floor plan</string>
+    <string name="report_issue_hint">This segment of your route will be flagged for other users once 3 people report the same issue.</string>
+    <string name="report_a_blocked_path">Report a blocked path</string>
 </resources>
