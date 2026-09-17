@@ -1,8 +1,32 @@
 package com.example.witspath.model;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class FirestoreGraphConverter {
+
+    public static void fetchGraphFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("nodes").get().addOnSuccessListener(nodeSnapshots -> {
+            List<NodeDTO> nodeDTOs = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : nodeSnapshots) {
+                nodeDTOs.add(doc.toObject(NodeDTO.class));
+            }
+
+            db.collection("edges").get().addOnSuccessListener(edgeSnapshots -> {
+                List<EdgeDTO> edgeDTOs = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : edgeSnapshots) {
+                    edgeDTOs.add(doc.toObject(EdgeDTO.class));
+                }
+
+                buildGraphFromDTOs(nodeDTOs, edgeDTOs);
+            });
+        });
+    }
 
     public static void buildGraphFromDTOs(List<NodeDTO> nodeDTOs, List<EdgeDTO> edgeDTOs) {
         if (nodeDTOs == null || edgeDTOs == null) {
@@ -35,6 +59,7 @@ public class FirestoreGraphConverter {
                 fromNode, 
                 toNode, 
                 edgeDTO.getDistance(), 
+                edgeDTO.getAccessibilityCost(),
                 edgeDTO.isRamp(), 
                 edgeDTO.isStairs(), 
                 edgeDTO.isElevator(), 

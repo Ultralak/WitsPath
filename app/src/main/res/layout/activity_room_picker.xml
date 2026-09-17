@@ -13,7 +13,7 @@
         android:background="@android:color/transparent"
         app:navigationIcon="@drawable/ic_back"
         app:navigationIconTint="@color/colorInkText"
-        app:title="DIRECTORY"
+        app:title="@string/nav_directory"
         app:titleTextColor="@color/colorInkText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -45,12 +45,22 @@ public class Node
         try
         {
             area = Area.valueOf(a.toUpperCase());
+        }
+        catch (Exception e)
+        {
+            // Default to WSS if floorId doesn't match enum
+            area = Area.WSS;
+        }
+
+        try
+        {
             point = new Point(x, y);
             type = NodeType.valueOf(t.toUpperCase());
         }
-        catch (IllegalArgumentException e)
+        catch (Exception e)
         {
-            System.out.println("Invalid node type or area.");
+            // Default to CLASSROOM if type doesn't match enum
+            type = NodeType.CLASSROOM;
         }
 
         neighbours = new ArrayList<>();

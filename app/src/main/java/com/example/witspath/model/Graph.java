@@ -28,8 +28,8 @@ public class Graph
         {
             JSONObject n = nodesArray.getJSONObject(i);
 
-            String name = n.getString("name");
-            String area = n.optString("area");
+            String name = n.optString("label", n.getString("nodeId"));
+            String area = n.optString("floorId", "WSS");
             double x = n.getDouble("x");
             double y = n.getDouble("y");
             String type = n.getString("type");
@@ -43,13 +43,14 @@ public class Graph
         {
             JSONObject e = edgesArray.getJSONObject(i);
 
-            String fromName = e.getString("from");
-            String toName = e.getString("to");
+            String fromName = e.optString("from", e.optString("fromNodeId"));
+            String toName = e.optString("to", e.optString("toNodeId"));
             double distance = e.getDouble("distance");
+            double accessibilityCost = e.optDouble("accessibilityCost", 1.0);
             boolean ramp = e.optBoolean("ramp", false);
             Boolean stairs = optNullableBoolean(e, "stairs");
             Boolean elevator = optNullableBoolean(e, "elevator");
-            boolean status = e.getString("status").equalsIgnoreCase("ok");
+            boolean status = e.optString("status", "ok").equalsIgnoreCase("ok");
 
             Node from = Node.getByName(fromName);
             Node to = Node.getByName(toName);
@@ -61,7 +62,7 @@ public class Graph
                 continue;
             }
 
-            new Edge(from, to, distance, ramp, Boolean.TRUE.equals(stairs), Boolean.TRUE.equals(elevator), status);
+            new Edge(from, to, distance, accessibilityCost, ramp, Boolean.TRUE.equals(stairs), Boolean.TRUE.equals(elevator), status);
         }
     }
 
