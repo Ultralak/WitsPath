@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="WitsPath"
+        android:text="@string/app_name"
         android:textColor="@color/colorInkText"
         android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
