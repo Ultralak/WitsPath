@@ -21,20 +21,66 @@ public class Graph
     {
 
         JSONObject root = new JSONObject(jsonText);
+        Node.clearNodes();
+
+        JSONArray floorsArray = root.optJSONArray("floors");
+
+        if(floorsArray != null)
+        {
+            for(int i = 0; i < floorsArray.length(); i++)
+            {
+                JSONObject f = floorsArray.getJSONObject(i);
+
+                String floorId = f.getString("floorId");
+                String name = f.optString("name", "");
+                int level = f.optInt("level", 0);
+                int imageWidth = f.optInt("imageWidth", 0);
+                int imageHeight = f.optInt("imageHeight", 0);
+                double metresPerPixel =
+                        f.optDouble("metresPerPixel", 1.0);
+
+                new Floor(
+                        floorId,
+                        name,
+                        level,
+                        imageWidth,
+                        imageHeight,
+                        metresPerPixel
+                );
+            }
+        }
 
         JSONArray nodesArray = root.getJSONArray("nodes");
 
-        for (int i = 0; i < nodesArray.length(); i++)
+        for(int i = 0; i < nodesArray.length(); i++)
         {
             JSONObject n = nodesArray.getJSONObject(i);
 
-            String name = n.optString("label", n.getString("nodeId"));
-            String area = n.optString("floorId", "WSS");
-            double x = n.getDouble("x");
-            double y = n.getDouble("y");
+            String nodeId = n.getString("nodeId");
+
+            String name = n.optString(
+                    "label",
+                    nodeId
+            );
+
+            String floorId = n.optString(
+                    "floorId",
+                    null
+            );
+
             String type = n.getString("type");
 
-            new Node(name, area, x, y, type);
+            double x = n.getDouble("x");
+            double y = n.getDouble("y");
+
+            new Node(
+                    nodeId,
+                    name,
+                    x,
+                    y,
+                    type,
+                    floorId
+            );
         }
 
         JSONArray edgesArray = root.getJSONArray("edges");
@@ -62,7 +108,7 @@ public class Graph
                 continue;
             }
 
-            new Edge(from, to, distance, accessibilityCost, ramp, Boolean.TRUE.equals(stairs), Boolean.TRUE.equals(elevator), status);
+            new Edge(from, to, distance, accessibilityCost, status);
         }
     }
 

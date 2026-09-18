@@ -60,9 +60,6 @@ public class FirestoreGraphConverter {
                 toNode, 
                 edgeDTO.getDistance(), 
                 edgeDTO.getAccessibilityCost(),
-                edgeDTO.isRamp(), 
-                edgeDTO.isStairs(), 
-                edgeDTO.isElevator(), 
                 isStatusOk
             );
         }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T17:47:53.229Z",
+  "generatedAt": "2026-09-16T20:53:53.539Z",
   "schemaNote": "accessibilityCost is a multiplier on distance. Weight = distance * accessibilityCost. Treat >=999 as impassable for step-free routing.",
   "floors": [
     {
@@ -15,232 +15,232 @@
     {
       "nodeId": "nd_mu2x3ima1",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 1",
+      "type": "building",
+      "label": "DJ DU Plessis Centre",
       "x": 238,
       "y": 30
     },
     {
       "nodeId": "nd_mu2x3jqd2",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 2",
+      "type": "building",
+      "label": "School of Law",
       "x": 347,
       "y": 72
     },
     {
       "nodeId": "nd_mu2x3kqd3",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 3",
+      "type": "building",
+      "label": "School of Accountancy - Entrance 1",
       "x": 426,
       "y": 127
     },
     {
       "nodeId": "nd_mu2x3mkb4",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 4",
+      "type": "building",
+      "label": "School of Accountancy - Entrance 2 ",
       "x": 531,
       "y": 156
     },
     {
       "nodeId": "nd_mu2x3n6j5",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 5",
+      "type": "building",
+      "label": "School of Accountancy - Entrance 3 ",
       "x": 562,
       "y": 124
     },
     {
       "nodeId": "nd_mu2x3p4f6",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 6",
+      "type": "building",
+      "label": "Commerce Law & Management - Entrance 1",
       "x": 570,
       "y": 248
     },
     {
       "nodeId": "nd_mu2x3qgb7",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 7",
+      "type": "building",
+      "label": "Commerce Law & Management - Entrance 2",
       "x": 422,
       "y": 243
     },
     {
       "nodeId": "nd_mu2x3r9v8",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 8",
+      "type": "building",
+      "label": "Commerce Library ",
       "x": 397,
       "y": 246
     },
     {
       "nodeId": "nd_mu2x3sgh9",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 9",
+      "type": "building",
+      "label": "Law Clinic",
       "x": 343,
       "y": 206
     },
     {
       "nodeId": "nd_mu2x3t65a",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 10",
+      "type": "building",
+      "label": "Chalstry Centre",
       "x": 302,
       "y": 188
     },
     {
       "nodeId": "nd_mu2x3u5xb",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 11",
+      "type": "building",
+      "label": "Facilities & Services ",
       "x": 252,
       "y": 154
     },
     {
       "nodeId": "nd_mu2x3wftc",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 12",
+      "type": "building",
+      "label": "Procurement Office",
       "x": 246,
       "y": 204
     },
     {
       "nodeId": "nd_mu2x40dnd",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 13",
+      "type": "building",
+      "label": "School of Business Sciences - 2",
       "x": 452,
       "y": 311
     },
     {
       "nodeId": "nd_mu2x42kke",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 14",
+      "type": "building",
+      "label": "Faculty of CLM",
       "x": 391,
       "y": 287
     },
     {
       "nodeId": "nd_mu2x44m9f",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 15",
+      "type": "building",
+      "label": "Tower of Light",
       "x": 410,
       "y": 278
     },
     {
       "nodeId": "nd_mu2x46y5g",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 16",
+      "type": "building",
+      "label": "School of Business Sciences ",
       "x": 570,
       "y": 308
     },
     {
       "nodeId": "nd_mu2x481ph",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 17",
+      "type": "building",
+      "label": "Wits Plus",
       "x": 570,
       "y": 354
     },
     {
       "nodeId": "nd_mu2x49f9i",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 18",
+      "type": "building",
+      "label": "Old Grand Stand",
       "x": 398,
       "y": 341
     },
     {
       "nodeId": "nd_mu2x4btjj",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 19",
+      "type": "building",
+      "label": "Mathematical Science Building ",
       "x": 469,
       "y": 397
     },
     {
       "nodeId": "nd_mu2x4d9ck",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 20",
+      "type": "classroom",
+      "label": "Science Stadium Auditoriums",
       "x": 299,
       "y": 427
     },
     {
       "nodeId": "nd_mu2x4etnl",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 21",
+      "type": "lab",
+      "label": "Science Stadium Laboratories",
       "x": 362,
       "y": 481
     },
     {
       "nodeId": "nd_mu2x4g6lm",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 22",
+      "type": "lab",
+      "label": "TW Kambule Mathematical Science Labs",
       "x": 478,
       "y": 456
     },
     {
       "nodeId": "nd_mu2x4i01n",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 23",
+      "type": "building",
+      "label": "CCDU - Entrance 1",
       "x": 575,
       "y": 498
     },
     {
       "nodeId": "nd_mu2x4p93o",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 24",
+      "type": "building",
+      "label": "CCDU - Entrance 2",
       "x": 505,
       "y": 505
     },
     {
       "nodeId": "nd_mu2x4r4hp",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 25",
+      "type": "lab",
+      "label": "Genmin Laboratories",
       "x": 428,
       "y": 566
     },
     {
       "nodeId": "nd_mu2x4sxtq",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 26",
+      "type": "building",
+      "label": "Flower Hall",
       "x": 382,
       "y": 667
     },
     {
       "nodeId": "nd_mu2x4u69r",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 27",
+      "type": "building",
+      "label": "Wits ARM Building - Entrance 1",
       "x": 518,
       "y": 681
     },
     {
       "nodeId": "nd_mu2x4w01s",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 28",
+      "type": "building",
+      "label": "Wits Arm Building - Entrance 2 ",
       "x": 523,
       "y": 577
     },
     {
       "nodeId": "nd_mu2x4y3nt",
       "floorId": "flr_mu2x3cer0",
-      "type": "junction",
-      "label": "Junction 29",
+      "type": "building",
+      "label": "CLTD",
       "x": 354,
       "y": 707
     },
@@ -248,7 +248,7 @@
       "nodeId": "nd_mu2x7umiv",
       "floorId": "flr_mu2x3cer0",
       "type": "ramp",
-      "label": "Ramp 1",
+      "label": "Ramp 1 - Old Grand Stand",
       "x": 439,
       "y": 354
     },
@@ -256,7 +256,7 @@
       "nodeId": "nd_mu2x8feyw",
       "floorId": "flr_mu2x3cer0",
       "type": "ramp",
-      "label": "Ramp 2",
+      "label": "Ramp 2 - Tower of Light",
       "x": 429,
       "y": 312
     },
@@ -264,9 +264,17 @@
       "nodeId": "nd_mu2x8i82x",
       "floorId": "flr_mu2x3cer0",
       "type": "ramp",
-      "label": "Ramp 3",
+      "label": "Ramp 3 - Commerce Library ",
       "x": 407,
       "y": 206
+    },
+    {
+      "nodeId": "nd_mu4k5u110",
+      "floorId": "flr_mu2x3cer0",
+      "type": "building",
+      "label": "Waste Disposal Centre",
+      "x": 426,
+      "y": 53
     }
   ],
   "edges": [
@@ -643,6 +651,294 @@
       "fromNodeId": "nd_mu2x3mkb4",
       "toNodeId": "nd_mu2x40dnd",
       "distance": 158.62,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4k8qfk1",
+      "fromNodeId": "nd_mu4k5u110",
+      "toNodeId": "nd_mu2x3mkb4",
+      "distance": 134.1,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kb1rt2",
+      "fromNodeId": "nd_mu2x3jqd2",
+      "toNodeId": "nd_mu2x3n6j5",
+      "distance": 201.68,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kbva83",
+      "fromNodeId": "nd_mu2x3kqd3",
+      "toNodeId": "nd_mu2x3mkb4",
+      "distance": 99.32,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kces14",
+      "fromNodeId": "nd_mu2x3mkb4",
+      "toNodeId": "nd_mu2x3n6j5",
+      "distance": 40.62,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kcum05",
+      "fromNodeId": "nd_mu2x3n6j5",
+      "toNodeId": "nd_mu4k5u110",
+      "distance": 139.88,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kdod66",
+      "fromNodeId": "nd_mu2x3kqd3",
+      "toNodeId": "nd_mu2x3p4f6",
+      "distance": 171.49,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kdryf7",
+      "fromNodeId": "nd_mu2x3p4f6",
+      "toNodeId": "nd_mu2x3mkb4",
+      "distance": 91.11,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4keih78",
+      "fromNodeId": "nd_mu2x3p4f6",
+      "toNodeId": "nd_mu2x3qgb7",
+      "distance": 135.02,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kfexm9",
+      "fromNodeId": "nd_mu2x3r9v8",
+      "toNodeId": "nd_mu2x3sgh9",
+      "distance": 61.27,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kfyu2a",
+      "fromNodeId": "nd_mu2x3sgh9",
+      "toNodeId": "nd_mu2x3t65a",
+      "distance": 40.83,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kguu9b",
+      "fromNodeId": "nd_mu2x3u5xb",
+      "toNodeId": "nd_mu2x3ima1",
+      "distance": 113.77,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kgxorc",
+      "fromNodeId": "nd_mu2x3ima1",
+      "toNodeId": "nd_mu2x3wftc",
+      "distance": 158.81,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4khbund",
+      "fromNodeId": "nd_mu2x3wftc",
+      "toNodeId": "nd_mu2x3t65a",
+      "distance": 53.1,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4ki8o7e",
+      "fromNodeId": "nd_mu2x42kke",
+      "toNodeId": "nd_mu2x46y5g",
+      "distance": 164.32,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kics7f",
+      "fromNodeId": "nd_mu2x46y5g",
+      "toNodeId": "nd_mu2x44m9f",
+      "distance": 148.42,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kim7zg",
+      "fromNodeId": "nd_mu2x3r9v8",
+      "toNodeId": "nd_mu2x4d9ck",
+      "distance": 187.66,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kipw9h",
+      "fromNodeId": "nd_mu2x4d9ck",
+      "toNodeId": "nd_mu2x49f9i",
+      "distance": 119.56,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kjdcli",
+      "fromNodeId": "nd_mu2x49f9i",
+      "toNodeId": "nd_mu2x42kke",
+      "distance": 49.65,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kkh15j",
+      "fromNodeId": "nd_mu2x3p4f6",
+      "toNodeId": "nd_mu2x46y5g",
+      "distance": 54.7,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kkyw8k",
+      "fromNodeId": "nd_mu2x46y5g",
+      "toNodeId": "nd_mu2x40dnd",
+      "distance": 107.62,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4km3oul",
+      "fromNodeId": "nd_mu2x481ph",
+      "toNodeId": "nd_mu2x4btjj",
+      "distance": 100.08,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kmmw1m",
+      "fromNodeId": "nd_mu2x4btjj",
+      "toNodeId": "nd_mu2x4g6lm",
+      "distance": 54.42,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kmrqyn",
+      "fromNodeId": "nd_mu2x4g6lm",
+      "toNodeId": "nd_mu2x4d9ck",
+      "distance": 165.33,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4knplpo",
+      "fromNodeId": "nd_mu2x4d9ck",
+      "toNodeId": "nd_mu2x4btjj",
+      "distance": 157.39,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kny2lp",
+      "fromNodeId": "nd_mu2x4g6lm",
+      "toNodeId": "nd_mu2x4i01n",
+      "distance": 96.37,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4ko3vvq",
+      "fromNodeId": "nd_mu2x4g6lm",
+      "toNodeId": "nd_mu2x4etnl",
+      "distance": 108.19,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kp5phr",
+      "fromNodeId": "nd_mu2x4g6lm",
+      "toNodeId": "nd_mu2x4w01s",
+      "distance": 117.7,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kpx2ys",
+      "fromNodeId": "nd_mu2x4r4hp",
+      "toNodeId": "nd_mu2x4p93o",
+      "distance": 89.56,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kqbcyt",
+      "fromNodeId": "nd_mu2x4p93o",
+      "toNodeId": "nd_mu2x4i01n",
+      "distance": 64.14,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4krakru",
+      "fromNodeId": "nd_mu2x4w01s",
+      "toNodeId": "nd_mu2x4r4hp",
+      "distance": 87.19,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4krfx1v",
+      "fromNodeId": "nd_mu2x4r4hp",
+      "toNodeId": "nd_mu2x4etnl",
+      "distance": 98.12,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4krmxfw",
+      "fromNodeId": "nd_mu2x4d9ck",
+      "toNodeId": "nd_mu2x4sxtq",
+      "distance": 231.54,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4ks0ytx",
+      "fromNodeId": "nd_mu2x4sxtq",
+      "toNodeId": "nd_mu2x4y3nt",
+      "distance": 44.52,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4ksbpzy",
+      "fromNodeId": "nd_mu2x4y3nt",
+      "toNodeId": "nd_mu2x4u69r",
+      "distance": 151.39,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4ksxj7z",
+      "fromNodeId": "nd_mu2x4r4hp",
+      "toNodeId": "nd_mu2x4i01n",
+      "distance": 147.67,
+      "accessibilityCost": 1.8,
+      "status": "ok"
+    },
+    {
+      "edgeId": "eg_mu4kubqe10",
+      "fromNodeId": "nd_mu2x4i01n",
+      "toNodeId": "nd_mu2x4w01s",
+      "distance": 86.23,
       "accessibilityCost": 1.8,
       "status": "ok"
     }
