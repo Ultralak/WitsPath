@@ -8,7 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.witspath.ui.BaseActivity;
 
 import com.example.witspath.R;
 import com.example.witspath.model.FirestoreSyncManager;
@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
  * Team Wavelets - WitsPath
  * Handles Firebase Auth sign-in flow (email/password and guest).
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private TextInputEditText emailInput;
     private TextInputEditText passwordInput;

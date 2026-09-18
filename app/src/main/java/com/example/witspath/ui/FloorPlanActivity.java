@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.witspath.ui.BaseActivity;
 
 import com.example.witspath.R;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -15,7 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FloorPlanActivity extends AppCompatActivity {
+public class FloorPlanActivity extends BaseActivity {
 
     private ZoomableFrameLayout zoomContainer;
     private FloorPlanRouteView routeView;

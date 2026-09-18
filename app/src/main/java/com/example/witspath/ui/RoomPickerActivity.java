@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.witspath.ui.BaseActivity;
 
 import com.example.witspath.R;
 import com.example.witspath.model.Node;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RoomPickerActivity extends AppCompatActivity {
+public class RoomPickerActivity extends BaseActivity {
 
     private LinearLayout container;
     private EditText searchInput;
