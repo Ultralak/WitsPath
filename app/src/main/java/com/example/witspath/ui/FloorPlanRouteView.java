@@ -2,6 +2,7 @@ package com.example.witspath.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -16,6 +17,7 @@ import com.example.witspath.R;
 import com.example.witspath.model.FloorPlanEdge;
 import com.example.witspath.model.FloorPlanNode;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,7 +47,6 @@ public class FloorPlanRouteView extends View {
     private final Map<String, FloorPlanNode> nodesById = new HashMap<>();
 
     private List<String> highlightedRouteNodeIds = Collections.emptyList();
-    private Set<String> highlightedRouteNodeIdSet = Collections.emptySet();
     private String currentPositionNodeId;
     private String destinationNodeId;
 
@@ -59,6 +60,7 @@ public class FloorPlanRouteView extends View {
     private final Paint currentPositionFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint currentPositionRingPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint destinationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint routeBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public FloorPlanRouteView(Context context) {
         this(context, null);
@@ -75,22 +77,30 @@ public class FloorPlanRouteView extends View {
 
     private void initPaints(Context context) {
         edgePaint.setColor(ContextCompat.getColor(context, R.color.colorRule));
-        edgePaint.setStrokeWidth(dp(2));
+        edgePaint.setStrokeWidth(dp(1.5f));
         edgePaint.setStyle(Paint.Style.STROKE);
         edgePaint.setStrokeCap(Paint.Cap.ROUND);
+        edgePaint.setAlpha(40);
 
         blockedEdgePaint.setColor(ContextCompat.getColor(context, R.color.colorFlag));
         blockedEdgePaint.setStrokeWidth(dp(2));
         blockedEdgePaint.setStyle(Paint.Style.STROKE);
         blockedEdgePaint.setStrokeCap(Paint.Cap.ROUND);
         blockedEdgePaint.setPathEffect(new DashPathEffect(new float[]{dp(4), dp(4)}, 0));
-        blockedEdgePaint.setAlpha(160);
+        blockedEdgePaint.setAlpha(100);
 
         routePaint.setColor(ContextCompat.getColor(context, R.color.colorRoute));
-        routePaint.setStrokeWidth(dp(4));
+        routePaint.setStrokeWidth(dp(6));
         routePaint.setStyle(Paint.Style.STROKE);
         routePaint.setStrokeCap(Paint.Cap.ROUND);
         routePaint.setStrokeJoin(Paint.Join.ROUND);
+
+        routeBorderPaint.setColor(Color.BLACK);
+        routeBorderPaint.setAlpha(80);
+        routeBorderPaint.setStrokeWidth(dp(10));
+        routeBorderPaint.setStyle(Paint.Style.STROKE);
+        routeBorderPaint.setStrokeCap(Paint.Cap.ROUND);
+        routeBorderPaint.setStrokeJoin(Paint.Join.ROUND);
 
         nodePaint.setColor(ContextCompat.getColor(context, R.color.colorInkTextMuted));
         nodePaint.setStyle(Paint.Style.FILL);
@@ -139,7 +149,6 @@ public class FloorPlanRouteView extends View {
 
     public void setHighlightedRoute(List<String> orderedNodeIds) {
         this.highlightedRouteNodeIds = (orderedNodeIds != null) ? orderedNodeIds : Collections.<String>emptyList();
-        this.highlightedRouteNodeIdSet = new HashSet<>(this.highlightedRouteNodeIds);
         invalidate();
     }
 
@@ -213,32 +222,54 @@ public class FloorPlanRouteView extends View {
 
     private void drawHighlightedRoute(Canvas canvas) {
         if (highlightedRouteNodeIds.size() < 2) return;
-        Path path = new Path();
-        boolean started = false;
+        
+        List<float[]> points = new ArrayList<>();
         for (String nodeId : highlightedRouteNodeIds) {
             FloorPlanNode node = nodesById.get(nodeId);
             if (node == null) continue;
             float[] p = mapNode(node);
-            if (!started) {
-                path.moveTo(p[0], p[1]);
-                started = true;
-            } else {
-                path.lineTo(p[0], p[1]);
-            }
+            points.add(new float[]{p[0], p[1]});
         }
+
+        if (points.size() < 2) return;
+
+        Path path = new Path();
+        float[] p0 = points.get(0);
+        path.moveTo(p0[0], p0[1]);
+
+        if (points.size() == 2) {
+            float[] p1 = points.get(1);
+            path.lineTo(p1[0], p1[1]);
+        } else {
+            // Line to first midpoint
+            float[] p1 = points.get(1);
+            path.lineTo((p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2);
+
+            for (int k = 1; k < points.size() - 1; k++) {
+                float[] pk = points.get(k);
+                float[] pkNext = points.get(k + 1);
+                float midNextX = (pk[0] + pkNext[0]) / 2;
+                float midNextY = (pk[1] + pkNext[1]) / 2;
+                path.quadTo(pk[0], pk[1], midNextX, midNextY);
+            }
+
+            // Final line to end
+            float[] pLast = points.get(points.size() - 1);
+            path.lineTo(pLast[0], pLast[1]);
+        }
+
+        canvas.drawPath(path, routeBorderPaint);
         canvas.drawPath(path, routePaint);
     }
 
     private void drawNodeMarkers(Canvas canvas) {
         for (FloorPlanNode node : nodes) {
             boolean isAccessibilityFeature = "ramp".equals(node.getType()) || "lift".equals(node.getType());
-            boolean onRoute = highlightedRouteNodeIdSet.contains(node.getNodeId());
-            if (onRoute && !isAccessibilityFeature) continue;
+            // Only draw accessibility features; intermediate junctions are hidden
+            if (!isAccessibilityFeature) continue;
 
             float[] p = mapNode(node);
-            Paint paint = isAccessibilityFeature ? accessibleNodePaint : nodePaint;
-            float radius = isAccessibilityFeature ? dp(5) : dp(3);
-            canvas.drawCircle(p[0], p[1], radius, paint);
+            canvas.drawCircle(p[0], p[1], dp(5), accessibleNodePaint);
         }
     }
 
