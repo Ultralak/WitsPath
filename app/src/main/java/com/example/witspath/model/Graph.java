@@ -85,89 +85,150 @@ public class Graph
 
         JSONArray edgesArray = root.getJSONArray("edges");
 
-        for (int i = 0; i < edgesArray.length(); i++)
+        for(int i = 0; i < edgesArray.length(); i++)
         {
             JSONObject e = edgesArray.getJSONObject(i);
 
-            String fromName = e.optString("from", e.optString("fromNodeId"));
-            String toName = e.optString("to", e.optString("toNodeId"));
-            double distance = e.getDouble("distance");
-            double accessibilityCost = e.optDouble("accessibilityCost", 1.0);
-            boolean ramp = e.optBoolean("ramp", false);
-            Boolean stairs = optNullableBoolean(e, "stairs");
-            Boolean elevator = optNullableBoolean(e, "elevator");
-            boolean status = e.optString("status", "ok").equalsIgnoreCase("ok");
+            String edgeId = e.optString(
+                    "edgeId",
+                    "edge_" + i
+            );
 
-            Node from = Node.getByName(fromName);
-            Node to = Node.getByName(toName);
+            String fromNodeId =
+                    e.getString("fromNodeId");
 
-            if (from == null || to == null)
+            String toNodeId =
+                    e.getString("toNodeId");
+
+            double distance =
+                    e.getDouble("distance");
+
+            double accessibilityCost =
+                    e.optDouble(
+                            "accessibilityCost",
+                            1.0
+                    );
+
+            String status =
+                    e.optString("status", "ok");
+
+            Node from = Node.getByID(fromNodeId);
+            Node to = Node.getByID(toNodeId);
+
+            if(from == null)
             {
-                System.out.println("Warning: edge references unknown node ('"
-                        + fromName + "' -> '" + toName + "'), skipping.");
+                System.out.println(
+                        "Warning: unknown fromNodeId: "
+                                + fromNodeId
+                );
                 continue;
             }
 
-            new Edge(from, to, distance, accessibilityCost, status);
+            if(to == null)
+            {
+                System.out.println(
+                        "Warning: unknown toNodeId: "
+                                + toNodeId
+                );
+                continue;
+            }
+
+            boolean statusOK =
+                    status.equalsIgnoreCase("ok");
+
+            new Edge(
+                    from,
+                    to,
+                    distance,
+                    accessibilityCost,
+                    statusOK
+            );
+
+            System.out.println(
+                    "Loaded edge " + edgeId +
+                            ": " + from.name +
+                            " -> " + to.name
+            );
         }
     }
 
-    public static void loadFromAssets(Context context, String assetFileName)
+    public static void loadFromAssets(
+            Context context,
+            String assetFileName)
     {
-        try (InputStream is = context.getAssets().open(assetFileName))
+        try(InputStream is = context.getAssets().open(assetFileName))
         {
             String json = readStream(is);
+
             loadFromJson(json);
         }
-        catch (IOException e)
+        catch(IOException e)
         {
-            System.out.println("Failed to read asset file '" + assetFileName + "': " + e.getMessage());
+            System.out.println(
+                    "Failed to read asset file '"
+                            + assetFileName
+                            + "': "
+                            + e.getMessage()
+            );
         }
-        catch (JSONException e)
+        catch(JSONException e)
         {
-            System.out.println("Failed to parse JSON in '" + assetFileName + "': " + e.getMessage());
+            System.out.println(
+                    "Failed to parse JSON in '"
+                            + assetFileName
+                            + "': "
+                            + e.getMessage()
+            );
         }
     }
 
     public static void loadFromFile(String filePath)
     {
-        try (InputStream is = new FileInputStream(filePath))
+        try(InputStream is = new FileInputStream(filePath))
         {
             String json = readStream(is);
+
             loadFromJson(json);
         }
-        catch (IOException e)
+        catch(IOException e)
         {
-            System.out.println("Failed to read file '" + filePath + "': " + e.getMessage());
+            System.out.println(
+                    "Failed to read file '"
+                            + filePath
+                            + "': "
+                            + e.getMessage()
+            );
         }
-        catch (JSONException e)
+        catch(JSONException e)
         {
-            System.out.println("Failed to parse JSON in '" + filePath + "': " + e.getMessage());
+            System.out.println(
+                    "Failed to parse JSON in '"
+                            + filePath
+                            + "': "
+                            + e.getMessage()
+            );
         }
     }
 
-    private static String readStream(InputStream is) throws IOException
+    private static String readStream(InputStream is)
+            throws IOException
     {
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(is, StandardCharsets.UTF_8)))
+
+        try(BufferedReader reader =
+                    new BufferedReader(
+                            new InputStreamReader(
+                                    is,
+                                    StandardCharsets.UTF_8)))
         {
             String line;
 
-            while ((line = reader.readLine()) != null)
+            while((line = reader.readLine()) != null)
             {
                 sb.append(line).append('\n');
             }
         }
-        return sb.toString();
-    }
 
-    private static Boolean optNullableBoolean(JSONObject obj, String key)
-    {
-        if (!obj.has(key) || obj.isNull(key))
-        {
-            return null;
-        }
-        return obj.optBoolean(key);
+        return sb.toString();
     }
 }
