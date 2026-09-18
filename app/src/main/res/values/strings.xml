@@ -190,4 +190,5 @@
     <string name="report_status_flagged">Flagged</string>
     <string name="my_reports_empty">You haven\'t reported any obstacles yet.</string>
     <string name="my_reports_sign_in_prompt">Sign in to see your submitted reports and their status.</string>
+    <string name="nav_populate_firestore">Populate Firestore</string>
 </resources>

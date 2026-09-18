@@ -25,6 +25,7 @@ import com.example.witspath.R;
 import com.example.witspath.model.SavedPlace;
 import com.example.witspath.util.Languages;
 import com.example.witspath.util.Prefs;
+import com.example.witspath.util.FirestorePopulator;
 
 import java.util.Calendar;
 import java.util.List;
@@ -68,7 +69,7 @@ public class HomeActivity extends BaseActivity {
                         Intent intent = new Intent(this, FloorPlanActivity.class);
                         intent.putExtra("to_node", selectedRoom);
                         // Assume current location as "MHR" or from Prefs
-                        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "MHR");
+                        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu2x3ima1");
                         intent.putExtra("from_node", homeNode);
                         startActivity(intent);
                     }
@@ -202,6 +203,10 @@ public class HomeActivity extends BaseActivity {
 
         findViewById(R.id.navHelpRow).setOnClickListener(v -> closeDrawer());
         findViewById(R.id.navAboutRow).setOnClickListener(v -> closeDrawer());
+        findViewById(R.id.navPopulateFirestoreRow).setOnClickListener(v -> {
+            closeDrawer();
+            FirestorePopulator.populateFromAssets(this);
+        });
     }
 
     private void onAccountRowClicked() {

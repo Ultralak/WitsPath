@@ -73,6 +73,12 @@ public class Graph
             double x = n.getDouble("x");
             double y = n.getDouble("y");
 
+            Floor floor = Floor.getById(floorId);
+            if (floor != null) {
+                x = floor.pixelsToMetres(x);
+                y = floor.pixelsToMetres(y);
+            }
+
             new Node(
                     nodeId,
                     name,
@@ -109,6 +115,10 @@ public class Graph
                             1.0
                     );
 
+            boolean ramp = e.optBoolean("ramp", false);
+            boolean stairs = e.optBoolean("stairs", false);
+            boolean elevator = e.optBoolean("elevator", false);
+
             String status =
                     e.optString("status", "ok");
 
@@ -141,6 +151,9 @@ public class Graph
                     to,
                     distance,
                     accessibilityCost,
+                    ramp,
+                    stairs,
+                    elevator,
                     statusOK
             );
 

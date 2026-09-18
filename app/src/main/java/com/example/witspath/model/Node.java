@@ -3,11 +3,16 @@ package com.example.witspath.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Node
 {
+    private static final AtomicInteger count = new AtomicInteger(0);
+    public int id;
     public String nodeId;
     public String name;
+    public String label;
+    public Area area;
     public Point point;
     public NodeType type;
     public String floorId;
@@ -26,11 +31,41 @@ public class Node
         LIFT
     }
 
+    public enum Area {
+        WSS,
+        ARM,
+        COMMERCE,
+        NCB,
+        TOWER,
+        LAW,
+        ACCOUNTANCY,
+        FACILITIES,
+        BUSINESS_SCIENCES,
+        KAMBULE,
+        SCIENCE_STADIUM,
+        CCDU,
+        GENMIN,
+        FLOWER_HALL
+    }
+
     public Node(String i, String n, double x, double y, String t, String floorId)
     {
+        this(i, n, "WSS", x, y, t, floorId);
+    }
+
+    public Node(String i, String l, String a, double x, double y, String t, String floorId)
+    {
+        id = count.incrementAndGet();
         nodeId = i;
-        name = n;
+        label = l;
+        name = i; // Use ID as the internal name key for lookups
         this.floorId = floorId;
+
+        try {
+            area = Area.valueOf(a.toUpperCase());
+        } catch (Exception e) {
+            area = Area.WSS;
+        }
 
         try
         {
@@ -88,11 +123,12 @@ public class Node
     public static ArrayList<Node> searchByName(String n)
     {
         ArrayList<Node> matchingNodes = new ArrayList<>();
-        for(String name : nodes.keySet())
+        for(Node node : nodes.values())
         {
-            if(name != null && name.contains(n))
+            if((node.label != null && node.label.toLowerCase().contains(n.toLowerCase())) ||
+               (node.nodeId != null && node.nodeId.toLowerCase().contains(n.toLowerCase())))
             {
-                matchingNodes.add(getByName(name));
+                matchingNodes.add(node);
             }
         }
 

@@ -435,6 +435,28 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/navPopulateFirestoreRow"
+            style="@style/WitsPath.DrawerRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                style="@style/WitsPath.DrawerRow.Icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sync"
+                app:tint="@color/colorInkText"
+                android:rotation="180" />
+
+            <TextView
+                style="@style/WitsPath.DrawerRow.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_populate_firestore" />
+
+        </LinearLayout>
+
         <!-- ================================ LOG OUT ================================ -->
         <View
             android:layout_width="match_parent"
