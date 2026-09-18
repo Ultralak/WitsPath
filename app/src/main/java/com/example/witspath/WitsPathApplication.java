@@ -29,7 +29,7 @@ public class WitsPathApplication extends Application {
         new EdgeUpdateListener(null).listenForEdgeUpdates();
 
         // Load graph data at startup
-        Graph.loadFromAssets(this, "wavelets-graph.json");
+        Graph.loadFromAssets(this, "graph_data.json");
         FirestoreGraphConverter.fetchGraphFromFirestore();
     }
 }

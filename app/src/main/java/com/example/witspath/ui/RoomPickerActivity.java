@@ -55,21 +55,23 @@ public class RoomPickerActivity extends BaseActivity {
     private void populateNodes(String query) {
         container.removeAllViews();
         
-        List<String> names = new ArrayList<>();
-        for (Node node : Node.searchByName(query)) {
-            if (node.name != null) {
-                names.add(node.name);
-            }
-        }
+        List<Node> filteredNodes = new ArrayList<>(Node.searchByName(query));
         
-        Collections.sort(names);
+        // Sort by label for user convenience
+        Collections.sort(filteredNodes, (n1, n2) -> {
+            String l1 = n1.label != null ? n1.label : n1.name;
+            String l2 = n2.label != null ? n2.label : n2.name;
+            return l1.compareToIgnoreCase(l2);
+        });
 
         float density = getResources().getDisplayMetrics().density;
         int padding = (int) (16 * density);
 
-        for (String name : names) {
+        for (Node node : filteredNodes) {
+            String displayLabel = node.label != null ? node.label : node.name;
+            
             TextView tv = new TextView(this);
-            tv.setText(name);
+            tv.setText(displayLabel);
             tv.setTextSize(16);
             tv.setTextColor(Color.WHITE);
             tv.setPadding(padding, padding, padding, padding);
@@ -82,7 +84,7 @@ public class RoomPickerActivity extends BaseActivity {
             
             tv.setOnClickListener(v -> {
                 Intent result = new Intent();
-                result.putExtra("selected_room", name);
+                result.putExtra("selected_room", node.name); // Return ID for lookup
                 setResult(RESULT_OK, result);
                 finish();
             });

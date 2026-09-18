@@ -34,12 +34,14 @@ public class FirestoreGraphConverter {
         }
 
         for (NodeDTO nodeDTO : nodeDTOs) {
-            String name = nodeDTO.getLabel() != null ? nodeDTO.getLabel() : nodeDTO.getNodeId();
+            String name = nodeDTO.getNodeId(); // Internal ID
+            String label = nodeDTO.getLabel() != null ? nodeDTO.getLabel() : name;
             String area = nodeDTO.getFloorId() != null ? nodeDTO.getFloorId() : "WSS"; 
             String type = nodeDTO.getType() != null ? nodeDTO.getType() : "CLASSROOM";
+            String floorId = nodeDTO.getFloorId();
 
             if (Node.getByName(name) == null) {
-                new Node(name, area, nodeDTO.getX(), nodeDTO.getY(), type);
+                new Node(name, label, area, nodeDTO.getX(), nodeDTO.getY(), type, floorId);
             }
         }
 
@@ -60,6 +62,9 @@ public class FirestoreGraphConverter {
                 toNode, 
                 edgeDTO.getDistance(), 
                 edgeDTO.getAccessibilityCost(),
+                edgeDTO.isRamp(),
+                edgeDTO.isStairs(),
+                edgeDTO.isElevator(),
                 isStatusOk
             );
         }
