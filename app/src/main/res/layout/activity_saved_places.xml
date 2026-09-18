@@ -1,56 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/languageRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorInk">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/languageToolbar"
+        android:id="@+id/savedPlacesToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/transparent"
         app:navigationIcon="@drawable/ic_back"
         app:navigationIconTint="@color/colorInkText"
-        app:title="@string/language_title"
+        app:title="@string/nav_saved_places"
         app:titleTextColor="@color/colorInkText"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/languageHintText"
-        style="@style/TextAppearance.WitsPath.Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/language_hint"
-        app:layout_constraintTop_toBottomOf="@id/languageToolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:clipToPadding="false"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/languageHintText"
+        app:layout_constraintTop_toBottomOf="@id/savedPlacesToolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:id="@+id/languageListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorRule"
-            android:divider="@drawable/directory_divider"
-            android:orientation="vertical"
-            android:showDividers="middle" />
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/savedPlacesContainer"
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/savedPlacesEmptyText"
+                style="@style/TextAppearance.WitsPath.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPlate"
+                android:padding="20dp"
+                android:text="@string/preferences_saved_empty"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

@@ -42,6 +42,7 @@
                 android:background="@drawable/bg_avatar_circle"
                 android:padding="12dp"
                 android:src="@drawable/ic_account"
+                app:tint="@color/colorInkText"
                 android:importantForAccessibility="no" />
 
             <LinearLayout
@@ -107,7 +108,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -129,7 +130,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_search"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -151,7 +152,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_bookmark"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -173,7 +174,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_flag"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -223,7 +224,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_settings"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -246,7 +247,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_language"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -284,7 +285,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_accessible"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1"/>
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -306,7 +307,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_tune"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -316,27 +317,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/navNotificationsRow"
-            style="@style/WitsPath.DrawerRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_notifications"
-                app:tint="@color/colorInkText"
-                android:scaleY="-1" />
-
-            <TextView
-                style="@style/WitsPath.DrawerRow.Label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/nav_notifications" />
-
-        </LinearLayout>
 
         <!-- =============================== ACCOUNT =============================== -->
         <TextView
@@ -365,7 +346,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_login"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -387,7 +368,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_person_add"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -422,7 +403,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_help"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -444,7 +425,7 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_info"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -481,7 +462,7 @@
                 android:src="@drawable/ic_logout"
                 android:importantForAccessibility="no"
                 app:tint="@color/colorInkText"
-                android:scaleY="-1" />
+                android:rotation="180" />
 
             <TextView
                 style="@style/TextAppearance.WitsPath.Code"

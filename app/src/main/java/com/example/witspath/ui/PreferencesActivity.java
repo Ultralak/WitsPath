@@ -1,13 +1,17 @@
 package com.example.witspath.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import com.example.witspath.ui.BaseActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
@@ -20,12 +24,27 @@ import com.example.witspath.util.Prefs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PreferencesActivity extends AppCompatActivity {
+public class PreferencesActivity extends BaseActivity {
 
     private Prefs prefs;
     private LinearLayout savedPlacesContainer;
     private View savedEmptyText;
     private final List<SavedPlace> savedPlaces = new ArrayList<>();
+
+    private final ActivityResultLauncher<Intent> roomPickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String selectedRoom = result.getData().getStringExtra("selected_room");
+                    // For now, let's assume we were picking the Home Location.
+                    // A real app would track which row launched the picker.
+                    if (selectedRoom != null) {
+                        prefs.setStringSync(Prefs.KEY_HOME_NODE_ID, selectedRoom);
+                        bindMyPlacesSection();
+                    }
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +71,8 @@ public class PreferencesActivity extends AppCompatActivity {
                 ? getString(R.string.preferences_not_set) : homeNodeId);
 
         findViewById(R.id.preferencesHomeLocationRow).setOnClickListener(v -> {
-        });
-
-        findViewById(R.id.preferencesDefaultEntranceRow).setOnClickListener(v -> {
+            Intent intent = new Intent(this, RoomPickerActivity.class);
+            roomPickerLauncher.launch(intent);
         });
     }
 
@@ -87,7 +105,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
     private void removeSavedPlace(SavedPlace place) {
         savedPlaces.remove(place);
-        prefs.setString(Prefs.KEY_SAVED_PLACES_JSON, SavedPlace.toJsonArray(savedPlaces));
+        prefs.setStringSync(Prefs.KEY_SAVED_PLACES_JSON, SavedPlace.toJsonArray(savedPlaces));
         renderSavedPlaces();
     }
 
@@ -96,7 +114,7 @@ public class PreferencesActivity extends AppCompatActivity {
         List<SavedPlace> places = SavedPlace.fromJsonArray(
                 prefs.getString(Prefs.KEY_SAVED_PLACES_JSON, ""));
         places.add(place);
-        prefs.setString(Prefs.KEY_SAVED_PLACES_JSON, SavedPlace.toJsonArray(places));
+        prefs.setStringSync(Prefs.KEY_SAVED_PLACES_JSON, SavedPlace.toJsonArray(places));
     }
 
     private void bindHistorySection() {
@@ -111,6 +129,8 @@ public class PreferencesActivity extends AppCompatActivity {
                         .setMessage(R.string.preferences_clear_history_subtitle)
                         .setNegativeButton(R.string.dialog_cancel, null)
                         .setPositiveButton(R.string.dialog_reset_confirm, (d, w) -> {
+                            // TODO: Clear actual history nodes in Firestore/Local DB
+                            Toast.makeText(this, "History cleared", Toast.LENGTH_SHORT).show();
                         })
                         .show());
     }

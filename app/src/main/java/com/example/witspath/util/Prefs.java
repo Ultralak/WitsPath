@@ -6,22 +6,20 @@ import android.content.SharedPreferences;
 /**
  * Team Wavelets - WitsPath
  * Single place for every SharedPreferences key used by the settings, preferences,
- * language and drawer screens. Frontend-only: this class never talks to Firestore.
- * When Person 3 wires sync, the natural hook is inside the setters below
- * (guarded by KEY_SYNC_ENABLED) rather than scattering Firestore calls through the UI.
+ * language and drawer screens.
  */
 public final class Prefs {
 
     private static final String FILE_NAME = "witspath_prefs";
 
     // ---- keys -------------------------------------------------------------
-    public static final String KEY_UI_LANGUAGE = "pref_ui_language"; // BCP-47 tag, "" = system
-    public static final String KEY_TEXT_SIZE = "pref_text_size"; // small|default|large|huge
+    public static final String KEY_UI_LANGUAGE = "pref_ui_language";
+    public static final String KEY_TEXT_SIZE = "pref_text_size";
     public static final String KEY_HIGH_CONTRAST = "pref_high_contrast";
     public static final String KEY_SCREEN_READER_HINTS = "pref_screen_reader_hints";
     public static final String KEY_SYNC_ENABLED = "pref_sync_enabled";
 
-    public static final String KEY_MOBILITY_PROFILE = "pref_mobility_profile"; // wheelchair|walking_aid|low_vision|none
+    public static final String KEY_MOBILITY_PROFILE = "pref_mobility_profile";
     public static final String KEY_STEP_FREE_ONLY = "pref_step_free_only";
     public static final String KEY_PREFER_LIFTS = "pref_prefer_lifts";
     public static final String KEY_AVOID_STEEP_RAMPS = "pref_avoid_steep_ramps";
@@ -31,20 +29,20 @@ public final class Prefs {
     public static final String KEY_HAPTICS = "pref_haptics";
     public static final String KEY_AUTO_LOCATE = "pref_auto_locate";
     public static final String KEY_DEFAULT_BUILDING = "pref_default_building";
-    public static final String KEY_UNITS = "pref_units"; // metres|feet|minutes
+    public static final String KEY_UNITS = "pref_units";
 
     public static final String KEY_SHOW_FLAGGED = "pref_show_flagged";
-    public static final String KEY_ROUTE_ALERTS = "pref_route_alerts";
     public static final String KEY_ANON_USAGE = "pref_anon_usage";
 
     public static final String KEY_TRACK_FREQUENT = "pref_track_frequent";
     public static final String KEY_HOME_NODE_ID = "pref_home_node_id";
-    public static final String KEY_SAVED_PLACES_JSON = "pref_saved_places_json"; // JSON array, see SavedPlace
+    public static final String KEY_SAVED_PLACES_JSON = "pref_saved_places_json";
 
     private final SharedPreferences prefs;
 
     public Prefs(Context context) {
-        this.prefs = context.getApplicationContext()
+        Context appContext = context.getApplicationContext();
+        this.prefs = (appContext != null ? appContext : context)
                 .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
     }
 
@@ -64,6 +62,11 @@ public final class Prefs {
         prefs.edit().putString(key, value).apply();
     }
 
+    /** Use for language and critical state that must persist before activity recreation. */
+    public void setStringSync(String key, String value) {
+        prefs.edit().putString(key, value).commit();
+    }
+
     public int getInt(String key, int defaultValue) {
         return prefs.getInt(key, defaultValue);
     }
@@ -72,7 +75,6 @@ public final class Prefs {
         prefs.edit().putInt(key, value).apply();
     }
 
-    /** Wipes every WitsPath preference. Used by "Reset all preferences". */
     public void clearAll() {
         prefs.edit().clear().apply();
     }

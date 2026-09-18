@@ -68,7 +68,7 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_home"
                         app:tint="@color/colorInkText"
-                        android:scaleY="-1" />
+                        android:rotation="180" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -96,51 +96,7 @@
                         android:layout_height="18dp"
                         android:src="@drawable/ic_chevron_right"
                         app:tint="@color/colorInkText"
-                        android:scaleX="-1"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/preferencesDefaultEntranceRow"
-                    style="@style/WitsPath.SettingRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_pin"
-                        app:tint="@color/colorInkText"
-                        android:scaleY="-1" />
-
-                    <LinearLayout
-                        style="@style/WitsPath.SettingRow.TextGroup"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/WitsPath.SettingRow.Title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/preferences_default_entrance_title" />
-
-                        <TextView
-                            android:id="@+id/preferencesDefaultEntranceValueText"
-                            style="@style/WitsPath.SettingRow.Subtitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/preferences_default_entrance_value" />
-
-                    </LinearLayout>
-
-                    <ImageView
-                        style="@style/WitsPath.SettingRow.Chevron"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText"
-                        android:scaleX="-1" />
+                        android:rotation="180" />
 
                 </LinearLayout>
 
@@ -193,7 +149,7 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_sync"
                         app:tint="@color/colorInkText"
-                        android:scaleY="-1" />
+                        android:rotation="180" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -207,6 +163,7 @@
                             android:text="@string/preferences_track_frequent_title" />
 
                         <TextView
+                            android:id="@+id/preferencesTrackFrequentSubtitle"
                             style="@style/WitsPath.SettingRow.Subtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -235,7 +192,7 @@
                         android:layout_height="24dp"
                         android:src="@drawable/ic_delete"
                         app:tint="@color/colorInkText"
-                        android:scaleY="-1" />
+                        android:rotation="180" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"

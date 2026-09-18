@@ -2,35 +2,28 @@ package com.example.witspath.ui;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.witspath.ui.BaseActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.example.witspath.R;
 import com.example.witspath.util.Languages;
 import com.example.witspath.util.Prefs;
 
-public class LanguageActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
-    private final int[] rowIds = {
-            R.id.languageSystemRow, R.id.languageEnglishRow, R.id.languageZuluRow,
-            R.id.languageSesothoRow, R.id.languageSetswanaRow, R.id.languageXhosaRow,
-            R.id.languageAfrikaansRow
-    };
-    private final int[] tickIds = {
-            R.id.languageSystemTick, R.id.languageEnglishTick, R.id.languageZuluTick,
-            R.id.languageSesothoTick, R.id.languageSetswanaTick, R.id.languageXhosaTick,
-            R.id.languageAfrikaansTick
-    };
-    private final int[] checkIds = {
-            R.id.languageSystemCheck, R.id.languageEnglishCheck, R.id.languageZuluCheck,
-            R.id.languageSesothoCheck, R.id.languageSetswanaCheck, R.id.languageXhosaCheck,
-            R.id.languageAfrikaansCheck
-    };
+public class LanguageActivity extends BaseActivity {
 
     private Prefs prefs;
+    private LinearLayout listContainer;
+    private final List<View> rowViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,35 +34,71 @@ public class LanguageActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.languageToolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        for (int i = 0; i < rowIds.length; i++) {
-            int index = i;
-            findViewById(rowIds[i]).setOnClickListener(v -> selectLanguage(index));
-        }
+        listContainer = findViewById(R.id.languageListContainer);
+        populateList();
+    }
 
+    private void populateList() {
+        listContainer.removeAllViews();
+        rowViews.clear();
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        for (int i = 0; i < Languages.TAGS.length; i++) {
+            View row = inflater.inflate(R.layout.item_language_option, listContainer, false);
+            
+            ((TextView) row.findViewById(R.id.languageOptionNameText)).setText(Languages.DISPLAY_NAMES[i]);
+            ((TextView) row.findViewById(R.id.languageOptionNativeText)).setText(Languages.NATIVE_NAMES[i]);
+
+            // Bind click recursively so any pixel works
+            final int index = i;
+            setClickRecursive(row, index);
+            
+            listContainer.addView(row);
+            rowViews.add(row);
+        }
+        refreshRows();
+    }
+
+    private void setClickRecursive(View view, int index) {
+        view.setOnClickListener(v -> selectLanguage(index));
+        if (view instanceof ViewGroup) {
+            ViewGroup vg = (ViewGroup) view;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                setClickRecursive(vg.getChildAt(i), index);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         refreshRows();
     }
 
     private void selectLanguage(int index) {
-        Languages.apply(this, Languages.TAGS[index]);
+        String tag = Languages.TAGS[index];
+        prefs.setStringSync(Prefs.KEY_UI_LANGUAGE, tag);
+        refreshRows();
+        Languages.apply(this, tag);
     }
 
     private void refreshRows() {
         String currentTag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
         int currentIndex = Languages.indexForTag(currentTag);
+        int amber = getColor(R.color.colorRoute);
 
-        for (int i = 0; i < rowIds.length; i++) {
-            int tint = getColor(Languages.COLORS[i]);
+        for (int i = 0; i < rowViews.size(); i++) {
+            View row = rowViews.get(i);
+            ImageView check = row.findViewById(R.id.languageOptionCheck);
+            View tick = row.findViewById(R.id.languageOptionTick);
 
-            View tick = findViewById(tickIds[i]);
-            tick.setBackgroundColor(tint);
+            tick.setBackgroundColor(getColor(Languages.COLORS[i]));
+            check.setImageTintList(ColorStateList.valueOf(amber));
+            check.setVisibility(i == currentIndex ? View.VISIBLE : View.GONE);
 
-            ImageView check = findViewById(checkIds[i]);
-            check.setImageTintList(ColorStateList.valueOf(tint));
-            check.setVisibility(i == currentIndex ? View.VISIBLE : View.INVISIBLE);
-
-            findViewById(rowIds[i]).setBackgroundColor(
-                    i == currentIndex ? Languages.dimColorForTag(this, Languages.TAGS[i])
-                            : getColor(R.color.colorPlate));
+            row.setBackgroundColor(i == currentIndex 
+                    ? Languages.dimColorForTag(this, Languages.TAGS[i])
+                    : getColor(R.color.colorPlate));
         }
     }
 }

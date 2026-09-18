@@ -2,10 +2,10 @@ package com.example.witspath.util;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.os.LocaleListCompat;
 
 import com.example.witspath.R;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 
 /**
  * Team Wavelets - WitsPath
@@ -56,14 +56,26 @@ public final class Languages {
             R.string.language_afrikaans
     };
 
+    public static final int[] NATIVE_NAMES = {
+            R.string.language_system_default_native,
+            R.string.language_english_native,
+            R.string.language_zulu_native,
+            R.string.language_sesotho_native,
+            R.string.language_setswana_native,
+            R.string.language_xhosa_native,
+            R.string.language_afrikaans_native
+    };
+
     private Languages() {
     }
 
     /** Index into TAGS/COLORS/DISPLAY_NAMES for a stored BCP-47 tag, defaulting to System. */
     public static int indexForTag(String tag) {
-        if (tag == null) return SYSTEM;
+        if (tag == null || tag.isEmpty()) return SYSTEM;
+        // Strip region code if present (e.g., en-ZA -> en)
+        String baseTag = tag.contains("-") ? tag.split("-")[0] : tag;
         for (int i = 0; i < TAGS.length; i++) {
-            if (TAGS[i].equals(tag)) return i;
+            if (TAGS[i].equalsIgnoreCase(baseTag)) return i;
         }
         return SYSTEM;
     }
@@ -85,13 +97,13 @@ public final class Languages {
      * on screen re-resolves immediately. Pass "" for "system default".
      */
     public static void apply(Activity activity, String tag) {
-        new Prefs(activity).setString(Prefs.KEY_UI_LANGUAGE, tag);
+        new Prefs(activity).setStringSync(Prefs.KEY_UI_LANGUAGE, tag);
         LocaleListCompat locales = tag.isEmpty()
                 ? LocaleListCompat.getEmptyLocaleList()
                 : LocaleListCompat.forLanguageTags(tag);
         AppCompatDelegate.setApplicationLocales(locales);
-        // setApplicationLocales already recreates activities that opted into per-app
-        // language config-change handling; recreate() is a safe no-op fallback otherwise.
-        activity.recreate();
+
+        // Use global refresh logic
+        AppConfiguration.refreshApp(activity);
     }
 }

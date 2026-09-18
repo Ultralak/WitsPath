@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.chip.Chip;
@@ -17,10 +18,11 @@ import com.google.android.material.slider.Slider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.example.witspath.R;
+import com.example.witspath.util.AppConfiguration;
 import com.example.witspath.util.Languages;
 import com.example.witspath.util.Prefs;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     private Prefs prefs;
 
@@ -41,6 +43,19 @@ public class SettingsActivity extends AppCompatActivity {
         bindPrivacySection();
         bindAboutSection();
         bindLogOut();
+
+        handleScrollToSection();
+    }
+
+    private void handleScrollToSection() {
+        String scrollTo = getIntent().getStringExtra("scrollToSection");
+        if ("accessibility".equals(scrollTo)) {
+            View section = findViewById(R.id.settingsAccessibilitySectionLabel);
+            View scroll = findViewById(R.id.settingsScrollView);
+            if (section != null && scroll != null) {
+                scroll.post(() -> ((NestedScrollView) scroll).smoothScrollTo(0, section.getTop()));
+            }
+        }
     }
 
     @Override
@@ -63,7 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
         findViewById(R.id.settingsAccountRow).setOnClickListener(v ->
                 startActivity(new Intent(this, signedIn ? SettingsActivity.class : LoginActivity.class)));
 
-        bindToggleRow(R.id.settingsSyncRow, R.id.settingsSyncSwitch, Prefs.KEY_SYNC_ENABLED, true);
+        bindToggleRow(R.id.settingsSyncSwitch, Prefs.KEY_SYNC_ENABLED, true);
     }
 
     private void bindLanguageAndDisplaySection() {
@@ -71,20 +86,9 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new Intent(this, LanguageActivity.class)));
         refreshLanguageRow();
 
-        String size = prefs.getString(Prefs.KEY_TEXT_SIZE, "default");
-        ChipGroup textSizeGroup = findViewById(R.id.settingsTextSizeChipGroup);
-        selectChipForValue(textSizeGroup, size,
-                new int[]{R.id.textSizeSmallChip, R.id.textSizeDefaultChip,
-                        R.id.textSizeLargeChip, R.id.textSizeHugeChip},
+        setupChipGroup(R.id.settingsTextSizeChipGroup, Prefs.KEY_TEXT_SIZE, "default",
+                new int[]{R.id.textSizeSmallChip, R.id.textSizeDefaultChip, R.id.textSizeLargeChip, R.id.textSizeHugeChip},
                 new String[]{"small", "default", "large", "huge"});
-        textSizeGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (checkedIds.isEmpty()) return;
-            String value = valueForChip(checkedIds.get(0),
-                    new int[]{R.id.textSizeSmallChip, R.id.textSizeDefaultChip,
-                            R.id.textSizeLargeChip, R.id.textSizeHugeChip},
-                    new String[]{"small", "default", "large", "huge"});
-            prefs.setString(Prefs.KEY_TEXT_SIZE, value);
-        });
 
         bindToggleRow(R.id.settingsHighContrastSwitch, Prefs.KEY_HIGH_CONTRAST, false);
         bindToggleRow(R.id.settingsScreenReaderSwitch, Prefs.KEY_SCREEN_READER_HINTS, true);
@@ -92,39 +96,28 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void refreshLanguageRow() {
         String tag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
-        TextView value = findViewById(R.id.settingsLanguageValueText);
-        value.setText(Languages.displayNameForTag(this, tag));
-        View swatch = findViewById(R.id.settingsLanguageSwatch);
-        swatch.setBackgroundTintList(
+        ((TextView) findViewById(R.id.settingsLanguageValueText)).setText(Languages.displayNameForTag(this, tag));
+        findViewById(R.id.settingsLanguageSwatch).setBackgroundTintList(
                 ColorStateList.valueOf(Languages.colorForTag(this, tag)));
     }
 
     private void bindRoutingSection() {
-        String profile = prefs.getString(Prefs.KEY_MOBILITY_PROFILE, "wheelchair");
-        ChipGroup mobilityGroup = findViewById(R.id.settingsMobilityChipGroup);
-        int[] mobilityChipIds = {R.id.mobilityWheelchairChip, R.id.mobilityWalkingAidChip,
-                R.id.mobilityLowVisionChip, R.id.mobilityNoneChip};
-        String[] mobilityValues = {"wheelchair", "walking_aid", "low_vision", "none"};
-        selectChipForValue(mobilityGroup, profile, mobilityChipIds, mobilityValues);
-        mobilityGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (checkedIds.isEmpty()) return;
-            prefs.setString(Prefs.KEY_MOBILITY_PROFILE,
-                    valueForChip(checkedIds.get(0), mobilityChipIds, mobilityValues));
-            onRoutingPreferenceChanged();
-        });
+        setupChipGroup(R.id.settingsMobilityChipGroup, Prefs.KEY_MOBILITY_PROFILE, "wheelchair",
+                new int[]{R.id.mobilityWheelchairChip, R.id.mobilityWalkingAidChip, R.id.mobilityLowVisionChip, R.id.mobilityNoneChip},
+                new String[]{"wheelchair", "walking_aid", "low_vision", "none"}, true);
 
-        bindRoutingToggle(R.id.settingsStepFreeSwitch, Prefs.KEY_STEP_FREE_ONLY, true);
-        bindRoutingToggle(R.id.settingsPreferLiftsSwitch, Prefs.KEY_PREFER_LIFTS, true);
-        bindRoutingToggle(R.id.settingsAvoidSteepSwitch, Prefs.KEY_AVOID_STEEP_RAMPS, true);
+        bindToggleRow(R.id.settingsStepFreeSwitch, Prefs.KEY_STEP_FREE_ONLY, true, true);
+        bindToggleRow(R.id.settingsPreferLiftsSwitch, Prefs.KEY_PREFER_LIFTS, true, true);
+        bindToggleRow(R.id.settingsAvoidSteepSwitch, Prefs.KEY_AVOID_STEEP_RAMPS, true, true);
 
         Slider slider = findViewById(R.id.settingsMaxDistanceSlider);
         TextView valueText = findViewById(R.id.settingsMaxDistanceValueText);
         int savedMetres = prefs.getInt(Prefs.KEY_MAX_ROUTE_METRES, 600);
         slider.setValue(savedMetres);
-        valueText.setText(savedMetres + " m");
+        valueText.setText(getString(R.string.units_metres_format, savedMetres));
         slider.addOnChangeListener((s, value, fromUser) -> {
             int metres = Math.round(value);
-            valueText.setText(metres + " m");
+            valueText.setText(getString(R.string.units_metres_format, metres));
             if (fromUser) {
                 prefs.setInt(Prefs.KEY_MAX_ROUTE_METRES, metres);
                 onRoutingPreferenceChanged();
@@ -132,62 +125,34 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    private void onRoutingPreferenceChanged() {
-    }
-
-    private void bindRoutingToggle(int switchId, String key, boolean defaultValue) {
-        MaterialSwitch sw = findViewById(switchId);
-        sw.setChecked(prefs.getBoolean(key, defaultValue));
-        sw.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.setBoolean(key, isChecked);
-            onRoutingPreferenceChanged();
-        });
-        View row = (View) sw.getParent();
-        row.setOnClickListener(v -> sw.setChecked(!sw.isChecked()));
-    }
-
     private void bindNavigationSection() {
         bindToggleRow(R.id.settingsVoiceSwitch, Prefs.KEY_VOICE_GUIDANCE, true);
         bindToggleRow(R.id.settingsHapticsSwitch, Prefs.KEY_HAPTICS, true);
         bindToggleRow(R.id.settingsAutoLocateSwitch, Prefs.KEY_AUTO_LOCATE, true);
 
-        TextView buildingValue = findViewById(R.id.settingsDefaultBuildingValueText);
-        buildingValue.setText(prefs.getString(Prefs.KEY_DEFAULT_BUILDING,
-                getString(R.string.settings_default_building_value)));
-        findViewById(R.id.settingsDefaultBuildingRow).setOnClickListener(v -> {
-        });
+        ((TextView) findViewById(R.id.settingsDefaultBuildingValueText)).setText(
+                prefs.getString(Prefs.KEY_DEFAULT_BUILDING, getString(R.string.settings_default_building_value)));
 
-        ChipGroup unitsGroup = findViewById(R.id.settingsUnitsChipGroup);
-        int[] unitsChipIds = {R.id.unitsMetresChip, R.id.unitsFeetChip, R.id.unitsMinutesChip};
-        String[] unitsValues = {"metres", "feet", "minutes"};
-        selectChipForValue(unitsGroup, prefs.getString(Prefs.KEY_UNITS, "metres"),
-                unitsChipIds, unitsValues);
-        unitsGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            if (checkedIds.isEmpty()) return;
-            prefs.setString(Prefs.KEY_UNITS, valueForChip(checkedIds.get(0), unitsChipIds, unitsValues));
-        });
+        setupChipGroup(R.id.settingsUnitsChipGroup, Prefs.KEY_UNITS, "metres",
+                new int[]{R.id.unitsMetresChip, R.id.unitsFeetChip, R.id.unitsMinutesChip},
+                new String[]{"metres", "feet", "minutes"});
     }
 
     private void bindReportsSection() {
         bindToggleRow(R.id.settingsShowFlaggedSwitch, Prefs.KEY_SHOW_FLAGGED, true);
-        bindToggleRow(R.id.settingsAlertsSwitch, Prefs.KEY_ROUTE_ALERTS, true);
         findViewById(R.id.settingsMyReportsRow).setOnClickListener(v ->
-                startActivity(new Intent(this, PreferencesActivity.class)));
+                startActivity(new Intent(this, MyReportsActivity.class)));
     }
 
     private void bindPrivacySection() {
         bindToggleRow(R.id.settingsAnonUsageSwitch, Prefs.KEY_ANON_USAGE, true);
-        findViewById(R.id.settingsClearCacheRow).setOnClickListener(v -> {
-        });
-        findViewById(R.id.settingsPrivacyPolicyRow).setOnClickListener(v -> {
-        });
+        findViewById(R.id.settingsClearCacheRow).setOnClickListener(v -> {});
+        findViewById(R.id.settingsPrivacyPolicyRow).setOnClickListener(v -> {});
     }
 
     private void bindAboutSection() {
-        findViewById(R.id.settingsHelpRow).setOnClickListener(v -> {
-        });
-        findViewById(R.id.settingsAboutRow).setOnClickListener(v -> {
-        });
+        findViewById(R.id.settingsHelpRow).setOnClickListener(v -> {});
+        findViewById(R.id.settingsAboutRow).setOnClickListener(v -> {});
     }
 
     private void bindLogOut() {
@@ -198,40 +163,56 @@ public class SettingsActivity extends AppCompatActivity {
                         .setNegativeButton(R.string.dialog_cancel, null)
                         .setPositiveButton(R.string.dialog_log_out_confirm, (d, w) -> {
                             FirebaseAuth.getInstance().signOut();
-                            bindAccountSection();
                             finish();
                         })
                         .show());
     }
 
-    private void bindToggleRow(int rowContainingSwitchId, String key, boolean defaultValue) {
-        MaterialSwitch sw = findViewById(rowContainingSwitchId);
-        sw.setChecked(prefs.getBoolean(key, defaultValue));
-        sw.setOnCheckedChangeListener((buttonView, isChecked) -> prefs.setBoolean(key, isChecked));
-        View row = (View) sw.getParent();
-        row.setOnClickListener(v -> sw.setChecked(!sw.isChecked()));
+    private void bindToggleRow(int switchId, String key, boolean def) {
+        bindToggleRow(switchId, key, def, false);
     }
 
-    private void bindToggleRow(int rowId, int switchId, String key, boolean defaultValue) {
+    private void bindToggleRow(int switchId, String key, boolean def, boolean triggerRouteUpdate) {
         MaterialSwitch sw = findViewById(switchId);
-        sw.setChecked(prefs.getBoolean(key, defaultValue));
-        sw.setOnCheckedChangeListener((buttonView, isChecked) -> prefs.setBoolean(key, isChecked));
-        findViewById(rowId).setOnClickListener(v -> sw.setChecked(!sw.isChecked()));
+        sw.setChecked(prefs.getBoolean(key, def));
+        sw.setOnCheckedChangeListener((b, isChecked) -> {
+            prefs.setBoolean(key, isChecked);
+            if (triggerRouteUpdate) onRoutingPreferenceChanged();
+        });
+        ((View) sw.getParent()).setOnClickListener(v -> sw.setChecked(!sw.isChecked()));
     }
 
-    private void selectChipForValue(ChipGroup group, String value, int[] chipIds, String[] values) {
-        for (int i = 0; i < values.length; i++) {
-            if (values[i].equals(value)) {
-                ((Chip) findViewById(chipIds[i])).setChecked(true);
-                return;
+    private void setupChipGroup(int groupId, String key, String def, int[] ids, String[] vals) {
+        setupChipGroup(groupId, key, def, ids, vals, false);
+    }
+
+    private void setupChipGroup(int groupId, String key, String def, int[] ids, String[] vals, boolean updateRoute) {
+        ChipGroup group = findViewById(groupId);
+        String saved = prefs.getString(key, def);
+        for (int i = 0; i < vals.length; i++) {
+            if (vals[i].equals(saved)) {
+                ((Chip) findViewById(ids[i])).setChecked(true);
+                break;
             }
         }
+        group.setOnCheckedStateChangeListener((g, checkedIds) -> {
+            if (checkedIds.isEmpty()) return;
+            for (int i = 0; i < ids.length; i++) {
+                if (ids[i] == checkedIds.get(0)) {
+                    String newVal = vals[i];
+                    prefs.setString(key, newVal);
+                    
+                    if (key.equals(Prefs.KEY_TEXT_SIZE)) {
+                        AppConfiguration.refreshApp(this);
+                        return;
+                    }
+                    
+                    if (updateRoute) onRoutingPreferenceChanged();
+                    return;
+                }
+            }
+        });
     }
 
-    private String valueForChip(int checkedChipId, int[] chipIds, String[] values) {
-        for (int i = 0; i < chipIds.length; i++) {
-            if (chipIds[i] == checkedChipId) return values[i];
-        }
-        return values[0];
-    }
+    private void onRoutingPreferenceChanged() {}
 }

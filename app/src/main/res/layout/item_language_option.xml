@@ -40,7 +40,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="@string/language_english" />
+            android:text="@string/language_english"
+            android:clickable="false"
+            android:focusable="false"/>
 
         <TextView
             android:id="@+id/languageOptionNativeText"
@@ -48,7 +50,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="@string/language_english" />
+            android:text="@string/language_english"
+            android:clickable="false"
+            android:focusable="false"/>
 
     </LinearLayout>
 

@@ -12,54 +12,55 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WitsPath">
-
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".ui.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.LanguageActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.SettingsActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.PreferencesActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.LoginActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.SignUpActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.RoomPickerActivity"
             android:exported="false" />
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="false">
             <meta-data
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
 
+        <activity
+            android:name=".ui.SavedPlacesActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.MyReportsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

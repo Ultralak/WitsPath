@@ -1,4 +1,4 @@
-    <!--
+<!--
         Team Wavelets - WitsPath
         Merge these into res/values/strings.xml. Nothing in the new layouts is hard-coded,
         so translating the app is just copying this file into res/values-zu, values-st,
@@ -29,7 +29,7 @@
     <string name="nav_language">Language</string>
     <string name="nav_accessibility">Accessibility</string>
     <string name="nav_preferences">My preferences</string>
-    <string name="nav_notifications">Notifications</string>
+
     <string name="nav_help">Help and feedback</string>
     <string name="nav_about">About WitsPath</string>
     <string name="nav_log_in">Log in</string>
@@ -41,7 +41,7 @@
     <string name="settings_section_language_display">LANGUAGE AND DISPLAY</string>
     <string name="settings_section_routing">ACCESSIBILITY AND ROUTING</string>
     <string name="settings_section_navigation">NAVIGATION</string>
-    <string name="settings_section_reports">REPORTS AND ALERTS</string>
+    <string name="settings_section_reports">REPORTS</string>
     <string name="settings_section_privacy">PRIVACY AND DATA</string>
     <string name="settings_section_about">ABOUT</string>
     <string name="settings_sync_title">Sync my settings</string>
@@ -72,8 +72,7 @@
     <string name="settings_units_title">Show distances as</string>
     <string name="settings_show_flagged_title">Show flagged paths</string>
     <string name="settings_show_flagged_subtitle">Mark reported obstacles on the floor plan</string>
-    <string name="settings_alerts_title">Alert me about my routes</string>
-    <string name="settings_alerts_subtitle">Notify me when a path I use often gets flagged</string>
+
     <string name="settings_my_reports_title">My reports</string>
     <string name="settings_my_reports_subtitle">See what you reported and its status</string>
     <string name="settings_anon_usage_title">Share anonymous usage data</string>
@@ -91,6 +90,7 @@
     <string name="mobility_low_vision">Low vision</string>
     <string name="mobility_none">No preference</string>
     <string name="units_metres">Metres</string>
+    <string name="units_metres_format">%d m</string>
     <string name="units_feet">Feet</string>
     <string name="units_minutes">Minutes</string>
     <!--  ============================= LANGUAGE =============================  -->
@@ -117,8 +117,6 @@
     <string name="preferences_section_history">HISTORY</string>
     <string name="preferences_home_location_title">Home base</string>
     <string name="preferences_not_set">Not set</string>
-    <string name="preferences_default_entrance_title">Preferred entrance</string>
-    <string name="preferences_default_entrance_value">Step-free entrance, west side</string>
     <string name="preferences_saved_empty">No saved places yet. Save a room from the directory and it will show up here.</string>
     <string name="preferences_track_frequent_title">Track frequent destinations</string>
     <string name="preferences_track_frequent_subtitle">Builds the list on your home screen</string>
@@ -180,4 +178,16 @@
     <string name="floor_plan">Floor plan</string>
     <string name="report_issue_hint">This segment of your route will be flagged for other users once 3 people report the same issue.</string>
     <string name="report_a_blocked_path">Report a blocked path</string>
+    <string name="greeting_morning">Good Morning</string>
+    <string name="greeting_afternoon">Good Afternoon</string>
+    <string name="greeting_evening">Good Evening</string>
+    <string name="floor_g">G</string>
+    <string name="floor_1">1</string>
+    <string name="floor_2">2</string>
+    <string name="filter_step_free">Step-free</string>
+    <string name="filter_avoid_stairs">Avoid stairs</string>
+    <string name="report_status_pending">Status Pending</string>
+    <string name="report_status_flagged">Flagged</string>
+    <string name="my_reports_empty">You haven\'t reported any obstacles yet.</string>
+    <string name="my_reports_sign_in_prompt">Sign in to see your submitted reports and their status.</string>
 </resources>

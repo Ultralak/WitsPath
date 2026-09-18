@@ -109,9 +109,13 @@
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:paddingTop">14dp</item>
         <item name="android:paddingBottom">14dp</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
     </style>
     <style name="WitsPath.LanguageRow.Check">
         <item name="android:importantForAccessibility">no</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
     </style>
     <!--  The 3dp amber signage tick used down the left edge of plates  -->
     <style name="WitsPath.Tick">
