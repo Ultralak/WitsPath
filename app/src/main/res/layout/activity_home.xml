@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorInk"
-        android:fitsSystemWindows="false">
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/homeToolbar"
@@ -142,7 +142,7 @@
                     style="@style/WitsPath.SectionLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TO" />
+                    android:text="@string/home_label_to" />
 
                 <LinearLayout
                     android:id="@+id/toLocationPlate"
@@ -202,7 +202,7 @@
                     style="@style/WitsPath.SectionLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MAP" />
+                    android:text="@string/home_label_map" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -217,7 +217,8 @@
                         android:background="@drawable/bg_plate"
                         android:elevation="1dp"
                         android:clipChildren="true"
-                        android:clipToPadding="true">
+                        android:clipToPadding="true"
+                        android:contentDescription="@string/cd_map_view">
 
                         <ImageView
                             android:id="@+id/homeFloorPlanImageView"

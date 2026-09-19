@@ -62,6 +62,17 @@
                 android:text="@string/my_reports_sign_in_prompt"
                 android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/myReportsErrorText"
+                style="@style/TextAppearance.WitsPath.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="32dp"
+                android:textColor="@color/colorFlag"
+                android:text="@string/my_reports_error"
+                android:visibility="gone" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

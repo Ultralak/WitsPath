@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -98,6 +99,17 @@ public class HomeActivity extends BaseActivity {
         bindMainContent();
         initMap();
 
+        if (savedInstanceState != null) {
+            String fromId = savedInstanceState.getString("selectedFromNodeId");
+            String destId = savedInstanceState.getString("selectedDestinationId");
+            if (fromId != null) {
+                updateFromLocation(fromId);
+            }
+            if (destId != null) {
+                updateToLocation(destId);
+            }
+        }
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -109,6 +121,13 @@ public class HomeActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("selectedFromNodeId", selectedFromNodeId);
+        outState.putString("selectedDestinationId", selectedDestinationId);
     }
 
     @Override
@@ -186,11 +205,11 @@ public class HomeActivity extends BaseActivity {
 
         findViewById(R.id.navigateButton).setOnClickListener(v -> {
             if (selectedDestinationId == null) {
-                Toast.makeText(this, "Please select a destination", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.home_toast_select_destination, Toast.LENGTH_SHORT).show();
                 return;
             }
             if (selectedFromNodeId == null) {
-                Toast.makeText(this, "Please select a starting point", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.home_toast_select_start, Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(this, NavigationActivity.class);
@@ -206,7 +225,7 @@ public class HomeActivity extends BaseActivity {
         String label = (node != null && node.label != null) ? node.label : nodeId;
         currentLocationNameText.setText(label);
         currentLocationNameText.setTextColor(getColor(R.color.colorInkText));
-        currentLocationLabelText.setText("Selected Start");
+        currentLocationLabelText.setText(R.string.home_label_selected_start);
         currentLocationLabelText.setVisibility(View.VISIBLE);
     }
 
@@ -216,7 +235,7 @@ public class HomeActivity extends BaseActivity {
         String label = (node != null && node.label != null) ? node.label : nodeId;
         toLocationNameText.setText(label);
         toLocationNameText.setTextColor(getColor(R.color.colorInkText));
-        toLocationLabelText.setText("Selected Destination");
+        toLocationLabelText.setText(R.string.home_label_selected_destination);
         toLocationLabelText.setVisibility(View.VISIBLE);
     }
 
@@ -224,7 +243,7 @@ public class HomeActivity extends BaseActivity {
         String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu7krqt6g");
         updateFromLocation(homeNode);
         currentLocationLabelText.setText(R.string.auto_detected);
-        Toast.makeText(this, "Location detected", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.home_toast_location_detected, Toast.LENGTH_SHORT).show();
     }
 
     private void bindDrawerClicks() {

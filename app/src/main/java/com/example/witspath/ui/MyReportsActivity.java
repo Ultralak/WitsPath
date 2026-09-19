@@ -2,6 +2,7 @@ package com.example.witspath.ui;
 
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -44,6 +45,7 @@ public class MyReportsActivity extends BaseActivity {
     private LinearLayout container;
     private View emptyText;
     private View signInPromptText;
+    private View errorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class MyReportsActivity extends BaseActivity {
         container = findViewById(R.id.myReportsContainer);
         emptyText = findViewById(R.id.myReportsEmptyText);
         signInPromptText = findViewById(R.id.myReportsSignInPromptText);
+        errorText = findViewById(R.id.myReportsErrorText);
     }
 
     @Override
@@ -77,7 +80,10 @@ public class MyReportsActivity extends BaseActivity {
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(this::onReportsLoaded)
-                .addOnFailureListener(e -> renderReports(new ArrayList<>(), new HashMap<>()));
+                .addOnFailureListener(e -> {
+                    Log.e("MyReportsActivity", "Error querying reports from Firestore", e);
+                    showErrorState();
+                });
     }
 
     private void onReportsLoaded(QuerySnapshot snapshot) {
@@ -134,11 +140,21 @@ public class MyReportsActivity extends BaseActivity {
         container.removeAllViews();
         container.setVisibility(View.GONE);
         emptyText.setVisibility(View.GONE);
+        errorText.setVisibility(View.GONE);
         signInPromptText.setVisibility(View.VISIBLE);
+    }
+
+    private void showErrorState() {
+        container.removeAllViews();
+        container.setVisibility(View.GONE);
+        emptyText.setVisibility(View.GONE);
+        signInPromptText.setVisibility(View.GONE);
+        errorText.setVisibility(View.VISIBLE);
     }
 
     private void renderReports(List<ReportEntry> reports, Map<String, String> edgeStatuses) {
         signInPromptText.setVisibility(View.GONE);
+        errorText.setVisibility(View.GONE);
         container.removeAllViews();
 
         emptyText.setVisibility(reports.isEmpty() ? View.VISIBLE : View.GONE);

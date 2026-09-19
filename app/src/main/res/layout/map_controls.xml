@@ -17,12 +17,12 @@
 
         <ImageButton
             android:id="@+id/btnZoomIn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_add"
             app:tint="@color/colorRoute"
-            android:contentDescription="Zoom In" />
+            android:contentDescription="@string/cd_zoom_in" />
 
         <View
             android:layout_width="match_parent"
@@ -32,12 +32,12 @@
 
         <ImageButton
             android:id="@+id/btnZoomOut"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_remove"
             app:tint="@color/colorRoute"
-            android:contentDescription="Zoom Out" />
+            android:contentDescription="@string/cd_zoom_out" />
 
         <View
             android:layout_width="match_parent"
@@ -47,12 +47,12 @@
 
         <ImageButton
             android:id="@+id/btnResetZoom"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_sync"
             app:tint="@color/colorRoute"
-            android:contentDescription="Reset Map" />
+            android:contentDescription="@string/cd_reset_map" />
 
     </LinearLayout>
 

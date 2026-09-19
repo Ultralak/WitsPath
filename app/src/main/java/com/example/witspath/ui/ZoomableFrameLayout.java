@@ -114,8 +114,41 @@ public class ZoomableFrameLayout extends FrameLayout {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (contentWidth > 0 && getMeasuredWidth() > 0) {
+            baseScale = (float) getMeasuredWidth() / contentWidth;
+            int childWidth = getMeasuredWidth();
+            int childHeight = (int) (contentHeight * baseScale);
+            int childWidthSpec = MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY);
+            int childHeightSpec = MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY);
+            for (int i = 0; i < getChildCount(); i++) {
+                getChildAt(i).measure(childWidthSpec, childHeightSpec);
+            }
+        }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (contentWidth > 0 && contentHeight > 0 && baseScale > 0) {
+            int childWidth = getWidth();
+            int childHeight = (int) (contentHeight * baseScale);
+            for (int i = 0; i < getChildCount(); i++) {
+                getChildAt(i).layout(0, 0, childWidth, childHeight);
+            }
+        }
+    }
+
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
+        if (relativeScale > 1f || ev.getPointerCount() > 1) {
+            if (getParent() != null) {
+                getParent().requestDisallowInterceptTouchEvent(true);
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -128,6 +161,14 @@ public class ZoomableFrameLayout extends FrameLayout {
                 lastTouchX = event.getX();
                 lastTouchY = event.getY();
                 activePointerId = event.getPointerId(0);
+                if (relativeScale > 1f || event.getPointerCount() > 1) {
+                    if (getParent() != null) {
+                        getParent().requestDisallowInterceptTouchEvent(true);
+                    }
+                }
+                break;
+
+            case MotionEvent.ACTION_POINTER_DOWN:
                 if (getParent() != null) {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }
@@ -180,7 +221,10 @@ public class ZoomableFrameLayout extends FrameLayout {
     }
 
     public void panTo(float contentX, float contentY) {
-        if (getWidth() == 0 || getHeight() == 0 || contentWidth == 0) return;
+        if (getWidth() == 0 || getHeight() == 0 || contentWidth == 0) {
+            post(() -> panTo(contentX, contentY));
+            return;
+        }
         
         float targetTranslateX = getWidth() / 2f - contentX * baseScale * relativeScale;
         float targetTranslateY = getHeight() / 2f - contentY * baseScale * relativeScale;

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.widget.NestedScrollView;
 
 import com.google.android.material.appbar.MaterialToolbar;
@@ -75,8 +76,11 @@ public class SettingsActivity extends BaseActivity {
                 ? user.getDisplayName() : getString(R.string.nav_guest_title));
         email.setText(signedIn ? user.getEmail() : getString(R.string.nav_guest_subtitle));
 
-        findViewById(R.id.settingsAccountRow).setOnClickListener(v ->
-                startActivity(new Intent(this, signedIn ? SettingsActivity.class : LoginActivity.class)));
+        findViewById(R.id.settingsAccountRow).setOnClickListener(v -> {
+            if (!signedIn) {
+                startActivity(new Intent(this, LoginActivity.class));
+            }
+        });
 
         bindToggleRow(R.id.settingsSyncSwitch, Prefs.KEY_SYNC_ENABLED, true);
     }
@@ -91,7 +95,26 @@ public class SettingsActivity extends BaseActivity {
                 new String[]{"small", "default", "large", "huge"});
 
         bindToggleRow(R.id.settingsHighContrastSwitch, Prefs.KEY_HIGH_CONTRAST, false);
+        bindDarkThemeToggleRow();
         bindToggleRow(R.id.settingsScreenReaderSwitch, Prefs.KEY_SCREEN_READER_HINTS, true);
+    }
+
+    private void bindDarkThemeToggleRow() {
+        MaterialSwitch sw = findViewById(R.id.settingsDarkThemeSwitch);
+        sw.setChecked(prefs.getBoolean("pref_dark_theme", false));
+        sw.setOnCheckedChangeListener((b, isChecked) -> {
+            prefs.setBoolean("pref_dark_theme", isChecked);
+            AppCompatDelegate.setDefaultNightMode(isChecked
+                ? AppCompatDelegate.MODE_NIGHT_YES
+                : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        });
+        View parentRow = (View) sw.getParent();
+        parentRow.setFocusable(true);
+        parentRow.setClickable(true);
+        parentRow.setOnClickListener(v -> sw.setChecked(!sw.isChecked()));
+        
+        sw.setFocusable(false);
+        sw.setClickable(false);
     }
 
     private void refreshLanguageRow() {
@@ -113,7 +136,10 @@ public class SettingsActivity extends BaseActivity {
         Slider slider = findViewById(R.id.settingsMaxDistanceSlider);
         TextView valueText = findViewById(R.id.settingsMaxDistanceValueText);
         int savedMetres = prefs.getInt(Prefs.KEY_MAX_ROUTE_METRES, 600);
-        slider.setValue(savedMetres);
+        float snapped = Math.round(savedMetres / 50.0f) * 50.0f;
+        if (snapped < 100f) snapped = 100f;
+        if (snapped > 2000f) snapped = 2000f;
+        slider.setValue(snapped);
         valueText.setText(getString(R.string.units_metres_format, savedMetres));
         slider.addOnChangeListener((s, value, fromUser) -> {
             int metres = Math.round(value);
@@ -179,7 +205,13 @@ public class SettingsActivity extends BaseActivity {
             prefs.setBoolean(key, isChecked);
             if (triggerRouteUpdate) onRoutingPreferenceChanged();
         });
-        ((View) sw.getParent()).setOnClickListener(v -> sw.setChecked(!sw.isChecked()));
+        View parentRow = (View) sw.getParent();
+        parentRow.setFocusable(true);
+        parentRow.setClickable(true);
+        parentRow.setOnClickListener(v -> sw.setChecked(!sw.isChecked()));
+        
+        sw.setFocusable(false);
+        sw.setClickable(false);
     }
 
     private void setupChipGroup(int groupId, String key, String def, int[] ids, String[] vals) {

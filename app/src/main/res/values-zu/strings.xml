@@ -4,6 +4,8 @@
     <string name="current_location">INDAWO OKUKHONA KUYO</string>
     <string name="frequented_locations">IZINDAWO EZIVAKASHELWA NJALO</string>
     <string name="start_navigation">QALA UKUHAMBA</string>
+    <string name="home_label_to">KUYA KWI</string>
+    <string name="home_label_map">IMEPHU</string>
     <string name="cd_open_menu">Vula imenyu yokuhamba</string>
     <string name="cd_remove_saved_place">Susa indawo elondoloziwe</string>
     <string name="nav_guest_title">Isivakashi</string>
@@ -40,6 +42,8 @@
     <string name="settings_text_size_title">Usayizi wombhalo</string>
     <string name="settings_high_contrast_title">Ukugqama okuphezulu</string>
     <string name="settings_high_contrast_subtitle">Imibala egqamile kumamephu nasemigqeni yemizila</string>
+    <string name="settings_dark_theme_title">Imo emnyama</string>
+    <string name="settings_dark_theme_subtitle">Shintshela ezindaweni ezimnyama nombhalo ogqamile phezulu</string>
     <string name="settings_screen_reader_title">Izincazelo zomfundi wesikrini</string>
     <string name="settings_screen_reader_subtitle">Chaza ijika ngalinye, irempu nekheshi kakhulu</string>
     <string name="settings_mobility_profile_title">Iphrofayili yokuhamba</string>
@@ -144,12 +148,24 @@
     <string name="login_error_guest_failed">Ukungena njengesivakashi kuhlulekile.</string>
     <string name="login_success">Ukungena kuphumelele</string>
     <string name="login_reset_sent">I-email yokusetha kabusha ithunyelwe.</string>
+    <string name="login_error_email_empty">Sicela ufake ikheli lakho le-imeyili kuqala.</string>
+    <string name="login_reset_failed">Yehlulekile ukuthumela i-imeyili yokusetha kabusha. Hlola ikheli lakho le-imeyili.</string>
+    <string name="home_toast_select_destination">Sicela ukhethe indawo uya kuyo</string>
+    <string name="home_toast_select_start">Sicela ukhethe indawo yokuqala</string>
+    <string name="home_label_selected_start">Ukhethe ukuQala</string>
+    <string name="home_label_selected_destination">Ukhethe iNdawo uya kuyo</string>
+    <string name="home_toast_location_detected">Indawo itholiwe</string>
+    <string name="cd_zoom_in">Khulisa</string>
+    <string name="cd_zoom_out">Nciphisa</string>
+    <string name="cd_reset_map">Setha kabusha imephu</string>
+    <string name="cd_map_view">Imephu yokuzulazula yekhampasi ebonisa ama-node nezindlela</string>
     <string name="signup_error_empty">Zonke izinkundla ziyadingeka.</string>
     <string name="signup_error_password_mismatch">Amaphasiwedi awafani.</string>
     <string name="signup_error_terms">Sicela wamukele imigomo.</string>
     <string name="signup_error_failed">Ukubhalisa kuhlulekile.</string>
     <string name="report_success">Isithiyo sibikiwe. Ngiyabonga!</string>
     <string name="report_failed">Kuhlulekile ukubika isithiyo.</string>
+    <string name="my_reports_error">Kuvele iphutha ngenkathi ulayisha imibiko yakho. Sicela uzame futhi ngokuhamba kwesikhathi.</string>
     <string name="auto_detected">Kutholwe ngokuzenzakalelayo</string>
     <string name="search_room">Sesha igumbi…</string>
     <string name="default_from_location">Kusuka e-</string>
@@ -159,6 +175,12 @@
     <string name="broken_lift">Ikheshi eliphukile</string>
     <string name="blocked_or_broken_ramp">Irempu evalekile noma ephukile</string>
     <string name="path_obstructed">Indlela ivalelekile</string>
+    <string name="node_type_classroom">Ikilasi</string>
+    <string name="node_type_building">Isakhiwo</string>
+    <string name="node_type_lab">Ilabhorethri</string>
+    <string name="node_type_ramp">Irempu</string>
+    <string name="node_type_junction">Impambanomgwaqo</string>
+    <string name="node_type_lift">Ikheshi</string>
     <string name="other">Okunye</string>
     <string name="submit_report">Thumela umbiko</string>
     <string name="report_issue_on_path">BIKA INKINGA ENDLELENI</string>
@@ -177,4 +199,6 @@
     <string name="report_status_flagged">Kumakiwe</string>
     <string name="my_reports_empty">Awukabiki noma yiziphi izithiyo okwamanje.</string>
     <string name="my_reports_sign_in_prompt">Ngena ukuze ubone imibiko yakho ethunyelwe nesimo sayo.</string>
+    <string name="units_metres_format">%d m</string>
+    <string name="nav_populate_firestore">Gcwalisa i-Firestore</string>
 </resources>

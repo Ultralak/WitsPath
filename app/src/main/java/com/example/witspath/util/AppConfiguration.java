@@ -40,18 +40,21 @@ public final class AppConfiguration {
             case "huge":  scale = 1.50f; break;
             default:      scale = 1.00f; break;
         }
-        config.fontScale = scale;
+        config.fontScale = context.getResources().getConfiguration().fontScale * scale;
 
         return context.createConfigurationContext(config);
     }
 
     /**
-     * Restarts the entire app from HomeActivity to apply configuration changes globally.
+     * Restarts the current activity to apply configuration changes on the same screen.
      */
     public static void refreshApp(Activity activity) {
-        Intent intent = new Intent(activity, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intent = new Intent(activity, activity.getClass());
+        if (activity.getIntent() != null && activity.getIntent().getExtras() != null) {
+            intent.putExtras(activity.getIntent().getExtras());
+        }
         activity.startActivity(intent);
         activity.finish();
+        activity.overridePendingTransition(0, 0);
     }
 }

@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import android.widget.ImageView;
 import com.example.witspath.R;
@@ -79,7 +80,7 @@ public class NavigationActivity extends BaseActivity {
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
         findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
 
-        findViewById(R.id.navigationToolbar).setOnClickListener(v -> finish());
+        ((MaterialToolbar) findViewById(R.id.navigationToolbar)).setNavigationOnClickListener(v -> finish());
         findViewById(R.id.nextStepButton).setOnClickListener(v -> nextStep());
         findViewById(R.id.prevStepButton).setOnClickListener(v -> prevStep());
 

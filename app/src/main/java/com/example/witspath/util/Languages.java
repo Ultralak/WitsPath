@@ -102,8 +102,5 @@ public final class Languages {
                 ? LocaleListCompat.getEmptyLocaleList()
                 : LocaleListCompat.forLanguageTags(tag);
         AppCompatDelegate.setApplicationLocales(locales);
-
-        // Use global refresh logic
-        AppConfiguration.refreshApp(activity);
     }
 }

@@ -66,6 +66,9 @@ public class RoomPickerActivity extends BaseActivity {
         });
 
         for (Node node : filteredNodes) {
+            if (node.type == Node.NodeType.RAMP) {
+                continue;
+            }
             String displayLabel = node.label != null ? node.label : node.name;
             
             View row = getLayoutInflater().inflate(R.layout.item_room, container, false);
@@ -73,7 +76,9 @@ public class RoomPickerActivity extends BaseActivity {
             TextView detailText = row.findViewById(R.id.roomDetailText);
             
             nameText.setText(displayLabel);
-            detailText.setText(node.name); // Using ID as detail for now
+            
+            int resId = getResources().getIdentifier("node_type_" + node.type.name().toLowerCase(), "string", getPackageName());
+            detailText.setText(resId != 0 ? getString(resId) : node.type.name());
             
             row.setOnClickListener(v -> {
                 Intent result = new Intent();

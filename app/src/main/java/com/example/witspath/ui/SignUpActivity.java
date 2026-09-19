@@ -66,8 +66,8 @@ public class SignUpActivity extends BaseActivity {
     private void handleSignUp() {
         String name = nameInput.getText().toString().trim();
         String email = emailInput.getText().toString().trim();
-        String password = passwordInput.getText().toString().trim();
-        String confirmPassword = confirmPasswordInput.getText().toString().trim();
+        String password = passwordInput.getText().toString();
+        String confirmPassword = confirmPasswordInput.getText().toString();
 
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             showError(getString(R.string.signup_error_empty));
@@ -91,14 +91,18 @@ public class SignUpActivity extends BaseActivity {
                         updateProfileAndSync(name);
                     } else {
                         setLoading(false);
-                        showError(task.getException() != null ? task.getException().getMessage() : getString(R.string.signup_error_failed));
+                        showError(getString(R.string.signup_error_generic));
                     }
                 });
     }
 
     private void updateProfileAndSync(String name) {
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null) return;
+        if (user == null) {
+            setLoading(false);
+            showError(getString(R.string.signup_error_generic));
+            return;
+        }
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)

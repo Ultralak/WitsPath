@@ -4,6 +4,8 @@
     <string name="current_location">HUIDIGE LIGGING</string>
     <string name="frequented_locations">GEREELDE PLEKKE</string>
     <string name="start_navigation">BEGIN NAVIGASIE</string>
+    <string name="home_label_to">NA</string>
+    <string name="home_label_map">KAART</string>
     <string name="cd_open_menu">Maak navigasiespyskaart oop</string>
     <string name="cd_remove_saved_place">Verwyder gestoorde plek</string>
     <string name="nav_guest_title">Gas</string>
@@ -40,6 +42,8 @@
     <string name="settings_text_size_title">Teksgrootte</string>
     <string name="settings_high_contrast_title">Hoë kontras</string>
     <string name="settings_high_contrast_subtitle">Sterker kleure op kaarte en roetelyne</string>
+    <string name="settings_dark_theme_title">Donker modus</string>
+    <string name="settings_dark_theme_subtitle">Skakel oor na donker oppervlaktes en hoë kontras teks</string>
     <string name="settings_screen_reader_title">Skermleser-beskrywings</string>
     <string name="settings_screen_reader_subtitle">Beskryf elke draai, oprit en hysbak hardop</string>
     <string name="settings_mobility_profile_title">Mobiliteitsprofiel</string>
@@ -144,12 +148,24 @@
     <string name="login_error_guest_failed">Gas-aanmelding het misluk.</string>
     <string name="login_success">Aanmelding suksesvol</string>
     <string name="login_reset_sent">Herstel-e-pos gestuur.</string>
+    <string name="login_error_email_empty">Voer asseblief eers u e-posadres in.</string>
+    <string name="login_reset_failed">Kon nie herstel-e-pos stuur nie. Gaan u e-posadres na.</string>
+    <string name="home_toast_select_destination">Kies asseblief \'n bestemming</string>
+    <string name="home_toast_select_start">Kies asseblief \'n beginpunt</string>
+    <string name="home_label_selected_start">Gekose Begin</string>
+    <string name="home_label_selected_destination">Gekose Bestemming</string>
+    <string name="home_toast_location_detected">Ligging bespeur</string>
+    <string name="cd_zoom_in">Zoem in</string>
+    <string name="cd_zoom_out">Zoem uit</string>
+    <string name="cd_reset_map">Herstel kaart</string>
+    <string name="cd_map_view">Kampus navigasie kaart wat nodusse en paaie toon</string>
     <string name="signup_error_empty">Alle velde word vereis.</string>
     <string name="signup_error_password_mismatch">Wagwoorde stem nie ooreen nie.</string>
     <string name="signup_error_terms">Aanvaar asseblief die voorwaardes.</string>
     <string name="signup_error_failed">Registrasie het misluk.</string>
     <string name="report_success">Hindernis gerapporteer. Dankie!</string>
     <string name="report_failed">Kon nie hindernis rapporteer nie.</string>
+    <string name="my_reports_error">\'n Fout het voorgekom tydens die laai van u verslae. Probeer asseblief later weer.</string>
     <string name="auto_detected">Outomaties bespeur</string>
     <string name="search_room">Soek kamer…</string>
     <string name="default_from_location">Vanaf</string>
@@ -159,6 +175,12 @@
     <string name="broken_lift">Stukkende hysbak</string>
     <string name="blocked_or_broken_ramp">Geblokkeerde of stukkende oprit</string>
     <string name="path_obstructed">Pad versper</string>
+    <string name="node_type_classroom">Klaskamer</string>
+    <string name="node_type_building">Gebou</string>
+    <string name="node_type_lab">Laboratorium</string>
+    <string name="node_type_ramp">Oprit</string>
+    <string name="node_type_junction">Aansluiting</string>
+    <string name="node_type_lift">Hysbak</string>
     <string name="other">Ander</string>
     <string name="submit_report">Dien verslag in</string>
     <string name="report_issue_on_path">RAPPORTEER PROBLEEM OP PAD</string>
@@ -177,4 +199,6 @@
     <string name="report_status_flagged">Gemerk</string>
     <string name="my_reports_empty">Jy het nog geen hindernisse gerapporteer nie.</string>
     <string name="my_reports_sign_in_prompt">Meld aan om jou ingediende verslae en hul status te sien.</string>
+    <string name="units_metres_format">%d m</string>
+    <string name="nav_populate_firestore">Vul Firestore in</string>
 </resources>

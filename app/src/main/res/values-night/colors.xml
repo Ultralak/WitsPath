@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorInk">#121212</color>
+    <color name="colorPlate">#1E1E1E</color>
+    <color name="colorPlateRaised">#2C2C2C</color>
+    <color name="colorRule">#37474F</color>
+    <color name="colorRuleStrong">#455A64</color>
+    <color name="colorInkText">#FFFFFF</color>
+    <color name="colorInkTextMuted">#B0BEC5</color>
+    <color name="colorRoute">#64B5F6</color>
+    <color name="colorBackground">@color/colorInk</color>
+    <color name="colorSurface">@color/colorPlate</color>
+    <color name="colorOnBackground">@color/colorInkText</color>
+    <color name="colorOnBackgroundMuted">@color/colorInkTextMuted</color>
+    <color name="colorOutline">@color/colorRule</color>
+    <color name="colorOutlineVariant">#2C2C2C</color>
+</resources>

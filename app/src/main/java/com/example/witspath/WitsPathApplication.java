@@ -21,10 +21,14 @@ public class WitsPathApplication extends Application {
         super.onCreate();
 
         // Re-apply locale to prevent "staggered" language changes
-        String tag = new Prefs(this).getString(Prefs.KEY_UI_LANGUAGE, "");
+        Prefs appPrefs = new Prefs(this);
+        String tag = appPrefs.getString(Prefs.KEY_UI_LANGUAGE, "");
         if (!tag.isEmpty()) {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag));
         }
+
+        boolean darkTheme = appPrefs.getBoolean("pref_dark_theme", false);
+        AppCompatDelegate.setDefaultNightMode(darkTheme ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
 
         new EdgeUpdateListener(null).listenForEdgeUpdates();
 

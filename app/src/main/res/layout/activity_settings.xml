@@ -204,9 +204,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp">
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -230,8 +228,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
                         app:singleLine="true"
                         app:singleSelection="true"
                         app:selectionRequired="true"
@@ -302,6 +298,45 @@
 
                     <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/settingsHighContrastSwitch"
+                        style="@style/WitsPath.SettingRow.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/WitsPath.SettingRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_contrast"
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
+
+                    <LinearLayout
+                        style="@style/WitsPath.SettingRow.TextGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_dark_theme_title" />
+
+                        <TextView
+                            style="@style/WitsPath.SettingRow.Subtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_dark_theme_subtitle" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingsDarkThemeSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

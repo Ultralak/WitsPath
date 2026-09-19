@@ -61,12 +61,14 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.loginForgotPasswordText).setOnClickListener(v -> {
             String email = emailInput.getText().toString().trim();
             if (TextUtils.isEmpty(email)) {
-                Toast.makeText(this, R.string.login_error_generic, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.login_error_email_empty, Toast.LENGTH_SHORT).show();
                 return;
             }
             mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, R.string.login_reset_sent, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.login_reset_failed, Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -74,7 +76,7 @@ public class LoginActivity extends BaseActivity {
 
     private void signInWithEmail() {
         String email = emailInput.getText().toString().trim();
-        String password = passwordInput.getText().toString().trim();
+        String password = passwordInput.getText().toString();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             showError(getString(R.string.login_error_empty));
@@ -88,7 +90,7 @@ public class LoginActivity extends BaseActivity {
                     if (task.isSuccessful()) {
                         onAuthSuccess();
                     } else {
-                        showError(task.getException() != null ? task.getException().getMessage() : getString(R.string.login_error_generic));
+                        showError(getString(R.string.login_error_generic));
                     }
                 });
     }
