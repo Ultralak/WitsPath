@@ -73,12 +73,12 @@ public class RoomPickerActivity extends BaseActivity {
             
             View row = getLayoutInflater().inflate(R.layout.item_room, container, false);
             TextView nameText = row.findViewById(R.id.roomNameText);
-            TextView detailText = row.findViewById(R.id.roomDetailText);
+            //TextView detailText = row.findViewById(R.id.roomDetailText);
             
             nameText.setText(displayLabel);
             
             int resId = getResources().getIdentifier("node_type_" + node.type.name().toLowerCase(), "string", getPackageName());
-            detailText.setText(resId != 0 ? getString(resId) : node.type.name());
+            //detailText.setText(resId != 0 ? getString(resId) : node.type.name());
             
             row.setOnClickListener(v -> {
                 Intent result = new Intent();

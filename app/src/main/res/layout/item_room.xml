@@ -26,13 +26,6 @@
             android:layout_height="wrap_content"
             tools:text="MSB 101" />
 
-        <TextView
-            android:id="@+id/roomDetailText"
-            style="@style/WitsPath.SettingRow.Subtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Mathematical Sciences Building" />
-
     </LinearLayout>
 
     <ImageView
