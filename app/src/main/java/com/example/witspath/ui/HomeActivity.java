@@ -240,7 +240,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void autoDetectLocation() {
-        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu7krqt6g");
+        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu84hhsut");
         updateFromLocation(homeNode);
         currentLocationLabelText.setText(R.string.auto_detected);
         Toast.makeText(this, R.string.home_toast_location_detected, Toast.LENGTH_SHORT).show();
