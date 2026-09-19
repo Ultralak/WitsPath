@@ -128,6 +128,9 @@ public class ZoomableFrameLayout extends FrameLayout {
                 lastTouchX = event.getX();
                 lastTouchY = event.getY();
                 activePointerId = event.getPointerId(0);
+                if (getParent() != null) {
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                }
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -136,16 +139,21 @@ public class ZoomableFrameLayout extends FrameLayout {
                     if (pointerIndex != -1) {
                         float x = event.getX(pointerIndex);
                         float y = event.getY(pointerIndex);
-                        translateX += (x - lastTouchX);
-                        translateY += (y - lastTouchY);
-                        clampTranslation();
-                        applyTransform();
-                        lastTouchX = x;
-                        lastTouchY = y;
+                        float dx = x - lastTouchX;
+                        float dy = y - lastTouchY;
+
+                        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+                            translateX += dx;
+                            translateY += dy;
+                            clampTranslation();
+                            applyTransform();
+                            lastTouchX = x;
+                            lastTouchY = y;
+                        }
                     }
                 }
                 break;
-
+                
             case MotionEvent.ACTION_POINTER_UP: {
                 int pointerIndex = event.getActionIndex();
                 int pointerId = event.getPointerId(pointerIndex);
@@ -163,9 +171,25 @@ public class ZoomableFrameLayout extends FrameLayout {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 activePointerId = MotionEvent.INVALID_POINTER_ID;
+                if (getParent() != null) {
+                    getParent().requestDisallowInterceptTouchEvent(false);
+                }
                 break;
         }
         return true;
+    }
+
+    public void panTo(float contentX, float contentY) {
+        if (getWidth() == 0 || getHeight() == 0 || contentWidth == 0) return;
+        
+        float targetTranslateX = getWidth() / 2f - contentX * baseScale * relativeScale;
+        float targetTranslateY = getHeight() / 2f - contentY * baseScale * relativeScale;
+        
+        this.translateX = targetTranslateX;
+        this.translateY = targetTranslateY;
+        
+        clampTranslation();
+        applyTransform();
     }
 
     private void clampTranslation() {

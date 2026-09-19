@@ -44,6 +44,7 @@ public class NavigationActivity extends BaseActivity {
 
     private LinkedList<Node> routeNodes;
     private int currentStepIndex = 0;
+    private double metresPerPixel = 1.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +115,7 @@ public class NavigationActivity extends BaseActivity {
     private void setupMap(Node fromNode, Node toNode) {
         String floorId = fromNode.floorId;
         Floor floor = Floor.getById(floorId);
-        double metresPerPixel = (floor != null) ? floor.metresPerPixel : 1.0;
+        this.metresPerPixel = (floor != null) ? floor.metresPerPixel : 1.0;
 
         Collection<Node> allNodes = Node.searchByName("");
         List<FloorPlanNode> renderNodes = FloorPlanGraphConverter.toFloorPlanNodes(allNodes, floorId, metresPerPixel);
@@ -150,6 +151,13 @@ public class NavigationActivity extends BaseActivity {
 
         Node currentNode = routeNodes.get(currentStepIndex);
         routeView.setCurrentPosition(currentNode.nodeId);
+        
+        // Center map on current node
+        if (currentNode.point != null) {
+            float pxX = (float) (currentNode.point.x / metresPerPixel);
+            float pxY = (float) (currentNode.point.y / metresPerPixel);
+            zoomContainer.panTo(pxX, pxY);
+        }
 
         // Update instruction
         if (currentStepIndex == routeNodes.size() - 1) {
