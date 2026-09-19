@@ -177,9 +177,11 @@ public class FloorPlanRouteView extends View {
         if (floorPlanWidth <= 0 || floorPlanHeight <= 0 || getWidth() <= 0 || getHeight() <= 0) {
             return;
         }
-        RectF source = new RectF(0, 0, floorPlanWidth, floorPlanHeight);
-        RectF dest = new RectF(0, 0, getWidth(), getHeight());
-        fitMatrix.setRectToRect(source, dest, Matrix.ScaleToFit.CENTER);
+        
+        // Initial map scale must fill the entire available width of the map area.
+        float scale = (float) getWidth() / floorPlanWidth;
+        fitMatrix.setScale(scale, scale);
+
         if (fitMatrixListener != null) {
             fitMatrixListener.onFitMatrixChanged(new Matrix(fitMatrix));
         }

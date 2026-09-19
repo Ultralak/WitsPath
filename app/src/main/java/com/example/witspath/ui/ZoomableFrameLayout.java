@@ -11,9 +11,9 @@ import android.widget.FrameLayout;
 
 public class ZoomableFrameLayout extends FrameLayout {
 
-    private static final float MIN_SCALE = 1f;
-    private static final float MAX_SCALE = 4f;
-    private static final float DOUBLE_TAP_SCALE = 2.5f;
+    private static final float MIN_RELATIVE_SCALE = 1f;
+    private static final float MAX_RELATIVE_SCALE = 4f;
+    private static final float DOUBLE_TAP_RELATIVE_SCALE = 2.5f;
 
     public interface OnTransformChangeListener {
         void onTransformChanged(Matrix matrix);
@@ -21,9 +21,13 @@ public class ZoomableFrameLayout extends FrameLayout {
 
     private final Matrix matrix = new Matrix();
 
-    private float scale = MIN_SCALE;
+    private float relativeScale = 1f;
     private float translateX = 0f;
     private float translateY = 0f;
+
+    private float contentWidth = 0;
+    private float contentHeight = 0;
+    private float baseScale = 1f;
 
     private float lastTouchX;
     private float lastTouchY;
@@ -53,19 +57,60 @@ public class ZoomableFrameLayout extends FrameLayout {
         gestureDetector = new GestureDetector(context, new TapListener());
     }
 
+    public void setContentSize(int width, int height) {
+        this.contentWidth = width;
+        this.contentHeight = height;
+        recalculateBaseScale();
+        resetZoom();
+    }
+
+    private void recalculateBaseScale() {
+        if (contentWidth > 0 && getWidth() > 0) {
+            baseScale = (float) getWidth() / contentWidth;
+        }
+    }
+
     public void setOnTransformChangeListener(OnTransformChangeListener listener) {
         this.transformListener = listener;
     }
 
     public void resetZoom() {
-        scale = MIN_SCALE;
+        relativeScale = MIN_RELATIVE_SCALE;
         translateX = 0f;
         translateY = 0f;
         applyTransform();
     }
 
+    public void zoomIn() {
+        zoomTo(relativeScale * 1.5f, getWidth() / 2f, getHeight() / 2f);
+    }
+
+    public void zoomOut() {
+        zoomTo(relativeScale / 1.5f, getWidth() / 2f, getHeight() / 2f);
+    }
+
+    private void zoomTo(float targetRelativeScale, float focusX, float focusY) {
+        float newScale = Math.max(MIN_RELATIVE_SCALE, Math.min(targetRelativeScale, MAX_RELATIVE_SCALE));
+        float scaleDelta = newScale / relativeScale;
+        
+        translateX = focusX - (focusX - translateX) * scaleDelta;
+        translateY = focusY - (focusY - translateY) * scaleDelta;
+        relativeScale = newScale;
+
+        clampTranslation();
+        applyTransform();
+    }
+
     public Matrix getCurrentMatrix() {
         return new Matrix(matrix);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        recalculateBaseScale();
+        clampTranslation();
+        applyTransform();
     }
 
     @Override
@@ -126,29 +171,29 @@ public class ZoomableFrameLayout extends FrameLayout {
     private void clampTranslation() {
         int width = getWidth();
         int height = getHeight();
-        if (width == 0 || height == 0) return;
+        if (width == 0 || height == 0 || contentWidth == 0 || contentHeight == 0) return;
 
-        float scaledWidth = width * scale;
-        float scaledHeight = height * scale;
+        float displayWidth = contentWidth * baseScale * relativeScale;
+        float displayHeight = contentHeight * baseScale * relativeScale;
 
-        if (scaledWidth <= width) {
-            translateX = (width - scaledWidth) / 2f;
+        if (displayWidth <= width) {
+            translateX = (width - displayWidth) / 2f;
         } else {
-            float minX = width - scaledWidth;
+            float minX = width - displayWidth;
             translateX = Math.max(minX, Math.min(translateX, 0f));
         }
 
-        if (scaledHeight <= height) {
-            translateY = (height - scaledHeight) / 2f;
+        if (displayHeight <= height) {
+            translateY = (height - displayHeight) / 2f;
         } else {
-            float minY = height - scaledHeight;
+            float minY = height - displayHeight;
             translateY = Math.max(minY, Math.min(translateY, 0f));
         }
     }
 
     private void applyTransform() {
         matrix.reset();
-        matrix.postScale(scale, scale);
+        matrix.postScale(relativeScale, relativeScale);
         matrix.postTranslate(translateX, translateY);
         if (transformListener != null) {
             transformListener.onTransformChanged(new Matrix(matrix));
@@ -167,18 +212,7 @@ public class ZoomableFrameLayout extends FrameLayout {
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
-            float newScale = scale * detector.getScaleFactor();
-            newScale = Math.max(MIN_SCALE, Math.min(newScale, MAX_SCALE));
-
-            float focusX = detector.getFocusX();
-            float focusY = detector.getFocusY();
-            float scaleDelta = newScale / scale;
-            translateX = focusX - (focusX - translateX) * scaleDelta;
-            translateY = focusY - (focusY - translateY) * scaleDelta;
-            scale = newScale;
-
-            clampTranslation();
-            applyTransform();
+            zoomTo(relativeScale * detector.getScaleFactor(), detector.getFocusX(), detector.getFocusY());
             return true;
         }
     }
@@ -186,16 +220,10 @@ public class ZoomableFrameLayout extends FrameLayout {
     private class TapListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if (scale > MIN_SCALE) {
+            if (relativeScale > MIN_RELATIVE_SCALE) {
                 resetZoom();
             } else {
-                float targetScale = Math.min(MAX_SCALE, DOUBLE_TAP_SCALE);
-                float scaleDelta = targetScale / scale;
-                translateX = e.getX() - (e.getX() - translateX) * scaleDelta;
-                translateY = e.getY() - (e.getY() - translateY) * scaleDelta;
-                scale = targetScale;
-                clampTranslation();
-                applyTransform();
+                zoomTo(DOUBLE_TAP_RELATIVE_SCALE, e.getX(), e.getY());
             }
             return true;
         }

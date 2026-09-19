@@ -204,28 +204,43 @@
                     android:layout_height="wrap_content"
                     android:text="MAP" />
 
-                <com.example.witspath.ui.ZoomableFrameLayout
-                    android:id="@+id/homeMapContainer"
-                    style="@style/WitsPath.Plate"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:clipChildren="true"
-                    android:clipToPadding="true">
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp">
 
-                    <ImageView
-                        android:id="@+id/homeFloorPlanImageView"
+                    <com.example.witspath.ui.ZoomableFrameLayout
+                        android:id="@+id/homeMapContainer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="matrix"
-                        android:src="@drawable/campusmap"
-                        android:contentDescription="@string/floor_plan" />
+                        android:background="@drawable/bg_plate"
+                        android:elevation="1dp"
+                        android:clipChildren="true"
+                        android:clipToPadding="true">
 
-                    <com.example.witspath.ui.FloorPlanRouteView
-                        android:id="@+id/homeFloorPlanRouteView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        <ImageView
+                            android:id="@+id/homeFloorPlanImageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="matrix"
+                            android:src="@drawable/campusmap"
+                            android:contentDescription="@string/floor_plan" />
 
-                </com.example.witspath.ui.ZoomableFrameLayout>
+                        <com.example.witspath.ui.FloorPlanRouteView
+                            android:id="@+id/homeFloorPlanRouteView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </com.example.witspath.ui.ZoomableFrameLayout>
+
+                    <include
+                        layout="@layout/map_controls"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end" />
+
+                </FrameLayout>
 
             </LinearLayout>
 

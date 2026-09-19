@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import android.widget.ImageView;
 import com.example.witspath.R;
 import com.example.witspath.model.Edge;
 import com.example.witspath.model.Floor;
@@ -56,11 +57,18 @@ public class NavigationActivity extends BaseActivity {
     private void initViews() {
         zoomContainer = findViewById(R.id.navigationMapContainer);
         routeView = findViewById(R.id.navigationFloorPlanRouteView);
+        ImageView imageView = findViewById(R.id.navigationFloorPlanImageView);
         fromNodeText = findViewById(R.id.navFromNodeText);
         toNodeText = findViewById(R.id.navToNodeText);
         instructionText = findViewById(R.id.navigationInstructionText);
         progressBar = findViewById(R.id.navigationProgressBar);
         stepsRecyclerView = findViewById(R.id.navigationStepsList);
+
+        routeView.setOnFitMatrixChangeListener(imageView::setImageMatrix);
+
+        findViewById(R.id.btnZoomIn).setOnClickListener(v -> zoomContainer.zoomIn());
+        findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
+        findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
 
         findViewById(R.id.navigationToolbar).setOnClickListener(v -> finish());
         findViewById(R.id.nextStepButton).setOnClickListener(v -> nextStep());
@@ -126,7 +134,10 @@ public class NavigationActivity extends BaseActivity {
         routeView.setHighlightedRoute(routeIds);
         
         routeView.setDestination(toNode.nodeId);
-        if (floor != null) routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
+        if (floor != null) {
+            zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
+            routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
+        }
     }
 
     private void setupStepsList() {

@@ -18,6 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import android.widget.ImageView;
 import com.example.witspath.R;
 import com.example.witspath.model.Floor;
 import com.example.witspath.model.Graph;
@@ -311,6 +312,13 @@ public class HomeActivity extends BaseActivity {
     private void initMap() {
         routeView = findViewById(R.id.homeFloorPlanRouteView);
         zoomContainer = findViewById(R.id.homeMapContainer);
+        ImageView imageView = findViewById(R.id.homeFloorPlanImageView);
+
+        routeView.setOnFitMatrixChangeListener(imageView::setImageMatrix);
+
+        findViewById(R.id.btnZoomIn).setOnClickListener(v -> zoomContainer.zoomIn());
+        findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
+        findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
 
         // Ensure graph is loaded to get floor dimensions
         if (Node.searchByName("").isEmpty()) {
@@ -321,6 +329,7 @@ public class HomeActivity extends BaseActivity {
         String floorId = "flr_mu2x3cer0";
         Floor floor = Floor.getById(floorId);
         if (floor != null && routeView != null) {
+            zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
             routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
         }
     }
