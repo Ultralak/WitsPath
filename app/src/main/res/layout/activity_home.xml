@@ -206,7 +206,7 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="480dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp">
 
@@ -224,7 +224,7 @@
                             android:id="@+id/homeFloorPlanImageView"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:scaleType="matrix"
+                            android:scaleType="fitXY"
                             android:src="@drawable/campusmap"
                             android:contentDescription="@string/floor_plan" />
 

@@ -66,15 +66,13 @@ public class NavigationActivity extends BaseActivity {
     private void initViews() {
         zoomContainer = findViewById(R.id.navigationMapContainer);
         routeView = findViewById(R.id.navigationFloorPlanRouteView);
-        graphOverlay = findViewById(R.id.navigationGraphOverlay);
-        ImageView imageView = findViewById(R.id.navigationFloorPlanImageView);
+        graphOverlay = findViewById(R.id.graph_overlay_view);
+        ImageView imageView = findViewById(R.id.map_image_view);
         fromNodeText = findViewById(R.id.navFromNodeText);
         toNodeText = findViewById(R.id.navToNodeText);
         instructionText = findViewById(R.id.navigationInstructionText);
         progressBar = findViewById(R.id.navigationProgressBar);
         stepsRecyclerView = findViewById(R.id.navigationStepsList);
-
-        routeView.setOnFitMatrixChangeListener(imageView::setImageMatrix);
 
         findViewById(R.id.btnZoomIn).setOnClickListener(v -> zoomContainer.zoomIn());
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
@@ -85,12 +83,6 @@ public class NavigationActivity extends BaseActivity {
         findViewById(R.id.prevStepButton).setOnClickListener(v -> prevStep());
 
         stepsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        zoomContainer.setOnTransformChangeListener(matrix -> {
-            if (graphOverlay != null) {
-                graphOverlay.updateTransform(matrix);
-            }
-        });
     }
 
     private void loadData() {
@@ -194,7 +186,7 @@ public class NavigationActivity extends BaseActivity {
         if (floor != null) {
             zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
             routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
-            
+
             // Assume bitmap matches asset dimensions for simplicity, or fetch from ImageView
             // For now, setting JSON dimensions as reference
             graphOverlay.setupTransform(floor.imageWidth, floor.imageHeight, 647, 717);
@@ -211,7 +203,7 @@ public class NavigationActivity extends BaseActivity {
 
         Node currentNode = routeNodes.get(currentStepIndex);
         routeView.setCurrentPosition(currentNode.nodeId);
-        
+
         // Center map on current node
         if (currentNode.point != null) {
             float pxX = (float) (currentNode.point.x / metresPerPixel);

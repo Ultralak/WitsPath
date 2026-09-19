@@ -19,7 +19,6 @@ import java.util.Map;
 public class GraphOverlayView extends View {
 
     private final Matrix currentMatrix = new Matrix();
-    private final Matrix identityMatrix = new Matrix();
     private MapTransformHelper transformHelper;
     
     private final Map<String, FloorPlanNode> nodeMap = new HashMap<>();
@@ -42,7 +41,7 @@ public class GraphOverlayView extends View {
         edgePaint.setStrokeWidth(4f);
         edgePaint.setStyle(Paint.Style.STROKE);
 
-        routePaint.setColor(0xFF2196F3);
+        routePaint.setColor(0xFF2196F3); // Default clear blue path color
         routePaint.setStrokeWidth(12f);
         routePaint.setStyle(Paint.Style.STROKE);
         routePaint.setStrokeCap(Paint.Cap.ROUND);
@@ -94,7 +93,6 @@ public class GraphOverlayView extends View {
         // Note: If this view is a child of ZoomableFrameLayout, the canvas 
         // is ALREADY transformed by the zoom/pan matrix. 
         // We only need the JSON-to-Bitmap mapping here.
-        float nodeRadius = 8f;
         float markerRadius = 20f;
 
         for (FloorPlanEdge edge : edges) {
@@ -113,8 +111,9 @@ public class GraphOverlayView extends View {
 
             if (!inRoute) continue;
 
-            float[] p1 = transformHelper.mapToCanvas(n1.getX(), n1.getY(), identityMatrix);
-            float[] p2 = transformHelper.mapToCanvas(n2.getX(), n2.getY(), identityMatrix);
+            // Pass currentMatrix instead of identityMatrix so it respects zoomContainer scaling and panning
+            float[] p1 = transformHelper.mapToCanvas(n1.getX(), n1.getY(), currentMatrix);
+            float[] p2 = transformHelper.mapToCanvas(n2.getX(), n2.getY(), currentMatrix);
 
             canvas.drawLine(p1[0], p1[1], p2[0], p2[1], routePaint);
 
@@ -126,7 +125,12 @@ public class GraphOverlayView extends View {
         }
 
         for (FloorPlanNode node : nodeMap.values()) {
-            float[] p = transformHelper.mapToCanvas(node.getX(), node.getY(), identityMatrix);
+            // Only draw if the node is part of the travelled highlighted route
+            if (!highlightedRoute.contains(node.getNodeId())) {
+                continue;
+            }
+
+            float[] p = transformHelper.mapToCanvas(node.getX(), node.getY(), currentMatrix);
             
             if (node.getNodeId().equals(currentPosId)) {
                 markerPaint.setColor(0xFF4CAF50);
@@ -134,8 +138,6 @@ public class GraphOverlayView extends View {
             } else if (node.getNodeId().equals(destinationId)) {
                 markerPaint.setColor(0xFFF44336);
                 canvas.drawCircle(p[0], p[1], markerRadius, markerPaint);
-            } else {
-                canvas.drawCircle(p[0], p[1], nodeRadius, nodePaint);
             }
         }
     }

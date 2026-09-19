@@ -12,7 +12,11 @@ public class MapTransformHelper {
     }
 
     public float[] mapToCanvas(float jsonX, float jsonY, Matrix zoomMatrix) {
-        float[] pts = {jsonX * scaleX, jsonY * scaleY};
+        // Subtract from X to move LEFT, subtract from Y to move UP (e.g., 15 pixels)
+        float shiftedX = (jsonX * scaleX) - 1500f;
+        float shiftedY = (jsonY * scaleY) - 1500000f;
+
+        float[] pts = {shiftedX, shiftedY};
         zoomMatrix.mapPoints(pts);
         return pts;
     }

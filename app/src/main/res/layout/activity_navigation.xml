@@ -1,172 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigationDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorInk"
     android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/navigationToolbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/navigationRootLayout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="match_parent"
         android:background="@color/colorInk"
-        app:navigationIcon="@drawable/ic_back"
-        app:navigationIconTint="@color/colorRoute"
-        app:title="Navigation"
-        app:titleTextColor="@color/colorRoute"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/navigationHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/navigationToolbar">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/navigationToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorInk"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/colorRoute"
+            app:title="Navigation"
+            app:titleTextColor="@color/colorRoute"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- FROM Plate -->
         <LinearLayout
-            android:id="@+id/navFromPlate"
-            style="@style/WitsPath.Plate"
+            android:id="@+id/navigationHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="12dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="4dp">
-            <View style="@style/WitsPath.Tick" android:layout_width="4dp" android:layout_height="20dp" />
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
-                <TextView android:id="@+id/navFromNodeText" style="@style/TextAppearance.WitsPath.Code" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="14sp" tools:text="Matrix Hub" />
-                <TextView style="@style/TextAppearance.WitsPath.Body.Small" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="START" android:textSize="10sp" />
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@id/navigationToolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- FROM Plate -->
+            <LinearLayout
+                android:id="@+id/navFromPlate"
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+                <View style="@style/WitsPath.Tick" android:layout_width="4dp" android:layout_height="20dp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
+                    <TextView android:id="@+id/navFromNodeText" style="@style/TextAppearance.WitsPath.Code" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="14sp" tools:text="Matrix Hub" />
+                    <TextView style="@style/TextAppearance.WitsPath.Body.Small" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="START" android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- TO Plate -->
+            <LinearLayout
+                android:id="@+id/navToPlate"
+                style="@style/WitsPath.Plate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center_vertical">
+                <View style="@style/WitsPath.Tick" android:layout_width="4dp" android:layout_height="20dp" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
+                    <TextView android:id="@+id/navToNodeText" style="@style/TextAppearance.WitsPath.Code" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="14sp" tools:text="Tower of Light" />
+                    <TextView style="@style/TextAppearance.WitsPath.Body.Small" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DESTINATION" android:textSize="10sp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <!-- TO Plate -->
-        <LinearLayout
-            android:id="@+id/navToPlate"
-            style="@style/WitsPath.Plate"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/navigationStepsList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="12dp"
-            android:gravity="center_vertical">
-            <View style="@style/WitsPath.Tick" android:layout_width="4dp" android:layout_height="20dp" />
-            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="12dp" android:orientation="vertical">
-                <TextView android:id="@+id/navToNodeText" style="@style/TextAppearance.WitsPath.Code" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="14sp" tools:text="Tower of Light" />
-                <TextView style="@style/TextAppearance.WitsPath.Body.Small" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DESTINATION" android:textSize="10sp" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+            android:layout_height="130dp"
+            android:padding="16dp"
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@id/navigationHeader"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/navigationMapContainerWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/navigationHeader"
-        app:layout_constraintBottom_toTopOf="@id/navigationStepsList"
-        app:layout_constraintHeight_percent="0.4">
-
-        <com.example.witspath.ui.ZoomableFrameLayout
-            android:id="@+id/navigationMapContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/navigationFloorPlanImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="matrix"
-                android:src="@drawable/campusmap"
-                android:contentDescription="@string/floor_plan" />
-
-            <com.example.witspath.ui.FloorPlanRouteView
-                android:id="@+id/navigationFloorPlanRouteView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <com.example.witspath.ui.GraphOverlayView
-                android:id="@+id/navigationGraphOverlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </com.example.witspath.ui.ZoomableFrameLayout>
-
-        <include
-            layout="@layout/map_controls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end" />
-    </FrameLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/navigationStepsList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="16dp"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/navigationMapContainerWrapper"
-        app:layout_constraintBottom_toTopOf="@id/navigationFooter" />
-
-    <LinearLayout
-        android:id="@+id/navigationFooter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/colorPlate"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/navigationInstructionText"
-            style="@style/TextAppearance.WitsPath.Header.Small"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+        <FrameLayout
+            android:id="@+id/navigationMapWrapper"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            tools:text="Walk 50m to CLM Entrance 2" />
+            app:layout_constraintTop_toBottomOf="@id/navigationStepsList"
+            app:layout_constraintBottom_toTopOf="@id/navigationBottomButtonsPanel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <ProgressBar
-            android:id="@+id/navigationProgressBar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:progressDrawable="@drawable/bg_progress_bar"
-            tools:progress="30" />
+            <com.example.witspath.ui.ZoomableFrameLayout
+                android:id="@+id/navigationMapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/map_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/campusmap"
+                    android:translationX="20dp"
+                    android:translationY="10dp"
+                    android:contentDescription="@string/floor_plan" />
+
+                <com.example.witspath.ui.FloorPlanRouteView
+                    android:id="@+id/navigationFloorPlanRouteView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.example.witspath.ui.GraphOverlayView
+                    android:id="@+id/graph_overlay_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:visibility="invisible" />
+
+            </com.example.witspath.ui.ZoomableFrameLayout>
+
+            <include
+                layout="@layout/map_controls"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end" />
+
+        </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/navigationBottomButtonsPanel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:orientation="vertical"
+            android:background="@color/colorInk"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/prevStepButton"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="Back"
-                app:icon="@drawable/ic_previous"
-                app:iconGravity="textStart"
-                app:strokeColor="@color/colorRoute"
-                app:cornerRadius="8dp" />
+            <LinearLayout
+                android:id="@+id/navigationFooter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorPlate"
+                android:padding="16dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/nextStepButton"
-                style="@style/WitsPath.Button"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="Next"
-                app:icon="@drawable/ic_next"
-                app:iconGravity="textEnd"
-                app:cornerRadius="8dp" />
+                <TextView
+                    android:id="@+id/navigationInstructionText"
+                    style="@style/TextAppearance.WitsPath.Header.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp"
+                    tools:text="Walk 50m to CLM Entrance 2" />
+
+                <ProgressBar
+                    android:id="@+id/navigationProgressBar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:progressDrawable="@drawable/bg_value_pill"
+                    tools:progress="30" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/prevStepButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="Back"
+                        app:icon="@drawable/ic_previous"
+                        app:iconGravity="textStart"
+                        app:strokeColor="@color/colorRoute"
+                        app:cornerRadius="8dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/nextStepButton"
+                        style="@style/WitsPath.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Next"
+                        app:icon="@drawable/ic_next"
+                        app:iconGravity="textEnd"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>
