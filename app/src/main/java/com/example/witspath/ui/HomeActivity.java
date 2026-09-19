@@ -54,7 +54,7 @@ public class HomeActivity extends BaseActivity {
     private View autoDetectButton;
     private FloorPlanRouteView routeView;
     private ZoomableFrameLayout zoomContainer;
-    
+
     private String selectedFromNodeId = null;
     private String selectedDestinationId = null;
 
@@ -221,7 +221,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void autoDetectLocation() {
-        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu2x3ima1");
+        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu7krqt6g");
         updateFromLocation(homeNode);
         currentLocationLabelText.setText(R.string.auto_detected);
         Toast.makeText(this, "Location detected", Toast.LENGTH_SHORT).show();

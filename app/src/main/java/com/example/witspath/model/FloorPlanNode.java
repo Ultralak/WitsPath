@@ -1,9 +1,11 @@
 package com.example.witspath.model;
 
+import com.example.witspath.ui.FloorPlanRouteView;
+
 /**
  * A single node on the floor-plan graph (junction, ramp, lift, room entrance, etc).
  * Coordinates are in the floor plan's intrinsic pixel space (imageWidth/imageHeight
- * from the graph JSON), NOT screen pixels — {@link com.example.witspath.ui.FloorPlanRouteView} maps them.
+ * from the graph JSON), NOT screen pixels — {@link FloorPlanRouteView} maps them.
  */
 public class FloorPlanNode {
 
@@ -11,14 +13,16 @@ public class FloorPlanNode {
     private final String floorId;
     private final String type;
     private final String label;
+    private final String bssid;
     private final float x;
     private final float y;
 
-    public FloorPlanNode(String nodeId, String floorId, String type, String label, float x, float y) {
+    public FloorPlanNode(String nodeId, String floorId, String type, String label, String bssid, float x, float y) {
         this.nodeId = nodeId;
         this.floorId = floorId;
         this.type = type;
         this.label = label;
+        this.bssid = bssid;
         this.x = x;
         this.y = y;
     }
@@ -38,6 +42,10 @@ public class FloorPlanNode {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getBssid() {
+        return bssid;
     }
 
     public float getX() {

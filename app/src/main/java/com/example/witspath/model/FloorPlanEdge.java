@@ -13,15 +13,22 @@ public class FloorPlanEdge {
     private final double distance;
     private final double accessibilityCost;
     private final String status;
+    private final String label;
 
     public FloorPlanEdge(String edgeId, String fromNodeId, String toNodeId,
                           double distance, double accessibilityCost, String status) {
+        this(edgeId, fromNodeId, toNodeId, distance, accessibilityCost, status, "");
+    }
+
+    public FloorPlanEdge(String edgeId, String fromNodeId, String toNodeId,
+                          double distance, double accessibilityCost, String status, String label) {
         this.edgeId = edgeId;
         this.fromNodeId = fromNodeId;
         this.toNodeId = toNodeId;
         this.distance = distance;
         this.accessibilityCost = accessibilityCost;
         this.status = status;
+        this.label = label;
     }
 
     public String getEdgeId() {
@@ -47,5 +54,9 @@ public class FloorPlanEdge {
     /** e.g. "ok", "blocked" */
     public String getStatus() {
         return status;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }

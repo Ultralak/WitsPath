@@ -39,7 +39,8 @@ public class FirestorePopulator {
                         nodeObj.optString("type", "CLASSROOM"),
                         nodeObj.getDouble("x"),
                         nodeObj.getDouble("y"),
-                        nodeObj.optString("label", null)
+                        nodeObj.optString("label", null),
+                        nodeObj.optString("bssid", "")
                 );
                 nodeDTOs.add(node);
             }
@@ -57,7 +58,8 @@ public class FirestorePopulator {
                         edgeObj.optString("status", "ok"),
                         edgeObj.optBoolean("ramp", false),
                         edgeObj.optBoolean("stairs", false),
-                        edgeObj.optBoolean("elevator", false)
+                        edgeObj.optBoolean("elevator", false),
+                        edgeObj.optString("label", "")
                 );
                 edgeDTOs.add(edge);
             }

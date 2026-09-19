@@ -7,17 +7,19 @@ public class NodeDTO {
     private double x;
     private double y;
     private String label;
+    private String bssid;
 
     public NodeDTO() {
     }
 
-    public NodeDTO(String nodeId, String floorId, String type, double x, double y, String label) {
+    public NodeDTO(String nodeId, String floorId, String type, double x, double y, String label, String bssid) {
         this.nodeId = nodeId;
         this.floorId = floorId;
         this.type = type;
         this.x = x;
         this.y = y;
         this.label = label;
+        this.bssid = bssid;
     }
 
     public String getNodeId() {
@@ -66,5 +68,13 @@ public class NodeDTO {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getBssid() {
+        return bssid;
+    }
+
+    public void setBssid(String bssid) {
+        this.bssid = bssid;
     }
 }

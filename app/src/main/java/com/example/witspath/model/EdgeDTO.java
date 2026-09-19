@@ -10,11 +10,16 @@ public class EdgeDTO {
     private boolean ramp;
     private boolean stairs;
     private boolean elevator;
+    private String label;
 
     public EdgeDTO() {
     }
 
     public EdgeDTO(String edgeId, String fromNodeId, String toNodeId, double distance, double accessibilityCost, String status, boolean ramp, boolean stairs, boolean elevator) {
+        this(edgeId, fromNodeId, toNodeId, distance, accessibilityCost, status, ramp, stairs, elevator, "");
+    }
+
+    public EdgeDTO(String edgeId, String fromNodeId, String toNodeId, double distance, double accessibilityCost, String status, boolean ramp, boolean stairs, boolean elevator, String label) {
         this.edgeId = edgeId;
         this.fromNodeId = fromNodeId;
         this.toNodeId = toNodeId;
@@ -24,6 +29,7 @@ public class EdgeDTO {
         this.ramp = ramp;
         this.stairs = stairs;
         this.elevator = elevator;
+        this.label = label;
     }
 
     public String getEdgeId() {
@@ -96,5 +102,13 @@ public class EdgeDTO {
 
     public void setElevator(boolean elevator) {
         this.elevator = elevator;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

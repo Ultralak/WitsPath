@@ -69,6 +69,7 @@ public class Graph
             );
 
             String type = n.getString("type");
+            String bssid = n.optString("bssid", "");
 
             double x = n.getDouble("x");
             double y = n.getDouble("y");
@@ -85,7 +86,8 @@ public class Graph
                     x,
                     y,
                     type,
-                    floorId
+                    floorId,
+                    bssid
             );
         }
 
@@ -121,6 +123,8 @@ public class Graph
 
             String status =
                     e.optString("status", "ok");
+            
+            String label = e.optString("label", "");
 
             Node from = Node.getByID(fromNodeId);
             Node to = Node.getByID(toNodeId);
@@ -154,7 +158,8 @@ public class Graph
                     ramp,
                     stairs,
                     elevator,
-                    statusOK
+                    statusOK,
+                    label
             );
 
             System.out.println(

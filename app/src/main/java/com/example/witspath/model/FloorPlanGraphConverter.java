@@ -76,6 +76,7 @@ public final class FloorPlanGraphConverter {
                     floorId,
                     type,
                     node.name,   // label
+                    node.bssid != null ? node.bssid : "",
                     pixelX,
                     pixelY
             ));
@@ -120,7 +121,8 @@ public final class FloorPlanGraphConverter {
                     edge.node2.name,
                     edge.distance,
                     edge.accessibilityCost,
-                    status
+                    status,
+                    edge.label != null ? edge.label : ""
             ));
         }
 

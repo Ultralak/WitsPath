@@ -25,6 +25,11 @@ import com.example.witspath.model.FloorPlanNode;
 import com.example.witspath.model.Graph;
 import com.example.witspath.model.Node;
 import com.example.witspath.model.PathFinder;
+import com.example.witspath.util.WifiPositionManager;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +40,7 @@ public class NavigationActivity extends BaseActivity {
 
     private ZoomableFrameLayout zoomContainer;
     private FloorPlanRouteView routeView;
+    private GraphOverlayView graphOverlay;
     private TextView fromNodeText;
     private TextView toNodeText;
     private TextView instructionText;
@@ -45,6 +51,7 @@ public class NavigationActivity extends BaseActivity {
     private LinkedList<Node> routeNodes;
     private int currentStepIndex = 0;
     private double metresPerPixel = 1.0;
+    private WifiPositionManager wifiPositionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,7 @@ public class NavigationActivity extends BaseActivity {
     private void initViews() {
         zoomContainer = findViewById(R.id.navigationMapContainer);
         routeView = findViewById(R.id.navigationFloorPlanRouteView);
+        graphOverlay = findViewById(R.id.navigationGraphOverlay);
         ImageView imageView = findViewById(R.id.navigationFloorPlanImageView);
         fromNodeText = findViewById(R.id.navFromNodeText);
         toNodeText = findViewById(R.id.navToNodeText);
@@ -76,6 +84,12 @@ public class NavigationActivity extends BaseActivity {
         findViewById(R.id.prevStepButton).setOnClickListener(v -> prevStep());
 
         stepsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        zoomContainer.setOnTransformChangeListener(matrix -> {
+            if (graphOverlay != null) {
+                graphOverlay.updateTransform(matrix);
+            }
+        });
     }
 
     private void loadData() {
@@ -110,6 +124,45 @@ public class NavigationActivity extends BaseActivity {
         setupMap(fromNode, toNode);
         setupStepsList();
         updateUI();
+        initWifiSnapping();
+    }
+
+    private void initWifiSnapping() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+            return;
+        }
+
+        Collection<Node> allNodes = Node.searchByName("");
+        wifiPositionManager = new WifiPositionManager(this, allNodes, this::onNodeSnapped);
+        wifiPositionManager.start();
+    }
+
+    private void onNodeSnapped(Node node) {
+        if (routeNodes == null) return;
+        
+        int index = routeNodes.indexOf(node);
+        if (index != -1 && index != currentStepIndex) {
+            currentStepIndex = index;
+            runOnUiThread(this::updateUI);
+            Toast.makeText(this, "Snapped to " + (node.label != null ? node.label : node.nodeId), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (wifiPositionManager != null) {
+            wifiPositionManager.stop();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            initWifiSnapping();
+        }
     }
 
     private void setupMap(Node fromNode, Node toNode) {
@@ -129,15 +182,21 @@ public class NavigationActivity extends BaseActivity {
         List<FloorPlanEdge> renderEdges = FloorPlanGraphConverter.toFloorPlanEdges(allEdges);
 
         routeView.setGraph(renderNodes, renderEdges);
+        graphOverlay.setData(renderNodes, renderEdges);
         
         List<String> routeIds = new ArrayList<>();
         for (Node n : routeNodes) routeIds.add(n.nodeId);
         routeView.setHighlightedRoute(routeIds);
+        graphOverlay.setRoute(routeIds, fromNode.nodeId, toNode.nodeId);
         
         routeView.setDestination(toNode.nodeId);
         if (floor != null) {
             zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
             routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
+            
+            // Assume bitmap matches asset dimensions for simplicity, or fetch from ImageView
+            // For now, setting JSON dimensions as reference
+            graphOverlay.setupTransform(floor.imageWidth, floor.imageHeight, 647, 717);
         }
     }
 

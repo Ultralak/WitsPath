@@ -16,6 +16,7 @@ public class Node
     public Point point;
     public NodeType type;
     public String floorId;
+    public String bssid;
 
     public ArrayList<Node> neighbours;
     public ArrayList<Edge> edges;
@@ -50,16 +51,27 @@ public class Node
 
     public Node(String i, String n, double x, double y, String t, String floorId)
     {
-        this(i, n, "WSS", x, y, t, floorId);
+        this(i, n, "WSS", x, y, t, floorId, "");
+    }
+
+    public Node(String i, String n, double x, double y, String t, String floorId, String bssid)
+    {
+        this(i, n, "WSS", x, y, t, floorId, bssid);
     }
 
     public Node(String i, String l, String a, double x, double y, String t, String floorId)
+    {
+        this(i, l, a, x, y, t, floorId, "");
+    }
+
+    public Node(String i, String l, String a, double x, double y, String t, String floorId, String bssid)
     {
         id = count.incrementAndGet();
         nodeId = i;
         label = l;
         name = i; // Use ID as the internal name key for lookups
         this.floorId = floorId;
+        this.bssid = bssid;
 
         try {
             area = Area.valueOf(a.toUpperCase());

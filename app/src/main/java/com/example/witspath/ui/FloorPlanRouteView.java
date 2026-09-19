@@ -61,6 +61,7 @@ public class FloorPlanRouteView extends View {
     private final Paint currentPositionRingPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint destinationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint routeBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public FloorPlanRouteView(Context context) {
         this(context, null);
@@ -118,6 +119,12 @@ public class FloorPlanRouteView extends View {
 
         destinationPaint.setColor(ContextCompat.getColor(context, R.color.colorFlag));
         destinationPaint.setStyle(Paint.Style.FILL);
+
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(dp(10));
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setFakeBoldText(true);
+        textPaint.setShadowLayer(dp(2), 0, 0, Color.BLACK);
     }
 
     private float dp(float value) {
@@ -177,7 +184,7 @@ public class FloorPlanRouteView extends View {
         if (floorPlanWidth <= 0 || floorPlanHeight <= 0 || getWidth() <= 0 || getHeight() <= 0) {
             return;
         }
-        
+
         // Initial map scale must fill the entire available width of the map area.
         float scale = (float) getWidth() / floorPlanWidth;
         fitMatrix.setScale(scale, scale);
@@ -213,51 +220,48 @@ public class FloorPlanRouteView extends View {
             FloorPlanNode to = nodesById.get(edge.getToNodeId());
             if (from == null || to == null) continue;
 
+            boolean inRoute = false;
+            for (int i = 0; i < highlightedRouteNodeIds.size() - 1; i++) {
+                if ((highlightedRouteNodeIds.get(i).equals(edge.getFromNodeId()) && highlightedRouteNodeIds.get(i + 1).equals(edge.getToNodeId())) ||
+                        (highlightedRouteNodeIds.get(i).equals(edge.getToNodeId()) && highlightedRouteNodeIds.get(i + 1).equals(edge.getFromNodeId()))) {
+                    inRoute = true;
+                    break;
+                }
+            }
+
+            if (!inRoute) continue;
+
             boolean blocked = "blocked".equals(edge.getStatus()) || edge.getAccessibilityCost() >= 999;
 
             float[] p1 = mapNode(from);
             float x1 = p1[0], y1 = p1[1];
             float[] p2 = mapNode(to);
-            canvas.drawLine(x1, y1, p2[0], p2[1], blocked ? blockedEdgePaint : edgePaint);
+            float x2 = p2[0], y2 = p2[1];
+            
+            canvas.drawLine(x1, y1, x2, y2, blocked ? blockedEdgePaint : edgePaint);
+
+            if (edge.getLabel() != null && !edge.getLabel().isEmpty()) {
+                canvas.drawText(edge.getLabel(), (x1 + x2) / 2, (y1 + y2) / 2, textPaint);
+            }
         }
     }
 
     private void drawHighlightedRoute(Canvas canvas) {
         if (highlightedRouteNodeIds.size() < 2) return;
         
-        List<float[]> points = new ArrayList<>();
+        Path path = new Path();
+        boolean first = true;
+
         for (String nodeId : highlightedRouteNodeIds) {
             FloorPlanNode node = nodesById.get(nodeId);
             if (node == null) continue;
             float[] p = mapNode(node);
-            points.add(new float[]{p[0], p[1]});
-        }
-
-        if (points.size() < 2) return;
-
-        Path path = new Path();
-        float[] p0 = points.get(0);
-        path.moveTo(p0[0], p0[1]);
-
-        if (points.size() == 2) {
-            float[] p1 = points.get(1);
-            path.lineTo(p1[0], p1[1]);
-        } else {
-            // Line to first midpoint
-            float[] p1 = points.get(1);
-            path.lineTo((p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2);
-
-            for (int k = 1; k < points.size() - 1; k++) {
-                float[] pk = points.get(k);
-                float[] pkNext = points.get(k + 1);
-                float midNextX = (pk[0] + pkNext[0]) / 2;
-                float midNextY = (pk[1] + pkNext[1]) / 2;
-                path.quadTo(pk[0], pk[1], midNextX, midNextY);
+            if (first) {
+                path.moveTo(p[0], p[1]);
+                first = false;
+            } else {
+                path.lineTo(p[0], p[1]);
             }
-
-            // Final line to end
-            float[] pLast = points.get(points.size() - 1);
-            path.lineTo(pLast[0], pLast[1]);
         }
 
         canvas.drawPath(path, routeBorderPaint);
