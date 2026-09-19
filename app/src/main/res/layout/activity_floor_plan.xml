@@ -1,165 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/floorPlanRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorInk">
+    android:background="@color/colorInk"
+    android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/floorPlanToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/colorInk"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@color/colorRoute"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/floorPlanToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/colorInkText">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/fromText"
+                    style="@style/TextAppearance.WitsPath.Body.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    tools:text="Matrix Hub"
+                    android:textColor="@color/colorInkTextMuted" />
 
-                    <TextView
-                        android:id="@+id/fromText"
-                        style="@style/TextAppearance.WitsPath.Header"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="MHR"
-                        android:textSize="12sp"
-                        android:textColor="@color/colorInkTextMuted" />
-
-                    <TextView
-                        android:id="@+id/toText"
-                        style="@style/TextAppearance.WitsPath.Header"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="WSS 102"
-                        android:textSize="16sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@color/colorRoute" />
+                <TextView
+                    android:id="@+id/toText"
+                    style="@style/TextAppearance.WitsPath.Header.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Matrix Lab"
+                    android:textColor="@color/colorRoute" />
             </LinearLayout>
 
-        </com.google.android.material.appbar.MaterialToolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+            <View
+                android:layout_width="2dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:background="@color/colorAccent" />
+        </LinearLayout>
 
-    <!-- Elevator call-panel floor switcher -->
-    <LinearLayout
-        android:id="@+id/floorSwitcherPanel"
-        android:layout_width="48dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical"
-        android:background="@color/colorPlateRaised"
-        android:padding="8dp"
-        android:elevation="4dp"
-        app:layout_constraintBottom_toBottomOf="@id/floorPlanZoomContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/floorPlanZoomContainer">
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:text="2"
-            android:textSize="10sp"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            app:backgroundTint="@color/colorPlate"
-            android:textColor="@color/colorInkText" />
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="8dp"
-            android:text="1"
-            android:textSize="10sp"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            app:backgroundTint="@color/colorRoute"
-            android:textColor="@color/colorInk" />
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="8dp"
-            android:text="G"
-            android:textSize="10sp"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            app:backgroundTint="@color/colorPlate"
-            android:textColor="@color/colorInkText" />
-
-    </LinearLayout>
-
-    <HorizontalScrollView
-        android:id="@+id/accessibilityFilterScroll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:scrollbars="none"
-        android:clipToPadding="false"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/accessibilityFilterChipGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleLine="true"
-            app:chipSpacingHorizontal="8dp">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/stepFreeFilterChip"
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Step-free"
-                app:chipBackgroundColor="@color/colorPlate"
-                app:chipStrokeWidth="0dp"
-                android:textColor="@color/colorAccessible"
-                app:chipIcon="@drawable/ic_lift"
-                app:chipIconTint="@color/colorAccessible" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/avoidStairsFilterChip"
-                style="@style/Widget.Material3.Chip.Assist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Avoid stairs"
-                app:chipBackgroundColor="@color/colorPlate"
-                app:chipStrokeWidth="0dp"
-                android:textColor="@color/colorInkText" />
-
-        </com.google.android.material.chip.ChipGroup>
-
-    </HorizontalScrollView>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <com.example.witspath.ui.ZoomableFrameLayout
         android:id="@+id/floorPlanZoomContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/accessibilityFilterScroll"
+        app:layout_constraintTop_toBottomOf="@id/floorPlanToolbar"
         app:layout_constraintBottom_toTopOf="@id/reportIssueButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -169,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="matrix"
+            android:src="@drawable/campusmap"
             android:contentDescription="@string/floor_plan" />
 
         <com.example.witspath.ui.FloorPlanRouteView
@@ -178,23 +78,20 @@
 
     </com.example.witspath.ui.ZoomableFrameLayout>
 
+    <!-- Elevator call-panel floor switcher -->
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/reportIssueButton"
         style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_margin="20dp"
         android:text="@string/report_issue_on_path"
         android:textColor="@color/colorFlag"
-        android:fontFamily="sans-serif-condensed"
-        android:textStyle="bold"
         app:icon="@drawable/ic_flag"
         app:iconTint="@color/colorFlag"
         app:strokeColor="@color/colorFlag"
-        app:strokeWidth="1dp"
-        app:cornerRadius="4dp"
+        app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

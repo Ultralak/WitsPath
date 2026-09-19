@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Team Wavelets - WitsPath
-    activity_settings.xml
-    Every switch/chip here maps to a SharedPreferences key (see PrefKeys in the notes) and,
-    when the user is signed in, mirrors to users/{uid}/preferences in Firestore.
-    The routing switches feed directly into the accessibilityCost weighting used by
-    Dijkstra/Yen's, so changing them must trigger a re-route.
--->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settingsRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorInk">
+    android:background="@color/colorInk"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settingsToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
+        android:background="@color/colorInk"
         app:navigationIcon="@drawable/ic_back"
-        app:navigationIconTint="@color/colorInkText"
+        app:navigationIconTint="@color/colorRoute"
         app:title="@string/settings_title"
-        app:titleTextColor="@color/colorInkText"
+        app:titleTextColor="@color/colorRoute"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -33,7 +27,6 @@
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:paddingBottom="32dp"
-        android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/settingsToolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,13 +56,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_account"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -81,25 +72,23 @@
                             style="@style/WitsPath.SettingRow.Title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/nav_guest_title" />
+                            tools:text="Ailton" />
 
                         <TextView
                             android:id="@+id/settingsAccountEmailText"
                             style="@style/WitsPath.SettingRow.Subtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/nav_guest_subtitle" />
+                            tools:text="ailton@example.com" />
 
                     </LinearLayout>
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Chevron"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                        />
+                        app:tint="#556B8D"
+                        android:importantForAccessibility="no" />
 
                 </LinearLayout>
 
@@ -110,13 +99,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_sync"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -141,8 +128,7 @@
                         android:id="@+id/settingsSyncSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -167,13 +153,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_language"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -191,30 +175,26 @@
                             style="@style/WitsPath.SettingRow.Subtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/language_english" />
+                            tools:text="English" />
 
                     </LinearLayout>
 
                     <View
                         android:id="@+id/settingsLanguageSwatch"
-                        android:layout_width="8dp"
-                        android:layout_height="13dp"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
                         android:layout_marginEnd="12dp"
-                        android:background="@drawable/bg_language_swatch"
-                        android:backgroundTint="@color/colorLangEnglish" />
+                        android:background="@drawable/bg_language_swatch" />
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Chevron"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#556B8D"
+                        android:importantForAccessibility="no" />
 
                 </LinearLayout>
 
-                <!-- Text size -->
                 <LinearLayout
                     style="@style/WitsPath.SettingRow.Column"
                     android:layout_width="match_parent"
@@ -224,16 +204,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
 
                         <ImageView
-                            style="@style/WitsPath.SettingRow.Icon"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_text_size"
-                            app:tint="@color/colorInkText"
-                            android:rotation="180"
-                             />
+                            app:tint="#002C5F"
+                            android:importantForAccessibility="no" />
 
                         <TextView
                             style="@style/WitsPath.SettingRow.Title"
@@ -249,10 +229,13 @@
                         android:id="@+id/settingsTextSizeChipGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         app:singleLine="true"
                         app:singleSelection="true"
-                        app:selectionRequired="true">
+                        app:selectionRequired="true"
+                        app:chipSpacingHorizontal="8dp">
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/textSizeSmallChip"
@@ -266,7 +249,6 @@
                             style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
                             android:text="@string/text_size_default" />
 
                         <com.google.android.material.chip.Chip
@@ -293,13 +275,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_contrast"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -334,13 +314,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_accessible"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -365,8 +343,7 @@
                         android:id="@+id/settingsScreenReaderSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -385,11 +362,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <!-- Mobility profile: seeds the default accessibilityCost weights -->
                 <LinearLayout
                     style="@style/WitsPath.SettingRow.Column"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <TextView
                         style="@style/WitsPath.SettingRow.Title"
@@ -397,26 +375,20 @@
                         android:layout_height="wrap_content"
                         android:text="@string/settings_mobility_profile_title" />
 
-                    <TextView
-                        style="@style/WitsPath.SettingRow.Subtitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_mobility_profile_subtitle" />
-
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/settingsMobilityChipGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="12dp"
                         app:singleSelection="true"
-                        app:selectionRequired="true">
+                        app:selectionRequired="true"
+                        app:chipSpacingHorizontal="8dp">
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/mobilityWheelchairChip"
                             style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
                             android:text="@string/mobility_wheelchair" />
 
                         <com.google.android.material.chip.Chip
@@ -450,13 +422,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_accessible"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -481,8 +451,7 @@
                         android:id="@+id/settingsStepFreeSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -492,13 +461,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_lift"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -523,8 +490,7 @@
                         android:id="@+id/settingsPreferLiftsSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -534,13 +500,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_flag"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -565,16 +529,16 @@
                         android:id="@+id/settingsAvoidSteepSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
-                <!-- Max walking/rolling distance before the router prefers a longer step-free leg -->
                 <LinearLayout
                     style="@style/WitsPath.SettingRow.Column"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -593,9 +557,9 @@
                             style="@style/TextAppearance.WitsPath.Code"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorRoute"
+                            android:textColor="@color/colorAccent"
                             android:textSize="16sp"
-                            android:text="600 m" />
+                            tools:text="600 m" />
 
                     </LinearLayout>
 
@@ -603,15 +567,13 @@
                         android:id="@+id/settingsMaxDistanceSlider"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:contentDescription="@string/settings_max_distance_title"
-                        android:stepSize="50"
-                        android:value="600"
+                        android:layout_marginTop="8dp"
                         android:valueFrom="100"
                         android:valueTo="2000"
-                        app:thumbColor="@color/colorRoute"
-                        app:trackColorActive="@color/colorRoute"
-                        app:trackColorInactive="@color/colorPlateRaised" />
+                        android:stepSize="50"
+                        app:thumbColor="@color/colorAccent"
+                        app:trackColorActive="@color/colorAccent"
+                        app:trackColorInactive="@color/colorAccentBorder" />
 
                 </LinearLayout>
 
@@ -635,14 +597,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_volume_up"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
-
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -667,8 +626,7 @@
                         android:id="@+id/settingsVoiceSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -678,13 +636,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_vibration"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -709,8 +665,7 @@
                         android:id="@+id/settingsHapticsSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -720,13 +675,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_my_location"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -751,8 +704,7 @@
                         android:id="@+id/settingsAutoLocateSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -763,13 +715,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_building"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -787,25 +737,25 @@
                             style="@style/WitsPath.SettingRow.Subtitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/settings_default_building_value" />
+                            tools:text="Braamfontein East" />
 
                     </LinearLayout>
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Chevron"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                        />
+                        app:tint="#556B8D"
+                        android:importantForAccessibility="no" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     style="@style/WitsPath.SettingRow.Column"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <TextView
                         style="@style/WitsPath.SettingRow.Title"
@@ -817,17 +767,17 @@
                         android:id="@+id/settingsUnitsChipGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="12dp"
                         app:singleLine="true"
                         app:singleSelection="true"
-                        app:selectionRequired="true">
+                        app:selectionRequired="true"
+                        app:chipSpacingHorizontal="8dp">
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/unitsMetresChip"
                             style="@style/Widget.Material3.Chip.Filter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
                             android:text="@string/units_metres" />
 
                         <com.google.android.material.chip.Chip
@@ -868,13 +818,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_flag"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -899,12 +847,9 @@
                         android:id="@+id/settingsShowFlaggedSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
-
-
 
                 <LinearLayout
                     android:id="@+id/settingsMyReportsRow"
@@ -913,13 +858,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_edit"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -941,13 +884,11 @@
                     </LinearLayout>
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Chevron"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#556B8D"
+                        android:importantForAccessibility="no" />
 
                 </LinearLayout>
 
@@ -971,13 +912,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_shield"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1002,8 +941,7 @@
                         android:id="@+id/settingsAnonUsageSwitch"
                         style="@style/WitsPath.SettingRow.Switch"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true" />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -1014,13 +952,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_delete"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1050,13 +986,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_lock"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1072,13 +1006,11 @@
                     </LinearLayout>
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Chevron"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#556B8D"
+                        android:importantForAccessibility="no" />
 
                 </LinearLayout>
 
@@ -1103,13 +1035,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_help"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1125,13 +1055,11 @@
                     </LinearLayout>
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Chevron"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#556B8D"
+                        android:importantForAccessibility="no" />
 
                 </LinearLayout>
 
@@ -1142,13 +1070,11 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_info"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#002C5F"
+                        android:importantForAccessibility="no" />
 
                     <LinearLayout
                         style="@style/WitsPath.SettingRow.TextGroup"
@@ -1170,13 +1096,11 @@
                     </LinearLayout>
 
                     <ImageView
-                        style="@style/WitsPath.SettingRow.Chevron"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/colorInkText"
-                        android:rotation="180"
-                         />
+                        app:tint="#556B8D"
+                        android:importantForAccessibility="no" />
 
                 </LinearLayout>
 
@@ -1188,19 +1112,14 @@
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="20dp"
-                android:fontFamily="sans-serif-condensed"
-                android:letterSpacing="0.05"
+                android:layout_margin="24dp"
                 android:text="@string/nav_log_out"
                 android:textColor="@color/colorFlag"
-                android:textStyle="bold"
-                app:cornerRadius="4dp"
+                app:strokeColor="@color/colorFlag"
                 app:icon="@drawable/ic_logout"
-                app:iconGravity="textStart"
                 app:iconTint="@color/colorFlag"
-                app:strokeColor="@color/colorFlag" />
+                app:iconGravity="textStart"
+                app:cornerRadius="8dp" />
 
         </LinearLayout>
 

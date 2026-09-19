@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">@color/colorLangSesotho</color>
+    <color name="colorAccentDark">@color/colorLangSesothoDark</color>
+    <color name="colorAccentLight">@color/colorLangSesothoLight</color>
+    <color name="colorAccentSurface">@color/colorLangSesothoSurface</color>
+    <color name="colorAccentBorder">@color/colorLangSesothoBorder</color>
+</resources>

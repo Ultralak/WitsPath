@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Team Wavelets - WitsPath
-    Hamburger drawer contents. Every row has a drawable; log out is red (@color/colorFlag).
-    Rows are plain clickable LinearLayouts (not a menu resource) so the log-out row can
-    carry its own colour and so Java wiring is a straight findViewById + setOnClickListener.
--->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorInk"
-    android:scrollbars="none"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="16dp">
+        android:paddingBottom="32dp">
 
         <!-- ============================ HEADER / ACCOUNT ============================ -->
         <LinearLayout
@@ -26,30 +20,31 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:background="@color/colorPlate"
+            android:background="@color/colorRoute"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             android:paddingStart="20dp"
             android:paddingEnd="16dp"
-            android:paddingTop="24dp"
-            android:paddingBottom="20dp">
+            android:paddingTop="48dp"
+            android:paddingBottom="24dp">
 
             <ImageView
                 android:id="@+id/navAvatarImage"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:background="@drawable/bg_avatar_circle"
+                android:backgroundTint="#22FFFFFF"
                 android:padding="12dp"
                 android:src="@drawable/ic_account"
-                app:tint="@color/colorInkText"
+                app:tint="#FFFFFF"
                 android:importantForAccessibility="no" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="14dp"
+                android:layout_marginStart="16dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -59,42 +54,37 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="@string/nav_guest_title" />
+                    android:textColor="#FFFFFF"
+                    tools:text="Guest User" />
 
                 <TextView
                     android:id="@+id/navUserEmailText"
-                    style="@style/TextAppearance.WitsPath.Body"
+                    style="@style/TextAppearance.WitsPath.Body.Small"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="@string/nav_guest_subtitle" />
+                    android:textColor="#CCFFFFFF"
+                    tools:text="Tap to sign in" />
 
             </LinearLayout>
 
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:alpha="0.5"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_chevron_right"
-                app:tint="@color/colorInkText"
+                app:tint="#FFFFFF"
                 android:importantForAccessibility="no" />
 
         </LinearLayout>
 
         <!-- ============================== NAVIGATE ============================== -->
         <TextView
-            style="@style/TextAppearance.WitsPath.Header"
+            style="@style/WitsPath.SectionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginBottom="4dp"
-            android:letterSpacing="0.1"
-            android:text="@string/nav_section_navigate"
-            android:textColor="@color/colorInkTextMuted"
-            android:textSize="12sp" />
+            android:text="@string/nav_section_navigate" />
 
         <LinearLayout
             android:id="@+id/navHomeRow"
@@ -103,12 +93,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -119,98 +108,48 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/navDirectoryRow"
-            style="@style/WitsPath.DrawerRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_search"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
-
-            <TextView
-                style="@style/WitsPath.DrawerRow.Label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/nav_directory" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navSavedPlacesRow"
-            style="@style/WitsPath.DrawerRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_bookmark"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
-
-            <TextView
-                style="@style/WitsPath.DrawerRow.Label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/nav_saved_places" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/navMyReportsRow"
             style="@style/WitsPath.DrawerRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_flag"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/nav_my_reports"
-                />
+                android:text="@string/nav_my_reports" />
 
             <TextView
                 android:id="@+id/navMyReportsCount"
-                style="@style/TextAppearance.WitsPath.Body"
+                style="@style/TextAppearance.WitsPath.Code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_value_pill"
+                android:background="@drawable/bg_language_swatch"
+                android:backgroundTint="@color/colorAccent"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
-                android:textColor="@color/colorRoute"
-                android:text="3" />
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                tools:text="3" />
 
         </LinearLayout>
 
         <!-- ============================== SETTINGS ============================== -->
         <TextView
-            style="@style/TextAppearance.WitsPath.Header"
+            style="@style/WitsPath.SectionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginBottom="4dp"
-            android:letterSpacing="0.1"
-            android:text="@string/nav_section_settings"
-            android:textColor="@color/colorInkTextMuted"
-            android:textSize="12sp" />
+            android:text="@string/nav_section_settings" />
 
         <LinearLayout
             android:id="@+id/navSettingsRow"
@@ -219,19 +158,17 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_settings"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/nav_settings"
-                />
+                android:text="@string/nav_settings" />
 
         </LinearLayout>
 
@@ -242,12 +179,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_language"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -257,19 +193,18 @@
 
             <View
                 android:id="@+id/navLanguageSwatch"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_language_swatch"
-                android:backgroundTint="@color/colorLangEnglish" />
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_language_swatch" />
 
             <TextView
                 android:id="@+id/navLanguageValueText"
-                style="@style/TextAppearance.WitsPath.Body"
+                style="@style/TextAppearance.WitsPath.Body.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="@string/language_english" />
+                tools:text="English" />
 
         </LinearLayout>
 
@@ -280,12 +215,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_accessible"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -302,12 +236,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_tune"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -317,23 +250,13 @@
 
         </LinearLayout>
 
-
-
         <!-- =============================== ACCOUNT =============================== -->
         <TextView
-            style="@style/TextAppearance.WitsPath.Header"
+            style="@style/WitsPath.SectionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginBottom="4dp"
-            android:letterSpacing="0.1"
-            android:text="@string/nav_section_account"
-            android:textColor="@color/colorInkTextMuted"
-            android:textSize="12sp" />
+            android:text="@string/nav_section_account" />
 
-        <!-- Show navLogInRow + navSignUpRow when signed out; hide them and show
-             navLogOutRow when FirebaseAuth.getInstance().getCurrentUser() != null. -->
         <LinearLayout
             android:id="@+id/navLogInRow"
             style="@style/WitsPath.DrawerRow"
@@ -341,12 +264,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_login"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -363,12 +285,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_person_add"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -380,16 +301,10 @@
 
         <!-- =============================== SUPPORT =============================== -->
         <TextView
-            style="@style/TextAppearance.WitsPath.Header"
+            style="@style/WitsPath.SectionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="22dp"
-            android:layout_marginBottom="4dp"
-            android:letterSpacing="0.1"
-            android:text="@string/nav_section_support"
-            android:textColor="@color/colorInkTextMuted"
-            android:textSize="12sp" />
+            android:text="@string/nav_section_support" />
 
         <LinearLayout
             android:id="@+id/navHelpRow"
@@ -398,12 +313,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_help"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -420,12 +334,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_info"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -442,12 +355,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                style="@style/WitsPath.DrawerRow.Icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_sync"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="#002C5F"
+                android:importantForAccessibility="no" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -462,53 +374,40 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             android:background="@color/colorRule" />
 
         <LinearLayout
             android:id="@+id/navLogOutRow"
+            style="@style/WitsPath.DrawerRow"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:minHeight="56dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingStart="20dp"
-            android:paddingEnd="16dp">
+            android:layout_height="wrap_content">
 
-            <!-- Red tint is baked into ic_logout, so no app:tint needed here. -->
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_logout"
-                android:importantForAccessibility="no"
-                app:tint="@color/colorInkText"
-                android:rotation="180" />
+                app:tint="@color/colorFlag"
+                android:importantForAccessibility="no" />
 
             <TextView
-                style="@style/TextAppearance.WitsPath.Code"
+                style="@style/WitsPath.DrawerRow.Label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:letterSpacing="0.05"
                 android:text="@string/nav_log_out"
-                android:textColor="@color/colorFlag"
-                android:textSize="16sp" />
+                android:textColor="@color/colorFlag" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/navVersionText"
-            style="@style/TextAppearance.WitsPath.Body"
+            style="@style/TextAppearance.WitsPath.Body.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="12dp"
             android:text="@string/app_version"
-            android:textColor="@color/colorInkTextMuted"
-            android:textSize="12sp" />
+            android:textColor="@color/colorInkTextMuted" />
 
     </LinearLayout>
 

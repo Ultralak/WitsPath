@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">@color/colorLangAfrikaans</color>
+    <color name="colorAccentDark">@color/colorLangAfrikaansDark</color>
+    <color name="colorAccentLight">@color/colorLangAfrikaansLight</color>
+    <color name="colorAccentSurface">@color/colorLangAfrikaansSurface</color>
+    <color name="colorAccentBorder">@color/colorLangAfrikaansBorder</color>
+</resources>

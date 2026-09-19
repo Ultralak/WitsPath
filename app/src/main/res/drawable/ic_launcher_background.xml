@@ -4,7 +4,7 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108"
-    android:tint="@color/colorInkText">
+    >
 
         <path
             android:fillColor="#3DDC84"

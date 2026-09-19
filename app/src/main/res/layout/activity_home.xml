@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Team Wavelets - WitsPath
-    activity_home.xml, now wrapped in a DrawerLayout. Original content is unchanged;
-    the hamburger (homeToolbar navigationIcon) opens homeDrawerLayout.
--->
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,162 +7,252 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- ============================ MAIN CONTENT ============================ -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/homeRootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorInk">
+        android:background="@color/colorInk"
+        android:fitsSystemWindows="false">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/homeToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
+            android:background="@color/colorInk"
             app:navigationIcon="@drawable/ic_menu"
-            app:navigationIconTint="@color/colorInkText"
+            app:navigationIconTint="@color/colorRoute"
             app:navigationContentDescription="@string/cd_open_menu"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
-            android:id="@+id/greetingText"
-            style="@style/TextAppearance.WitsPath.Header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
-            tools:text="Good Afternoon, Ailton!"
-            app:layout_constraintTop_toBottomOf="@id/homeToolbar"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/currentLocationLabel"
-            style="@style/TextAppearance.WitsPath.Header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/current_location"
-            android:textSize="14sp"
-            android:letterSpacing="0.1"
-            android:textColor="@color/colorInkTextMuted"
-            app:layout_constraintTop_toBottomOf="@id/greetingText"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <!-- Directory-board style current location plate -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/currentLocationPlate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorPlate"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            app:layout_constraintTop_toBottomOf="@id/currentLocationLabel">
-
-            <!-- The 3dp amber tick -->
-            <View
-                android:layout_width="3dp"
-                android:layout_height="0dp"
-                android:background="@color/colorRoute"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
-                android:id="@+id/currentLocationNameText"
-                style="@style/TextAppearance.WitsPath.Code"
+                style="@style/TextAppearance.WitsPath.Header.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                tools:text="MHR"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/colorRoute"
+                android:letterSpacing="0.1" />
 
-            <TextView
-                android:id="@+id/autoDetectedLabel"
-                style="@style/TextAppearance.WitsPath.Body"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/auto_detected"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/frequentedLocationsLabel"
-            style="@style/TextAppearance.WitsPath.Header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/frequented_locations"
-            android:textSize="14sp"
-            android:letterSpacing="0.1"
-            android:textColor="@color/colorInkTextMuted"
-            app:layout_constraintTop_toBottomOf="@id/currentLocationPlate"
-            app:layout_constraintStart_toStartOf="parent" />
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/frequentedLocationsScrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="20dp"
             android:clipToPadding="false"
-            android:scrollbars="none"
-            app:layout_constraintTop_toBottomOf="@id/frequentedLocationsLabel"
+            app:layout_constraintTop_toBottomOf="@id/homeToolbar"
             app:layout_constraintBottom_toTopOf="@id/navigateButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
-                android:id="@+id/frequentedLocationsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@color/colorRule"
-                android:divider="@drawable/directory_divider"
-                android:showDividers="middle" />
+                android:paddingBottom="32dp">
+
+                <TextView
+                    android:id="@+id/greetingText"
+                    style="@style/TextAppearance.WitsPath.Header.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="20dp"
+                    tools:text="Good Afternoon, User!" />
+
+                <TextView
+                    style="@style/WitsPath.SectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/current_location" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:id="@+id/currentLocationPlate"
+                        style="@style/WitsPath.Plate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <View
+                            style="@style/WitsPath.Tick"
+                            android:layout_width="4dp"
+                            android:layout_height="24dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/currentLocationNameText"
+                                style="@style/TextAppearance.WitsPath.Code"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18sp"
+                                tools:text="Matrix Hub" />
+
+                            <TextView
+                                android:id="@+id/currentLocationLabelText"
+                                style="@style/TextAppearance.WitsPath.Body.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/auto_detected" />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/currentLocationIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_location"
+                            android:contentDescription="@null"
+                            app:tint="@color/colorAccent" />
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/autoDetectButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_my_location"
+                        app:tint="@color/colorRoute"
+                        android:contentDescription="@string/settings_auto_locate_title" />
+
+                </LinearLayout>
+
+                <!-- NEW "TO" SECTION -->
+                <TextView
+                    style="@style/WitsPath.SectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TO" />
+
+                <LinearLayout
+                    android:id="@+id/toLocationPlate"
+                    style="@style/WitsPath.Plate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <View
+                        style="@style/WitsPath.Tick"
+                        android:layout_width="4dp"
+                        android:layout_height="24dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/toLocationNameText"
+                            style="@style/TextAppearance.WitsPath.Code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select Destination"
+                            android:textColor="@color/colorInkTextMuted"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/toLocationLabelText"
+                            style="@style/TextAppearance.WitsPath.Body.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            tools:text="Destination"
+                            tools:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/toLocationIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_search"
+                        android:contentDescription="@null"
+                        app:tint="@color/colorAccent" />
+
+                </LinearLayout>
+
+                <!-- MAP SECTION -->
+                <TextView
+                    style="@style/WitsPath.SectionLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MAP" />
+
+                <com.example.witspath.ui.ZoomableFrameLayout
+                    android:id="@+id/homeMapContainer"
+                    style="@style/WitsPath.Plate"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:clipChildren="true"
+                    android:clipToPadding="true">
+
+                    <ImageView
+                        android:id="@+id/homeFloorPlanImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="matrix"
+                        android:src="@drawable/campusmap"
+                        android:contentDescription="@string/floor_plan" />
+
+                    <com.example.witspath.ui.FloorPlanRouteView
+                        android:id="@+id/homeFloorPlanRouteView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </com.example.witspath.ui.ZoomableFrameLayout>
+
+            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/navigateButton"
-            style="@style/Widget.Material3.Button"
+            style="@style/WitsPath.Button"
             android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_marginBottom="24dp"
+            android:layout_height="56dp"
+            android:layout_margin="20dp"
             android:text="@string/start_navigation"
-            android:textColor="@color/colorInk"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            android:letterSpacing="0.05"
-            app:backgroundTint="@color/colorRoute"
-            app:cornerRadius="4dp"
-            app:layout_constraintWidth_percent="0.8"
+            app:icon="@drawable/ic_search"
+            app:iconGravity="textStart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- ============================== DRAWER ============================== -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/homeNavigationView"
-        android:layout_width="300dp"
+        android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorInk"
-        android:fitsSystemWindows="true"
-        app:elevation="0dp">
+        android:background="@color/colorPlate"
+        android:fitsSystemWindows="true">
 
         <include layout="@layout/nav_drawer_content" />
 

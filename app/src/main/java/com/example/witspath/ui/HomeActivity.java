@@ -3,16 +3,13 @@ package com.example.witspath.ui;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import com.example.witspath.ui.BaseActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -22,56 +19,63 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.witspath.R;
-import com.example.witspath.model.SavedPlace;
+import com.example.witspath.model.Floor;
+import com.example.witspath.model.Graph;
+import com.example.witspath.model.Node;
 import com.example.witspath.util.Languages;
 import com.example.witspath.util.Prefs;
 import com.example.witspath.util.FirestorePopulator;
 
 import java.util.Calendar;
-import java.util.List;
 
-/**
- * Team Wavelets - WitsPath
- * Home screen. Owns the hamburger drawer (nav_drawer_content.xml, included inside
- * activity_home.xml's NavigationView) and every row's navigation target.
- * Frontend only: FirebaseAuth.getCurrentUser() is read to decide what the drawer
- * header shows, but no Firestore reads/writes happen here.
- */
 public class HomeActivity extends BaseActivity {
 
     private DrawerLayout drawerLayout;
     private Prefs prefs;
 
-    // Drawer header
+    // Drawer views
     private TextView navUserNameText;
     private TextView navUserEmailText;
-
-    // Drawer account rows (visibility toggles with sign-in state)
     private View navLogInRow;
     private View navSignUpRow;
     private View navLogOutRow;
-
-    // Language swatch + value shown in the drawer
     private View navLanguageSwatch;
     private TextView navLanguageValueText;
 
     // Main content
     private TextView greetingText;
     private TextView currentLocationNameText;
-    private LinearLayout frequentedLocationsContainer;
+    private TextView currentLocationLabelText;
+    private TextView toLocationNameText;
+    private TextView toLocationLabelText;
+    private View currentLocationPlate;
+    private View toLocationPlate;
+    private View autoDetectButton;
+    private FloorPlanRouteView routeView;
+    private ZoomableFrameLayout zoomContainer;
+    
+    private String selectedFromNodeId = null;
+    private String selectedDestinationId = null;
 
-    private final ActivityResultLauncher<Intent> roomPickerLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> fromPickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    String selectedRoom = result.getData().getStringExtra("selected_room");
-                    if (selectedRoom != null) {
-                        Intent intent = new Intent(this, FloorPlanActivity.class);
-                        intent.putExtra("to_node", selectedRoom);
-                        // Assume current location as "MHR" or from Prefs
-                        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu2x3ima1");
-                        intent.putExtra("from_node", homeNode);
-                        startActivity(intent);
+                    String nodeId = result.getData().getStringExtra("selected_room");
+                    if (nodeId != null) {
+                        updateFromLocation(nodeId);
+                    }
+                }
+            }
+    );
+
+    private final ActivityResultLauncher<Intent> destinationPickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    String nodeId = result.getData().getStringExtra("selected_room");
+                    if (nodeId != null) {
+                        updateToLocation(nodeId);
                     }
                 }
             }
@@ -90,9 +94,9 @@ public class HomeActivity extends BaseActivity {
 
         bindDrawerViews();
         bindDrawerClicks();
-        bindMainContentClicks();
+        bindMainContent();
+        initMap();
 
-        // Back press closes an open drawer before it does anything else.
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -113,7 +117,6 @@ public class HomeActivity extends BaseActivity {
         refreshLanguageIndicator();
         refreshGreeting();
         refreshCurrentLocation();
-        refreshFrequentedLocations();
     }
 
     private void refreshAccountState() {
@@ -160,42 +163,82 @@ public class HomeActivity extends BaseActivity {
         navLogOutRow = findViewById(R.id.navLogOutRow);
         navLanguageSwatch = findViewById(R.id.navLanguageSwatch);
         navLanguageValueText = findViewById(R.id.navLanguageValueText);
-
-        greetingText = findViewById(R.id.greetingText);
-        currentLocationNameText = findViewById(R.id.currentLocationNameText);
-        frequentedLocationsContainer = findViewById(R.id.frequentedLocationsContainer);
     }
 
-    private void bindMainContentClicks() {
-        findViewById(R.id.navigateButton).setOnClickListener(v ->
-                roomPickerLauncher.launch(new Intent(this, RoomPickerActivity.class)));
+    private void bindMainContent() {
+        greetingText = findViewById(R.id.greetingText);
+        currentLocationNameText = findViewById(R.id.currentLocationNameText);
+        currentLocationLabelText = findViewById(R.id.currentLocationLabelText);
+        toLocationNameText = findViewById(R.id.toLocationNameText);
+        toLocationLabelText = findViewById(R.id.toLocationLabelText);
+        currentLocationPlate = findViewById(R.id.currentLocationPlate);
+        toLocationPlate = findViewById(R.id.toLocationPlate);
+        autoDetectButton = findViewById(R.id.autoDetectButton);
+
+        currentLocationPlate.setOnClickListener(v ->
+                fromPickerLauncher.launch(new Intent(this, RoomPickerActivity.class)));
+
+        toLocationPlate.setOnClickListener(v ->
+                destinationPickerLauncher.launch(new Intent(this, RoomPickerActivity.class)));
+
+        autoDetectButton.setOnClickListener(v -> autoDetectLocation());
+
+        findViewById(R.id.navigateButton).setOnClickListener(v -> {
+            if (selectedDestinationId == null) {
+                Toast.makeText(this, "Please select a destination", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (selectedFromNodeId == null) {
+                Toast.makeText(this, "Please select a starting point", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(this, NavigationActivity.class);
+            intent.putExtra("to_node", selectedDestinationId);
+            intent.putExtra("from_node", selectedFromNodeId);
+            startActivity(intent);
+        });
+    }
+
+    private void updateFromLocation(String nodeId) {
+        selectedFromNodeId = nodeId;
+        Node node = Node.getByID(nodeId);
+        String label = (node != null && node.label != null) ? node.label : nodeId;
+        currentLocationNameText.setText(label);
+        currentLocationNameText.setTextColor(getColor(R.color.colorInkText));
+        currentLocationLabelText.setText("Selected Start");
+        currentLocationLabelText.setVisibility(View.VISIBLE);
+    }
+
+    private void updateToLocation(String nodeId) {
+        selectedDestinationId = nodeId;
+        Node node = Node.getByID(nodeId);
+        String label = (node != null && node.label != null) ? node.label : nodeId;
+        toLocationNameText.setText(label);
+        toLocationNameText.setTextColor(getColor(R.color.colorInkText));
+        toLocationLabelText.setText("Selected Destination");
+        toLocationLabelText.setVisibility(View.VISIBLE);
+    }
+
+    private void autoDetectLocation() {
+        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu2x3ima1");
+        updateFromLocation(homeNode);
+        currentLocationLabelText.setText(R.string.auto_detected);
+        Toast.makeText(this, "Location detected", Toast.LENGTH_SHORT).show();
     }
 
     private void bindDrawerClicks() {
         findViewById(R.id.navHeaderAccount).setOnClickListener(v -> onAccountRowClicked());
-
         findViewById(R.id.navHomeRow).setOnClickListener(v -> closeDrawer());
-        findViewById(R.id.navDirectoryRow).setOnClickListener(v -> {
-            closeDrawer();
-            roomPickerLauncher.launch(new Intent(this, RoomPickerActivity.class));
-        });
-        findViewById(R.id.navSavedPlacesRow).setOnClickListener(v ->
-                openAndCloseDrawer(SavedPlacesActivity.class));
-        findViewById(R.id.navMyReportsRow).setOnClickListener(v ->
-                openAndCloseDrawer(MyReportsActivity.class));
-
-        findViewById(R.id.navSettingsRow).setOnClickListener(v ->
-                openAndCloseDrawer(SettingsActivity.class));
-        findViewById(R.id.navLanguageRow).setOnClickListener(v ->
-                openAndCloseDrawer(LanguageActivity.class));
+        findViewById(R.id.navMyReportsRow).setOnClickListener(v -> openAndCloseDrawer(MyReportsActivity.class));
+        findViewById(R.id.navSettingsRow).setOnClickListener(v -> openAndCloseDrawer(SettingsActivity.class));
+        findViewById(R.id.navLanguageRow).setOnClickListener(v -> openAndCloseDrawer(LanguageActivity.class));
         findViewById(R.id.navAccessibilityRow).setOnClickListener(v -> {
             closeDrawer();
             Intent intent = new Intent(this, SettingsActivity.class);
             intent.putExtra("scrollToSection", "accessibility");
             startActivity(intent);
         });
-        findViewById(R.id.navPreferencesRow).setOnClickListener(v ->
-                openAndCloseDrawer(PreferencesActivity.class));
+        findViewById(R.id.navPreferencesRow).setOnClickListener(v -> openAndCloseDrawer(PreferencesActivity.class));
 
         navLogInRow.setOnClickListener(v -> openAndCloseDrawer(LoginActivity.class));
         navSignUpRow.setOnClickListener(v -> openAndCloseDrawer(SignUpActivity.class));
@@ -231,7 +274,6 @@ public class HomeActivity extends BaseActivity {
                 .show();
     }
 
-
     private void refreshLanguageIndicator() {
         String tag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
         navLanguageValueText.setText(Languages.displayNameForTag(this, tag));
@@ -255,35 +297,33 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void refreshCurrentLocation() {
-        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "");
-        currentLocationNameText.setText(homeNode.isEmpty() ? "---" : homeNode);
-    }
-
-    private void refreshFrequentedLocations() {
-        frequentedLocationsContainer.removeAllViews();
-        List<SavedPlace> places = SavedPlace.fromJsonArray(
-                prefs.getString(Prefs.KEY_SAVED_PLACES_JSON, ""));
-
-        if (places.isEmpty()) {
-            return;
-        }
-
-        LayoutInflater inflater = LayoutInflater.from(this);
-        for (SavedPlace place : places) {
-            View row = inflater.inflate(R.layout.item_frequented_location, frequentedLocationsContainer, false);
-            ((TextView) row.findViewById(R.id.locationNameText)).setText(place.label);
-            ((TextView) row.findViewById(R.id.lastVisitedText)).setText(place.detail);
-
-            row.setOnClickListener(v -> {
-                Intent intent = new Intent(this, FloorPlanActivity.class);
-                intent.putExtra("targetNodeId", place.nodeId);
-                startActivity(intent);
-            });
-
-            frequentedLocationsContainer.addView(row);
+        if (selectedFromNodeId == null) {
+            String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "");
+            if (!homeNode.isEmpty()) {
+                updateFromLocation(homeNode);
+            } else {
+                currentLocationNameText.setText("---");
+                currentLocationLabelText.setVisibility(View.GONE);
+            }
         }
     }
-    
+
+    private void initMap() {
+        routeView = findViewById(R.id.homeFloorPlanRouteView);
+        zoomContainer = findViewById(R.id.homeMapContainer);
+
+        // Ensure graph is loaded to get floor dimensions
+        if (Node.searchByName("").isEmpty()) {
+            Graph.loadFromAssets(this, "graph_data.json");
+        }
+
+        // West Campus floor ID from JSON
+        String floorId = "flr_mu2x3cer0";
+        Floor floor = Floor.getById(floorId);
+        if (floor != null && routeView != null) {
+            routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
+        }
+    }
 
     private void closeDrawer() {
         drawerLayout.closeDrawer(GravityCompat.START);

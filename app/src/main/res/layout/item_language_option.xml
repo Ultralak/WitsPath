@@ -1,68 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Team Wavelets - WitsPath
-    item_language_option.xml - inflate into languageListContainer if you build the
-    language list from a String[][] of {bcp47Tag, englishName, nativeName}.
-    Set languageOptionCheck visibility to VISIBLE for the active tag only.
--->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/languageOptionRow"
+    style="@style/WitsPath.SettingRow"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPlate"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:minHeight="64dp"
+    android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingEnd="20dp">
 
     <View
         android:id="@+id/languageOptionTick"
         android:layout_width="4dp"
-        android:layout_height="match_parent"
+        android:layout_height="24dp"
         android:background="@color/colorLangSystem" />
 
     <LinearLayout
+        style="@style/WitsPath.SettingRow.TextGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingTop="14dp"
-        android:paddingBottom="14dp">
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/languageOptionNameText"
-            style="@style/TextAppearance.WitsPath.Code"
+            style="@style/WitsPath.SettingRow.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="@string/language_english"
-            android:clickable="false"
-            android:focusable="false"/>
+            tools:text="English" />
 
         <TextView
             android:id="@+id/languageOptionNativeText"
-            style="@style/TextAppearance.WitsPath.Body"
+            style="@style/WitsPath.SettingRow.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="@string/language_english"
-            android:clickable="false"
-            android:focusable="false"/>
+            tools:text="English" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/languageOptionCheck"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:src="@drawable/ic_check"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:importantForAccessibility="no"
-        app:tint="@color/colorRoute" />
+        app:tint="@color/colorAccent"
+        tools:visibility="visible" />
 
 </LinearLayout>

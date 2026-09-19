@@ -1,57 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Team Wavelets - WitsPath
-    activity_login.xml - FirebaseAuth signInWithEmailAndPassword.
-    "Continue as guest" uses signInAnonymously() so reports still get a stable userId
-    (reports/{reportId}.userId) and the 3-unique-report rule keeps working.
--->
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/loginRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorInk"
     android:fillViewport="true"
-    android:scrollbars="none">
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="32dp">
+        android:padding="24dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/loginToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_marginStart="-16dp"
-            android:background="@android:color/transparent"
+            android:background="@color/colorInk"
             app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@color/colorInkText" />
+            app:navigationIconTint="@color/colorRoute"
+            app:title="@string/login_title"
+            app:titleTextColor="@color/colorRoute" />
 
         <TextView
-            style="@style/TextAppearance.WitsPath.Header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/login_title" />
-
-        <TextView
-            style="@style/TextAppearance.WitsPath.Body"
+            style="@style/TextAppearance.WitsPath.Body.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/login_subtitle" />
+            android:layout_marginTop="24dp"
+            android:text="@string/login_subtitle"
+            android:textColor="@color/colorInkTextMuted" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/loginEmailLayout"
             style="@style/WitsPath.TextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="32dp"
             android:hint="@string/field_email"
             app:startIconDrawable="@drawable/ic_email">
 
@@ -59,7 +47,6 @@
                 android:id="@+id/loginEmailInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="emailAddress"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/colorInkText" />
 
@@ -70,17 +57,15 @@
             style="@style/WitsPath.TextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/field_password"
             app:endIconMode="password_toggle"
-            app:endIconDrawable="@drawable/ic_visibility"
             app:startIconDrawable="@drawable/ic_lock">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/loginPasswordInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:textColor="@color/colorInkText" />
@@ -89,42 +74,37 @@
 
         <TextView
             android:id="@+id/loginForgotPasswordText"
-            style="@style/TextAppearance.WitsPath.Body"
+            style="@style/TextAppearance.WitsPath.Code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:minHeight="44dp"
-            android:gravity="center_vertical"
+            android:padding="8dp"
             android:text="@string/login_forgot_password"
-            android:textColor="@color/colorRoute" />
+            android:textColor="@color/colorAccent" />
 
         <TextView
             android:id="@+id/loginErrorText"
-            style="@style/TextAppearance.WitsPath.Body"
+            style="@style/TextAppearance.WitsPath.Body.Small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:textColor="@color/colorFlag"
             android:visibility="gone"
-            android:text="@string/login_error_generic" />
+            tools:text="Invalid credentials" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginButton"
-            style="@style/Widget.Material3.Button"
+            style="@style/WitsPath.Button"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-condensed"
-            android:letterSpacing="0.05"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
             android:text="@string/login_button"
-            android:textColor="@color/colorInk"
-            android:textStyle="bold"
-            app:backgroundTint="@color/colorRoute"
-            app:cornerRadius="4dp" />
+            app:icon="@drawable/ic_login"
+            app:iconGravity="textStart" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginGuestButton"
@@ -134,23 +114,28 @@
             android:layout_marginTop="12dp"
             android:text="@string/login_continue_guest"
             android:textColor="@color/colorInkText"
-            app:cornerRadius="4dp"
-            app:strokeColor="@color/colorRule" />
+            app:strokeColor="@color/colorRule"
+            app:cornerRadius="8dp" />
 
         <ProgressBar
             android:id="@+id/loginProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:indeterminateTint="@color/colorRoute"
+            android:layout_marginTop="24dp"
+            android:indeterminateTint="@color/colorAccent"
             android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="32dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -165,15 +150,13 @@
                 style="@style/TextAppearance.WitsPath.Code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="8dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:minHeight="44dp"
-                android:gravity="center_vertical"
+                android:padding="8dp"
                 android:text="@string/nav_sign_up"
-                android:textColor="@color/colorRoute"
-                android:textSize="16sp" />
+                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 

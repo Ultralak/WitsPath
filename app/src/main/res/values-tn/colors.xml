@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">@color/colorLangSetswana</color>
+    <color name="colorAccentDark">@color/colorLangSetswanaDark</color>
+    <color name="colorAccentLight">@color/colorLangSetswanaLight</color>
+    <color name="colorAccentSurface">@color/colorLangSetswanaSurface</color>
+    <color name="colorAccentBorder">@color/colorLangSetswanaBorder</color>
+</resources>

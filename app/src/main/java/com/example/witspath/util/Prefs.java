@@ -34,9 +34,7 @@ public final class Prefs {
     public static final String KEY_SHOW_FLAGGED = "pref_show_flagged";
     public static final String KEY_ANON_USAGE = "pref_anon_usage";
 
-    public static final String KEY_TRACK_FREQUENT = "pref_track_frequent";
     public static final String KEY_HOME_NODE_ID = "pref_home_node_id";
-    public static final String KEY_SAVED_PLACES_JSON = "pref_saved_places_json";
 
     private final SharedPreferences prefs;
 

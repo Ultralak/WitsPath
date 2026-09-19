@@ -6,6 +6,14 @@
         <entry key="Firebase Crashlytics">
           <value>
             <InsightsFilterSettings>
+              <option name="connection">
+                <ConnectionSetting>
+                  <option name="appId" value="com.example.witspath" />
+                  <option name="mobileSdkAppId" value="1:559692559984:android:bd6bc2c248edd8145ba6b5" />
+                  <option name="projectId" value="wavelets-wits-nav" />
+                  <option name="projectNumber" value="559692559984" />
+                </ConnectionSetting>
+              </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
               <option name="timeIntervalDays" value="THIRTY_DAYS" />
               <option name="visibilityType" value="ALL" />

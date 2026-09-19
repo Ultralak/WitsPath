@@ -1,74 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Background, cool-toned ink rather than flat black -->
-    <color name="colorInk">#0D1013</color>
+    <!-- WITSPATH DESIGN SYSTEM - BASE PALETTE (LIGHT THEME) -->
 
-    <!-- Row/surface fill -->
-    <color name="colorPlate">#15181C</color>
+    <!-- Screen Background - Neutral grey for depth -->
+    <color name="colorInk">#E8EDF2</color>
 
-    <!-- Sheets, elevated surfaces -->
-    <color name="colorPlateRaised">#1C2126</color>
+    <!-- Card/Surface fill - Pure White for maximum contrast -->
+    <color name="colorPlate">#FFFFFF</color>
 
-    <!-- Hairline dividers, default vs. emphasis -->
-    <color name="colorRule">#262B31</color>
-    <color name="colorRuleStrong">#3A414A</color>
+    <!-- Elevated surfaces -->
+    <color name="colorPlateRaised">#DDE3EA</color>
 
-    <!-- Primary/secondary text -->
-    <color name="colorInkText">#F2F4F6</color>
-    <color name="colorInkTextMuted">#8D96A1</color>
+    <!-- Hairline dividers -->
+    <color name="colorRule">#DDE3EA</color>
+    <color name="colorRuleStrong">#C4CED9</color>
 
-    <!-- Warm amber, the one accent, used only for the active path and primary actions -->
-    <color name="colorRoute">#F2A93B</color>
+    <!-- Typography - Wits-inspired Dark Blue -->
+    <color name="colorInkText">#002C5F</color>
+    <color name="colorInkTextMuted">#556B8D</color>
 
-    <!-- Semantic teal, step-free/accessible indicator -->
-    <color name="colorAccessible">#34C29B</color>
+    <!-- Active branding - Wits Blue -->
+    <color name="colorRoute">#003B7E</color>
 
-    <!-- Semantic red, reported/blocked-path indicator -->
-    <color name="colorFlag">#E5594F</color>
+    <!-- Semantic colours -->
+    <color name="colorAccessible">#00897B</color>
+    <color name="colorFlag">#D32F2F</color>
 
-    <!-- Compatibility mappings for existing layouts if needed,
-         though we are rewriting them to use the new names -->
+    <!-- DYNAMIC ACCENT TOKENS -->
+    <color name="colorAccent">@color/colorLangSystem</color>
+    <color name="colorAccentDark">@color/colorLangSystemDark</color>
+    <color name="colorAccentLight">@color/colorLangSystemLight</color>
+    <color name="colorAccentSurface">@color/colorLangSystemSurface</color>
+    <color name="colorAccentBorder">@color/colorLangSystemBorder</color>
+
+    <!-- LANGUAGE ACCENT PALETTES -->
+    <!-- System Default (Darker Grey for visibility) -->
+    <color name="colorLangSystem">#556B8D</color>
+    <color name="colorLangSystemDark">#3A4D6B</color>
+    <color name="colorLangSystemLight">#7A8A9E</color>
+    <color name="colorLangSystemSurface">#F2F5F8</color>
+    <color name="colorLangSystemBorder">#C4CED9</color>
+    <color name="colorLangSystemDim">#33556B8D</color>
+
+    <color name="colorLangEnglish">#5B93F0</color>
+    <color name="colorLangEnglishDark">#3A76D9</color>
+    <color name="colorLangEnglishLight">#A1C2F7</color>
+    <color name="colorLangEnglishSurface">#EBF2FE</color>
+    <color name="colorLangEnglishBorder">#C5D9FB</color>
+    <color name="colorLangEnglishDim">#335B93F0</color>
+
+    <color name="colorLangZulu">#A47BF0</color>
+    <color name="colorLangZuluDark">#7F51D6</color>
+    <color name="colorLangZuluLight">#CBB3F7</color>
+    <color name="colorLangZuluSurface">#F5F1FE</color>
+    <color name="colorLangZuluBorder">#DFD0FB</color>
+    <color name="colorLangZuluDim">#33A47BF0</color>
+
+    <color name="colorLangSesotho">#EC6EA9</color>
+    <color name="colorLangSesothoDark">#C84883</color>
+    <color name="colorLangSesothoLight">#F4A9CB</color>
+    <color name="colorLangSesothoSurface">#FDF1F6</color>
+    <color name="colorLangSesothoBorder">#F9D0E2</color>
+    <color name="colorLangSesothoDim">#33EC6EA9</color>
+
+    <color name="colorLangSetswana">#A3CE4E</color>
+    <color name="colorLangSetswanaDark">#81A934</color>
+    <color name="colorLangSetswanaLight">#C5E092</color>
+    <color name="colorLangSetswanaSurface">#F6F9EF</color>
+    <color name="colorLangSetswanaBorder">#E2EFC8</color>
+    <color name="colorLangSetswanaDim">#33A3CE4E</color>
+
+    <color name="colorLangXhosa">#3EB8E0</color>
+    <color name="colorLangXhosaDark">#2A93B5</color>
+    <color name="colorLangXhosaLight">#8FD8EF</color>
+    <color name="colorLangXhosaSurface">#ECF8FC</color>
+    <color name="colorLangXhosaBorder">#C5EAF5</color>
+    <color name="colorLangXhosaDim">#333EB8E0</color>
+
+    <color name="colorLangAfrikaans">#63C55F</color>
+    <color name="colorLangAfrikaansDark">#48A045</color>
+    <color name="colorLangAfrikaansLight">#A3DE9F</color>
+    <color name="colorLangAfrikaansSurface">#F0F9EF</color>
+    <color name="colorLangAfrikaansBorder">#D0EFC8</color>
+    <color name="colorLangAfrikaansDim">#3363C55F</color>
+
+    <!-- Legacy Compatibility mappings -->
     <color name="colorBackground">@color/colorInk</color>
     <color name="colorSurface">@color/colorPlate</color>
     <color name="colorOnBackground">@color/colorInkText</color>
     <color name="colorOnBackgroundMuted">@color/colorInkTextMuted</color>
-    <color name="colorAccent">@color/colorRoute</color>
     <color name="colorOutline">@color/colorRule</color>
-    <color name="colorOutlineVariant">#4D4D4D</color>
-
-        <!-- System default - deliberately hueless, it is not a language -->
-        <color name="colorLangSystem">#9BA7B5</color>
-        <color name="colorLangSystemDim">#339BA7B5</color>
-
-        <!-- English - blue, 220 -->
-        <color name="colorLangEnglish">#5B93F0</color>
-        <color name="colorLangEnglishDim">#335B93F0</color>
-
-        <!-- isiZulu - violet, 265 -->
-        <color name="colorLangZulu">#A47BF0</color>
-        <color name="colorLangZuluDim">#33A47BF0</color>
-
-        <!-- Sesotho - pink, 325 -->
-        <color name="colorLangSesotho">#EC6EA9</color>
-        <color name="colorLangSesothoDim">#33EC6EA9</color>
-
-        <!-- Setswana - lime, 85 -->
-        <color name="colorLangSetswana">#A3CE4E</color>
-        <color name="colorLangSetswanaDim">#33A3CE4E</color>
-
-        <!-- isiXhosa - cyan, 195 -->
-        <color name="colorLangXhosa">#3EB8E0</color>
-        <color name="colorLangXhosaDim">#333EB8E0</color>
-
-        <!-- Afrikaans - green, 130 -->
-        <color name="colorLangAfrikaans">#63C55F</color>
-        <color name="colorLangAfrikaansDim">#3363C55F</color>
-
-        <!-- Spare hues if you add more languages later:
-             Xitsonga  #D98CE8 (290, orchid)
-             Tshivenda #7FD4C0 (168 - too close to colorAccessible, avoid)
-             Sepedi    #6FA8F5 (215 - too close to English, avoid)
-             siSwati   #C9A227 (45 - too close to colorRoute, avoid)
-             Prefer 240 (#7C85F2) and 305 (#C978E8) next. -->
-
+    <color name="colorOutlineVariant">#DDE3EA</color>
 </resources>

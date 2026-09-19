@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -64,32 +65,24 @@ public class RoomPickerActivity extends BaseActivity {
             return l1.compareToIgnoreCase(l2);
         });
 
-        float density = getResources().getDisplayMetrics().density;
-        int padding = (int) (16 * density);
-
         for (Node node : filteredNodes) {
             String displayLabel = node.label != null ? node.label : node.name;
             
-            TextView tv = new TextView(this);
-            tv.setText(displayLabel);
-            tv.setTextSize(16);
-            tv.setTextColor(Color.WHITE);
-            tv.setPadding(padding, padding, padding, padding);
-            tv.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, 
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-            tv.setClickable(true);
-            tv.setFocusable(true);
-            tv.setBackgroundResource(android.R.drawable.list_selector_background);
+            View row = getLayoutInflater().inflate(R.layout.item_room, container, false);
+            TextView nameText = row.findViewById(R.id.roomNameText);
+            TextView detailText = row.findViewById(R.id.roomDetailText);
             
-            tv.setOnClickListener(v -> {
+            nameText.setText(displayLabel);
+            detailText.setText(node.name); // Using ID as detail for now
+            
+            row.setOnClickListener(v -> {
                 Intent result = new Intent();
-                result.putExtra("selected_room", node.name); // Return ID for lookup
+                result.putExtra("selected_room", node.name);
                 setResult(RESULT_OK, result);
                 finish();
             });
 
-            container.addView(tv);
+            container.addView(row);
         }
     }
 }

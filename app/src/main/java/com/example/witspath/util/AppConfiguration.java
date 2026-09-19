@@ -31,13 +31,13 @@ public final class AppConfiguration {
             config.setLocale(locale);
         }
 
-        // 2. Apply Text Size (Very drastic scales to confirm functionality)
+        // 2. Apply Text Size
         String textSize = prefs.getString(Prefs.KEY_TEXT_SIZE, "default");
         float scale = 1.0f;
         switch (textSize) {
-            case "small": scale = 0.60f; break;
-            case "large": scale = 1.40f; break;
-            case "huge":  scale = 1.80f; break;
+            case "small": scale = 0.85f; break;
+            case "large": scale = 1.25f; break;
+            case "huge":  scale = 1.50f; break;
             default:      scale = 1.00f; break;
         }
         config.fontScale = scale;

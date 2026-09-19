@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Team Wavelets - WitsPath
-    activity_my_reports.xml - lists every report the signed-in user has submitted,
-    newest first. Reached from the drawer's "My reports" row and from
-    Settings > Reports & Alerts > My reports. See MyReportsActivity for the query.
--->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/myReportsRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorInk">
+    android:background="@color/colorInk"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/myReportsToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
+        android:background="@color/colorInk"
         app:navigationIcon="@drawable/ic_back"
-        app:navigationIconTint="@color/colorInkText"
+        app:navigationIconTint="@color/colorRoute"
         app:title="@string/nav_my_reports"
-        app:titleTextColor="@color/colorInkText"
+        app:titleTextColor="@color/colorRoute"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -29,8 +24,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingBottom="32dp"
-        android:scrollbars="none"
         app:layout_constraintTop_toBottomOf="@id/myReportsToolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,9 +32,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="32dp">
 
-            <!-- Inflate item_report.xml into this container -->
             <LinearLayout
                 android:id="@+id/myReportsContainer"
                 style="@style/WitsPath.Plate"
@@ -53,8 +47,8 @@
                 style="@style/TextAppearance.WitsPath.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPlate"
-                android:padding="20dp"
+                android:gravity="center"
+                android:padding="32dp"
                 android:text="@string/my_reports_empty"
                 android:visibility="gone" />
 
@@ -63,8 +57,8 @@
                 style="@style/TextAppearance.WitsPath.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPlate"
-                android:padding="20dp"
+                android:gravity="center"
+                android:padding="32dp"
                 android:text="@string/my_reports_sign_in_prompt"
                 android:visibility="gone" />
 

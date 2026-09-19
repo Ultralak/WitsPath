@@ -1,12 +1,8 @@
-<!--
-        Team Wavelets - WitsPath
-        Append these to your existing styles.xml (or keep as a separate file in res/values).
-        They assume the TextAppearance.WitsPath.* styles you already have.
-     -->
-<resources>
-    <!--  Empty base so the dot-notation styles below resolve their implicit parents  -->
+<resources xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- WITSPATH COMPONENT SYSTEM -->
     <style name="WitsPath"/>
-    <!--  ============================== DRAWER ==============================  -->
+
+    <!-- ============================== DRAWER ============================== -->
     <style name="WitsPath.DrawerRow">
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical</item>
@@ -17,46 +13,56 @@
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
+
     <style name="WitsPath.DrawerRow.Icon">
         <item name="android:importantForAccessibility">no</item>
+        <item name="tint">@color/colorInkText</item>
+        <item name="android:tint">@color/colorInkText</item>
     </style>
+
     <style name="WitsPath.DrawerRow.Label" parent="TextAppearance.WitsPath.Code">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorInkText</item>
     </style>
-    <!--  ============================ SETTINGS ============================  -->
-    <!--  Uppercase muted section header, matching the directory-board look  -->
+
+    <!-- ============================ SETTINGS ============================ -->
+
     <style name="WitsPath.SectionLabel" parent="TextAppearance.WitsPath.Header">
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginTop">28dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:letterSpacing">0.1</item>
+        <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/colorInkTextMuted</item>
     </style>
-    <!--  Grouped container: colorRule shows through as 1dp hairlines between rows  -->
+
+    <!-- Grouped container: White card on light-grey background -->
     <style name="WitsPath.Plate">
         <item name="android:orientation">vertical</item>
-        <item name="android:background">@color/colorRule</item>
-        <item name="android:divider">@drawable/directory_divider</item>
+        <item name="android:background">@drawable/bg_plate</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:divider">@drawable/divider_horizontal</item>
         <item name="android:showDividers">middle</item>
     </style>
+
     <style name="WitsPath.SettingRow">
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:minHeight">64dp</item>
-        <item name="android:background">@color/colorPlate</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
-        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
     </style>
-    <!--  Same plate, but stacked content (chip groups, sliders)  -->
+
     <style name="WitsPath.SettingRow.Column">
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">start</item>
@@ -65,76 +71,98 @@
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
     </style>
+
     <style name="WitsPath.SettingRow.Icon">
         <item name="android:importantForAccessibility">no</item>
+        <item name="tint">@color/colorInkText</item>
+        <item name="android:tint">@color/colorInkText</item>
     </style>
+
     <style name="WitsPath.SettingRow.TextGroup">
         <item name="android:orientation">vertical</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">12dp</item>
     </style>
+
     <style name="WitsPath.SettingRow.Title" parent="TextAppearance.WitsPath.Code">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorInkText</item>
     </style>
-    <style name="WitsPath.SettingRow.Subtitle" parent="TextAppearance.WitsPath.Body">
+
+    <style name="WitsPath.SettingRow.Subtitle" parent="TextAppearance.WitsPath.Body.Small">
         <item name="android:layout_marginTop">2dp</item>
-        <item name="android:textColor">@color/colorInkTextMuted</item>
     </style>
+
     <style name="WitsPath.SettingRow.Chevron">
-        <item name="android:alpha">0.5</item>
+        <item name="android:alpha">0.6</item>
+        <item name="tint">@color/colorInkTextMuted</item>
+        <item name="android:tint">@color/colorInkTextMuted</item>
         <item name="android:importantForAccessibility">no</item>
     </style>
-    <!--  The switch itself is not focusable; the whole row toggles it, which gives
-             TalkBack one target instead of two.  -->
+
     <style name="WitsPath.SettingRow.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
         <item name="android:clickable">false</item>
         <item name="android:focusable">false</item>
     </style>
-    <!--  ============================ LANGUAGE ============================  -->
+
+    <!-- ============================ LANGUAGE ============================ -->
     <style name="WitsPath.LanguageRow">
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:minHeight">64dp</item>
-        <item name="android:background">@color/colorPlate</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:paddingEnd">20dp</item>
     </style>
+
     <style name="WitsPath.LanguageRow.TextGroup">
         <item name="android:orientation">vertical</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:paddingTop">14dp</item>
         <item name="android:paddingBottom">14dp</item>
-        <item name="android:clickable">false</item>
-        <item name="android:focusable">false</item>
     </style>
+
     <style name="WitsPath.LanguageRow.Check">
         <item name="android:importantForAccessibility">no</item>
-        <item name="android:clickable">false</item>
-        <item name="android:focusable">false</item>
+        <item name="tint">@color/colorAccent</item>
+        <item name="android:tint">@color/colorAccent</item>
     </style>
-    <!--  The 3dp amber signage tick used down the left edge of plates  -->
+
+    <!-- The accent tick - now uses dynamic colorAccent -->
     <style name="WitsPath.Tick">
-        <item name="android:background">@color/colorRoute</item>
+        <item name="android:background">@color/colorAccent</item>
     </style>
-    <!--  ============================== FORMS ==============================  -->
+
+    <!-- ============================== FORMS ============================== -->
     <style name="WitsPath.TextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/colorRoute</item>
+        <item name="boxStrokeColor">@color/colorAccent</item>
         <item name="boxStrokeWidth">1dp</item>
-        <item name="boxCornerRadiusTopStart">4dp</item>
-        <item name="boxCornerRadiusTopEnd">4dp</item>
-        <item name="boxCornerRadiusBottomStart">4dp</item>
-        <item name="boxCornerRadiusBottomEnd">4dp</item>
-        <item name="hintTextColor">@color/colorRoute</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusBottomStart">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">8dp</item>
+        <item name="hintTextColor">@color/colorAccent</item>
         <item name="android:textColorHint">@color/colorInkTextMuted</item>
         <item name="startIconTint">@color/colorInkTextMuted</item>
         <item name="endIconTint">@color/colorInkTextMuted</item>
         <item name="errorTextColor">@color/colorFlag</item>
         <item name="boxStrokeErrorColor">@color/colorFlag</item>
-        <item name="helperTextTextColor">@color/colorInkTextMuted</item>
     </style>
+
+    <style name="WitsPath.Button" parent="Widget.Material3.Button">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="iconTint">#FFFFFF</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.WitsPath.Button</item>
+    </style>
+
+    <style name="ShapeAppearance.WitsPath.Button" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">8dp</item>
+    </style>
+
 </resources>

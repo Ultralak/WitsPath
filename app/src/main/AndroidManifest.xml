@@ -53,6 +53,9 @@
         <activity
             android:name=".ui.FloorPlanActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.NavigationActivity"
+            android:exported="false" />
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
@@ -63,10 +66,6 @@
                 android:value="true" />
         </service>
 
-        <activity
-            android:name=".ui.SavedPlacesActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.MyReportsActivity"
             android:exported="false"

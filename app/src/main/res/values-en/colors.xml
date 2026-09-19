@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">@color/colorLangEnglish</color>
+    <color name="colorAccentDark">@color/colorLangEnglishDark</color>
+    <color name="colorAccentLight">@color/colorLangEnglishLight</color>
+    <color name="colorAccentSurface">@color/colorLangEnglishSurface</color>
+    <color name="colorAccentBorder">@color/colorLangEnglishBorder</color>
+</resources>
