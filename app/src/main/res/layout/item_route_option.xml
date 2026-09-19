@@ -79,23 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:src="@drawable/ic_lift"
-                        app:tint="@color/colorAccessible" />
-
-                    <TextView
-                        style="@style/TextAppearance.WitsPath.Body"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:text="1 lift"
-                        android:textColor="@color/colorAccessible" />
-
-                </LinearLayout>
+                    android:gravity="center_vertical"/>
 
             </LinearLayout>
 
