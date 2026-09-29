@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="web_accessible_navigation">Tsumbedzo ya ndila i swikeleaho</string>
+    <string name="web_inclusive_subtitle">Khamphasi ine ya katela vhoṱhe</string>
+    <string name="web_home">Hayani</string>
+    <string name="web_account_settings">Nzudzanyo dza akhaunthu</string>
+    <string name="web_destination">Vhupo vhune na ya khaho</string>
+    <string name="web_campus_name">Wits West Campus</string>
+    <string name="web_estimated_time">Tshifhinga tsho anganyelwaho</string>
+    <string name="web_start">Thoma</string>
+    <string name="web_guidance_initial">Nangani ndila, ni thome tsumbedzo uri ni vhone ndaela nga maga.</string>
+    <string name="web_suggested_route">Ndila yo dzinginywaho</string>
+    <string name="web_route_ready">Ndila yo lugela. Thomani tsumbedzo uri ni vhone maga.</string>
+    <string name="web_navigation_started">Tsumbedzo ya ndila yo thoma • Tevhelani maga.</string>
+    <string name="web_navigation_ended">Tsumbedzo ya ndila yo fhela.</string>
+    <string name="web_no_step_free_route">A hu na ndila i si na zwiṱepisi kha lwendo lwo teaho.</string>
+    <string name="web_no_route">A hu ngo wanala ndila vhukati ha fhethu afho.</string>
+    <string name="web_end_navigation">Fhedza u tevhela ndila</string>
+    <string name="web_main_entrance">Muṋango muhulwane</string>
+    <string name="web_legend_start_destination">●  Start     ●  Destination</string>
+    <string name="web_legend_accessible">♿  Accessible entrance</string>
+    <string name="web_mode_wheelchair">Tshiṱulo tsha vhaholefhali
+Swikeleaho</string>
+    <string name="web_mode_walking_aid">U tshimbila
+Thuso</string>
+    <string name="web_mode_visual">Maṱo
+Thuso</string>
+    <string name="web_mode_general">Zwoṱhe
+Ndila</string>
+    <string name="web_route_ready_status">Route ready • %1$d m</string>
+    <string name="web_total_route_length">Vhulapfu ha ndila yoṱhe: %1$d m</string>
+    <string name="web_arrive_at">Swikani kha %1$s</string>
+    <string name="web_continue_for">Bvelani phanda nga %1$d m</string>
+    <string name="web_follow_toward">Tevhelani ndila i swikeleaho ya u ya kha %1$s</string>
+    <string name="language_venda">Tshivenda</string>
+    <string name="language_venda_native">Tshivenda</string>
+    <string name="nav_home">Hayani</string>
+    <string name="nav_language">Luambo</string>
+    <string name="settings_prefer_lifts_title">Nangani lifti nṱha ha rampu</string>
+    <string name="settings_avoid_steep_title">Ḽambedzani rampu dzi re nṱha</string>
+    <string name="text_size_small">Tṱhukhu</string>
+    <string name="text_size_default">Zwo ḓoweleaho</string>
+    <string name="text_size_large">Khulwane</string>
+    <string name="mobility_wheelchair">Tshiṱulo tsha vhaholefhali</string>
+    <string name="units_feet">Milenzhe</string>
+    <string name="units_minutes">Minithi</string>
+    <string name="field_email">Ḽiresi ya imeili</string>
+    <string name="other">Zwinwe</string>
+</resources>

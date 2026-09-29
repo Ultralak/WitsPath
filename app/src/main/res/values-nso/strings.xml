@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="web_accessible_navigation">Tsejanatšhupetšo ye e fihlelekago</string>
+    <string name="web_inclusive_subtitle">Khamphase ye e akaretšago bohle</string>
+    <string name="web_home">Gae</string>
+    <string name="web_account_settings">Dipeakanyo tša akhaonto</string>
+    <string name="web_destination">Mo o yago gona</string>
+    <string name="web_campus_name">Wits West Campus</string>
+    <string name="web_estimated_time">Nako ye e akanyetšwago</string>
+    <string name="web_start">Mathomo</string>
+    <string name="web_guidance_initial">Kgetha tsela gomme o thome tsejanatšhupetšo go bona ditaelo tša dikgato.</string>
+    <string name="web_suggested_route">Tsela ye e šišintšwego</string>
+    <string name="web_route_ready">Tsela e lokile. Thoma tsejanatšhupetšo go bona dikgato.</string>
+    <string name="web_navigation_started">Tsejanatšhupetšo e thomile • Latela dikgato.</string>
+    <string name="web_navigation_ended">Tsejanatšhupetšo e fedile.</string>
+    <string name="web_no_step_free_route">Ga go na tsela ye e se nago manamelo leetong leo.</string>
+    <string name="web_no_route">Ga go hweditšwe tsela magareng ga mafelo ao.</string>
+    <string name="web_end_navigation">Fediša go sepela</string>
+    <string name="web_main_entrance">Monyako o mogolo</string>
+    <string name="web_legend_start_destination">●  Start     ●  Destination</string>
+    <string name="web_legend_accessible">♿  Accessible entrance</string>
+    <string name="web_mode_wheelchair">Setulo sa digole
+Fihlelekago</string>
+    <string name="web_mode_walking_aid">Go sepela
+Thušo</string>
+    <string name="web_mode_visual">Pono
+Thušo</string>
+    <string name="web_mode_general">Kakaretšo
+Tsela</string>
+    <string name="web_route_ready_status">Route ready • %1$d m</string>
+    <string name="web_total_route_length">Botelele bja tsela ka moka: %1$d m</string>
+    <string name="web_arrive_at">Fihla go %1$s</string>
+    <string name="web_continue_for">Tšwela pele ka %1$d m</string>
+    <string name="web_follow_toward">Latela tsela ye e fihlelekago go ya go %1$s</string>
+    <string name="language_sepedi">Sepedi</string>
+    <string name="language_sepedi_native">Sepedi</string>
+    <string name="nav_home">Gae</string>
+    <string name="nav_language">Polelo</string>
+    <string name="settings_prefer_lifts_title">Kgetha lifti go na le rampo</string>
+    <string name="settings_avoid_steep_title">Phema dirampo tše di phagamego</string>
+    <string name="text_size_small">Nnyane</string>
+    <string name="text_size_default">Tlwaelo</string>
+    <string name="text_size_large">Kgolo</string>
+    <string name="mobility_wheelchair">Setulo sa digole</string>
+    <string name="units_feet">Dimaoto</string>
+    <string name="units_minutes">Metsotso</string>
+    <string name="field_email">Aterese ya imeile</string>
+    <string name="other">Tše dingwe</string>
+</resources>

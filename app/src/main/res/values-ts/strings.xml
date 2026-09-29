@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="web_accessible_navigation">Nkongomiso wa ndlela leyi fikelekaka</string>
+    <string name="web_inclusive_subtitle">Khamphasi leyi katsaka vanhu hinkwavo</string>
+    <string name="web_home">Ekaya</string>
+    <string name="web_account_settings">Matshamelo ya akhawunti</string>
+    <string name="web_destination">Ndhawu leyi u yaka eka yona</string>
+    <string name="web_campus_name">Wits West Campus</string>
+    <string name="web_estimated_time">Nkarhi lowu ringanyetiweke</string>
+    <string name="web_start">Sungula</string>
+    <string name="web_guidance_initial">Hlawula ndlela, kutani u sungula nkongomiso ku vona swiletelo swa magoza.</string>
+    <string name="web_suggested_route">Ndlela leyi ringanyetiweke</string>
+    <string name="web_route_ready">Ndlela yi lunghekile. Sungula nkongomiso ku vona magoza.</string>
+    <string name="web_navigation_started">Nkongomiso wu sungurile • Landzela magoza.</string>
+    <string name="web_navigation_ended">Nkongomiso wu herile.</string>
+    <string name="web_no_step_free_route">A ku na ndlela leyi nga riki na switepisi eka riendzo rero.</string>
+    <string name="web_no_route">A ku kumekanga ndlela ya le xikarhi ka tindhawu teto.</string>
+    <string name="web_end_navigation">Hetisa nkongomiso</string>
+    <string name="web_main_entrance">Nyangwa leyikulu</string>
+    <string name="web_legend_start_destination">●  Start     ●  Destination</string>
+    <string name="web_legend_accessible">♿  Accessible entrance</string>
+    <string name="web_mode_wheelchair">Xitulu xa mavhilwa
+Fikelekaka</string>
+    <string name="web_mode_walking_aid">Ku famba
+Nseketelo</string>
+    <string name="web_mode_visual">Ku vona
+Nseketelo</string>
+    <string name="web_mode_general">Swin’wana
+Ndlela</string>
+    <string name="web_route_ready_status">Route ready • %1$d m</string>
+    <string name="web_total_route_length">Vulehi hinkwabyo bya ndlela: %1$d m</string>
+    <string name="web_arrive_at">Fika e-%1$s</string>
+    <string name="web_continue_for">Yana mahlweni hi %1$d m</string>
+    <string name="web_follow_toward">Landzela ndlela leyi fikelekaka ku ya e-%1$s</string>
+    <string name="language_tsonga">itsonga</string>
+    <string name="language_tsonga_native">itsonga</string>
+    <string name="nav_home">Ekaya</string>
+    <string name="nav_language">Ririmi</string>
+    <string name="settings_prefer_lifts_title">Tsakela lifti ku ri ni rampu</string>
+    <string name="settings_avoid_steep_title">Papalata tirampu leti tlakukeke</string>
+    <string name="text_size_small">Ntsongo</string>
+    <string name="text_size_default">Ntolovelo</string>
+    <string name="text_size_large">Nkulu</string>
+    <string name="mobility_wheelchair">Xitulu xa mavhilwa</string>
+    <string name="units_feet">Milenge</string>
+    <string name="units_minutes">Timinete</string>
+    <string name="field_email">Adirese ya imeyili</string>
+    <string name="other">Swin’wana</string>
+</resources>
