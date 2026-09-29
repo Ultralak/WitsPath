@@ -16,17 +16,20 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.witspath.R;
-import com.example.witspath.model.Edge;
-import com.example.witspath.model.Floor;
 import com.example.witspath.model.FloorPlanEdge;
 import com.example.witspath.model.FloorPlanGraphConverter;
 import com.example.witspath.model.FloorPlanNode;
-import com.example.witspath.model.Graph;
-import com.example.witspath.model.Node;
-import com.example.witspath.model.PathFinder;
+import com.example.witspath.routing.CampusGraph;
+import com.example.witspath.routing.Floor;
+import com.example.witspath.routing.Node;
+import com.example.witspath.routing.PhraseBook;
+import com.example.witspath.routing.RouteOptions;
+import com.example.witspath.routing.TravelTimeConfig;
 import com.example.witspath.util.FirestorePopulator;
+import com.example.witspath.util.GraphStore;
 import com.example.witspath.util.Languages;
 import com.example.witspath.util.Prefs;
+import com.example.witspath.util.RoutePlanner;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,10 +38,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 public class HomeActivity extends BaseActivity {
@@ -71,7 +72,9 @@ public class HomeActivity extends BaseActivity {
     private String selectedDestinationId;
     private String mobilityProfile = "wheelchair";
     private boolean navigationStarted = false;
-    private LinkedList<Node> currentRoute;
+    private CampusGraph graph;
+    private RoutePlanner.Plan currentPlan;
+    private List<Node> currentRoute;
 
     private enum Mode {
         WHEELCHAIR("wheelchair"), WALKING_AID("walking-aid"), VISUAL("low-vision"), GENERAL("no-preference");
@@ -174,22 +177,24 @@ public class HomeActivity extends BaseActivity {
     }
 
     private int modeIdForProfile(String profile) {
-        if ("walking-aid".equals(profile)) return R.id.modeWalkingAid;
-        if ("low-vision".equals(profile)) return R.id.modeVisual;
-        if ("no-preference".equals(profile)) return R.id.modeGeneral;
-        return R.id.modeWheelchair;
+        switch (RouteOptions.normaliseProfile(profile)) {
+            case RouteOptions.WALKING_AID: return R.id.modeWalkingAid;
+            case RouteOptions.LOW_VISION: return R.id.modeVisual;
+            case RouteOptions.NONE: return R.id.modeGeneral;
+            default: return R.id.modeWheelchair;
+        }
     }
 
     private void loadGraphAndMap() {
-        if (Node.searchByName("").isEmpty()) Graph.loadFromAssets(this, "graph_data.json");
+        graph = GraphStore.get(this);
 
         selectableNodes.clear();
-        selectableNodes.addAll(Node.searchByName(""));
-        selectableNodes.removeIf(node -> node.type == Node.NodeType.RAMP);
-        Collections.sort(selectableNodes, Comparator.comparing(n -> n.label == null ? n.nodeId : n.label, String.CASE_INSENSITIVE_ORDER));
+        if (graph != null) selectableNodes.addAll(graph.nodes());
+        selectableNodes.removeIf(node -> "ramp".equals(node.type));
+        Collections.sort(selectableNodes, Comparator.comparing(Node::displayName, String.CASE_INSENSITIVE_ORDER));
 
         List<String> labels = new ArrayList<>();
-        for (Node node : selectableNodes) labels.add(node.label == null ? node.nodeId : node.label);
+        for (Node node : selectableNodes) labels.add(node.displayName());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, labels);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fromSpinner.setAdapter(adapter);
@@ -214,16 +219,16 @@ public class HomeActivity extends BaseActivity {
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
         findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
 
-        Floor floor = Floor.getById("flr_mu83yzmd0");
-        if (floor == null) floor = Floor.allSortedByLevel().isEmpty() ? null : Floor.allSortedByLevel().get(0);
+        Floor floor = null;
+        if (graph != null) {
+            floor = graph.floor("flr_mu83yzmd0");
+            if (floor == null && !graph.floors().isEmpty()) floor = graph.floors().get(0);
+        }
         if (floor != null) {
             zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
             routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
-            Collection<Node> nodes = Node.searchByName("");
-            List<FloorPlanNode> renderNodes = FloorPlanGraphConverter.toFloorPlanNodes(nodes, floor.floorId, floor.metresPerPixel);
-            List<Edge> allEdges = new ArrayList<>();
-            for (Node node : nodes) for (Edge edge : node.edges) if (!allEdges.contains(edge)) allEdges.add(edge);
-            List<FloorPlanEdge> renderEdges = FloorPlanGraphConverter.toFloorPlanEdges(allEdges);
+            List<FloorPlanNode> renderNodes = FloorPlanGraphConverter.toFloorPlanNodes(graph, floor.floorId);
+            List<FloorPlanEdge> renderEdges = FloorPlanGraphConverter.toFloorPlanEdges(graph, floor.floorId);
             routeView.setGraph(renderNodes, renderEdges);
         }
 
@@ -231,12 +236,12 @@ public class HomeActivity extends BaseActivity {
     }
 
     private String findNodeOrFirst(String id) {
-        if (Node.getByID(id) != null) return id;
+        if (graph != null && graph.node(id) != null) return id;
         return selectableNodes.isEmpty() ? null : selectableNodes.get(0).nodeId;
     }
 
     private String findNodeOrSecond(String id) {
-        if (Node.getByID(id) != null) return id;
+        if (graph != null && graph.node(id) != null) return id;
         return selectableNodes.size() > 1 ? selectableNodes.get(1).nodeId : findNodeOrFirst(id);
     }
 
@@ -258,15 +263,19 @@ public class HomeActivity extends BaseActivity {
             if (showErrors) showStatus(getString(R.string.home_toast_select_destination), true);
             return;
         }
-        Node from = Node.getByID(selectedFromNodeId);
-        Node to = Node.getByID(selectedDestinationId);
+        if (graph == null) return;
+        Node from = graph.node(selectedFromNodeId);
+        Node to = graph.node(selectedDestinationId);
         if (from == null || to == null) return;
 
         boolean stepFree = "wheelchair".equals(mobilityProfile) || "low-vision".equals(mobilityProfile);
         boolean preferLifts = prefs.getBoolean(Prefs.KEY_PREFER_LIFTS, false);
         boolean avoidSteepRamps = prefs.getBoolean(Prefs.KEY_AVOID_STEEP_RAMPS, false);
 
-        currentRoute = new PathFinder().aStarSearch(from, to, mobilityProfile, stepFree, preferLifts, avoidSteepRamps);
+        // Same A* module as the navigation screen and the companion.
+        RouteOptions options = new RouteOptions(mobilityProfile, stepFree, preferLifts, avoidSteepRamps);
+        currentPlan = RoutePlanner.plan(graph, from, to, options, RoutePlanner.speedMultiplier(prefs), PhraseBook.english());
+        currentRoute = currentPlan.ok() ? currentPlan.nodes : null;
         if (currentRoute == null || currentRoute.size() < 2) {
             estimatedTimeText.setText("—");
             estimatedDistanceText.setText("");
@@ -276,9 +285,8 @@ public class HomeActivity extends BaseActivity {
             return;
         }
 
-        double distance = routeDistance(currentRoute);
-        int minutes = Math.max(1, (int) Math.round(distance / speedForProfile(mobilityProfile) / 60.0));
-        estimatedTimeText.setText(minutes + " min");
+        double distance = currentPlan.distanceMetres;
+        estimatedTimeText.setText(currentPlan.minutes() + " min");
         estimatedDistanceText.setText("(" + formatDistance(distance) + ")");
         guidanceText.setText(navigationStarted ? getString(R.string.web_total_route_length, Math.round(distance)) : getString(R.string.web_route_ready));
         showStatus(getString(R.string.web_route_ready_status, Math.round(distance)), false);
@@ -294,27 +302,15 @@ public class HomeActivity extends BaseActivity {
         else stepsContainer.setVisibility(View.GONE);
     }
 
-    private double routeDistance(List<Node> route) {
-        double total = 0;
-        for (int i = 1; i < route.size(); i++) total += calculateDistance(route.get(i - 1), route.get(i));
-        return total;
-    }
-
     private double calculateDistance(Node a, Node b) {
         if (a.point == null || b.point == null) return 0;
         return Math.hypot(a.point.x - b.point.x, a.point.y - b.point.y);
     }
 
-    private double speedForProfile(String profile) {
-        if ("wheelchair".equals(profile)) return 0.8;
-        if ("walking-aid".equals(profile) || "low-vision".equals(profile)) return 1.1;
-        return 1.73;
-    }
-
     private String formatDistance(double metres) {
         String units = prefs.getString(Prefs.KEY_UNITS, "meters");
         if ("feet".equalsIgnoreCase(units)) return Math.round(metres * 3.28084) + " ft";
-        if ("minutes".equalsIgnoreCase(units)) return Math.max(1, Math.round(metres / speedForProfile(mobilityProfile) / 60)) + " min";
+        if ("minutes".equalsIgnoreCase(units)) return Math.max(1, Math.round(metres / TravelTimeConfig.speedFor(mobilityProfile) / 60)) + " min";
         return Math.round(metres) + " m";
     }
 
@@ -330,7 +326,7 @@ public class HomeActivity extends BaseActivity {
         }
         if (navigationStarted) {
             renderSteps(currentRoute);
-            guidanceText.setText(getString(R.string.web_total_route_length, Math.round(routeDistance(currentRoute))));
+            guidanceText.setText(getString(R.string.web_total_route_length, Math.round(currentPlan.distanceMetres)));
             showStatus(getString(R.string.web_navigation_started), false);
 
             if (routeView != null && selectedFromNodeId != null && selectedDestinationId != null) {
@@ -374,7 +370,7 @@ public class HomeActivity extends BaseActivity {
         stepsContainer.setVisibility(View.VISIBLE);
     }
 
-    private String safeLabel(Node node) { return node.label == null ? node.nodeId : node.label; }
+    private String safeLabel(Node node) { return node.displayName(); }
 
     private void showStatus(String message, boolean error) {
         statusMessage.setText(message);

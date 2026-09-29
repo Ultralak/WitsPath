@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":routing-core"))
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)

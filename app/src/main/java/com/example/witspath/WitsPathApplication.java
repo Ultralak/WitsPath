@@ -7,7 +7,7 @@ import androidx.core.os.LocaleListCompat;
 
 import com.example.witspath.model.EdgeUpdateListener;
 import com.example.witspath.model.FirestoreGraphConverter;
-import com.example.witspath.model.Graph;
+import com.example.witspath.util.GraphStore;
 import com.example.witspath.util.AppConfiguration;
 import com.example.witspath.util.Prefs;
 
@@ -30,10 +30,10 @@ public class WitsPathApplication extends Application {
         boolean darkTheme = appPrefs.getBoolean(Prefs.KEY_DARK_THEME, false);
         AppCompatDelegate.setDefaultNightMode(darkTheme ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
-        new EdgeUpdateListener(null).listenForEdgeUpdates();
+        new EdgeUpdateListener(this, null).listenForEdgeUpdates();
 
         // Load graph data at startup
-        Graph.loadFromAssets(this, "graph_data.json");
-        FirestoreGraphConverter.fetchGraphFromFirestore();
+        GraphStore.get(this);
+        FirestoreGraphConverter.fetchGraphFromFirestore(this);
     }
 }

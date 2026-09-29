@@ -97,7 +97,7 @@ public class FirestorePopulator {
             if (task.isSuccessful()) {
                 Log.d(TAG, "Firestore population successful!");
                 Toast.makeText(context, "Graph uploaded successfully!", Toast.LENGTH_SHORT).show();
-                FirestoreGraphConverter.buildGraphFromDTOs(nodes, edges);
+                FirestoreGraphConverter.fetchGraphFromFirestore(context);
             } else {
                 Log.e(TAG, "Firestore population failed", task.getException());
                 Toast.makeText(context, "Upload failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();

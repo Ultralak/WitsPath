@@ -218,6 +218,76 @@
     <string name="my_reports_empty">You haven\'t reported any obstacles yet.</string>
     <string name="my_reports_sign_in_prompt">Sign in to see your submitted reports and their status.</string>
     <string name="nav_populate_firestore">Populate Firestore</string>
+
+    <!-- Routing and directions -->
+    <string name="route_blocked_notice">Part of this route is reported blocked near %1$s.</string>
+    <string name="route_status_unchecked">Live path reports could not be checked. This route is not confirmed clear.</string>
+    <string name="route_directions_english_fallback">Directions shown in English: not yet verified in %1$s.</string>
+    <string name="route_rerouted">A path on your route changed. The route was recalculated.</string>
+    <string name="route_cannot_confirm">I can\'t confirm a route right now.</string>
+    <string name="route_destination_reached">Destination reached</string>
+    <string name="route_invalid_locations">Invalid locations</string>
+    <string name="route_no_route_found">No route found: %1$s</string>
+
+    <!-- AI Companion -->
+    <string name="companion_title">WitsPath Companion</string>
+    <string name="companion_entry">Ask the companion</string>
+    <string name="companion_fab_label" translatable="false">Ask AI companion</string>
+    <string name="companion_online" translatable="false">online</string>
+    <string name="companion_typing" translatable="false">typing…</string>
+    <string name="companion_today" translatable="false">Today</string>
+    <string name="companion_unavailable_message" translatable="false">The companion isn\'t available right now. You can still plan a route yourself.</string>
+    <string name="companion_retry" translatable="false">Retry</string>
+    <string name="companion_stop" translatable="false">Stop</string>
+    <string name="companion_new_chat" translatable="false">New chat</string>
+    <string name="companion_reply_language" translatable="false">Reply language</string>
+    <string name="companion_share_chat" translatable="false">Share chat</string>
+    <string name="companion_share_subject" translatable="false">WitsPath AI Companion Chat</string>
+    <string-array name="companion_suggestions">
+        <item>Where is the Commerce Library?</item>
+        <item>Show step-free route</item>
+        <item>How long will it take?</item>
+        <item>Is my path blocked?</item>
+        <item>Where is the nearest lift?</item>
+        <item>Report a broken ramp or lift</item>
+        <item>Which entrances are accessible?</item>
+    </string-array>
+    <string name="companion_back">Back</string>
+    <string name="companion_language_label">Reply language</string>
+    <string name="companion_language_auto">Automatic</string>
+    <string name="companion_lang_full">%1$s (full support)</string>
+    <string name="companion_lang_limited">%1$s (limited support)</string>
+    <string name="companion_read_aloud">Read replies aloud</string>
+    <string name="companion_stop_reading">Stop reading</string>
+    <string name="companion_speak">Speak</string>
+    <string name="companion_listening">Listening… tap again to stop</string>
+    <string name="companion_stop_listening">Stop</string>
+    <string name="companion_thinking">Let me check that for you right away…</string>
+    <string name="companion_send">Send</string>
+    <string name="companion_input_hint">Ask about a place or route</string>
+    <string name="companion_welcome">Hello there! I\'m here to help you navigate campus comfortably and safely. What can I help you find today?</string>
+    <string name="companion_unavailable">I\'m so sorry, but I\'m having trouble connecting right now. Please don\'t worry—you can still easily plan your route using the map!</string>
+    <string name="companion_you_said">You said: %1$s</string>
+    <string name="companion_said">Companion: %1$s</string>
+    <string name="companion_badge_limited">Limited support: may contain mistakes</string>
+    <string name="companion_badge_unconfirmed">Language not confirmed</string>
+    <string name="companion_badge_directions_english">Directions shown in English: not yet verified in %1$s</string>
+    <string name="companion_no_voice">No voice is installed for %1$s, so this reply is not read aloud.</string>
+    <string name="companion_voice_only_full">Voice input is available for English, Afrikaans, isiZulu and Sesotho. Please type your message.</string>
+    <string name="companion_voice_unavailable">Voice input isn\'t available on this device. Please type your message.</string>
+    <string name="companion_voice_not_heard">I didn\'t catch that. Please try again or type your message.</string>
+    <string name="companion_report_sent">Report sent</string>
+    <string name="companion_report_signin">Sign in so your report counts toward flagging this path.</string>
+    <string name="companion_route_summary">Route to %1$s: %2$s metres</string>
+    <string name="companion_route_step_free">This route is step-free.</string>
+    <string name="companion_route_not_step_free">This route is not confirmed step-free.</string>
+    <string name="companion_route_time">Estimated time: about %1$d minutes (estimate).</string>
+    <string name="companion_route_time_one">Estimated time: about 1 minute (estimate).</string>
+    <string name="companion_show_on_map">Show on map</string>
+    <string name="companion_start_navigation">Start navigation</string>
+    <string name="companion_share">Share</string>
+    <string name="companion_share_title">Share route</string>
+    <string name="companion_endpoint" translatable="false"></string>
     <string name="web_accessible_navigation">Accessible Navigation</string>
     <string name="web_inclusive_subtitle">A more inclusive campus for everyone</string>
     <string name="web_wits_wordmark">WITS

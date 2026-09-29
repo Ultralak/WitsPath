@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_language"
+        android:title="@string/companion_reply_language"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_read_aloud"
+        android:checkable="true"
+        android:title="@string/companion_read_aloud"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_new_chat"
+        android:title="@string/companion_new_chat"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_share_chat"
+        android:title="@string/companion_share_chat"
+        app:showAsAction="never" />
+</menu>

@@ -152,6 +152,18 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/navigationNoticeText"
+                    style="@style/TextAppearance.WitsPath.Code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:accessibilityLiveRegion="polite"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    tools:text="Route to CLM: 68 metres. This route is step-free."
+                    tools:visibility="visible" />
+
+                <TextView
                     android:id="@+id/navigationInstructionText"
                     style="@style/TextAppearance.WitsPath.Header.Small"
                     android:layout_width="match_parent"

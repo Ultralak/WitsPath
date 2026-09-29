@@ -1,51 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/languageOptionRow"
-    style="@style/WitsPath.SettingRow"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
+    android:minHeight="56dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingEnd="20dp">
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:background="@color/colorPlate">
 
     <View
         android:id="@+id/languageOptionTick"
         android:layout_width="4dp"
-        android:layout_height="24dp"
-        android:background="@color/colorLangSystem" />
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp" />
 
     <LinearLayout
-        style="@style/WitsPath.SettingRow.TextGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/languageOptionNameText"
-            style="@style/WitsPath.SettingRow.Title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="English" />
+            android:textColor="@color/colorInkText"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/languageOptionNativeText"
-            style="@style/WitsPath.SettingRow.Subtitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="English" />
-
+            android:textColor="@color/colorInkTextMuted"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/languageOptionCheck"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:contentDescription="@null"
         android:src="@drawable/ic_check"
-        android:visibility="gone"
-        android:importantForAccessibility="no"
-        app:tint="@color/colorAccent"
-        tools:visibility="visible" />
-
+        android:visibility="gone" />
 </LinearLayout>
