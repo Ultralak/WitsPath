@@ -123,7 +123,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void bindMainContent() {
-        greetingText = findViewById(R.id.webProductTitle);
+        greetingText = findViewById(R.id.navProductTitle);
         fromSpinner = findViewById(R.id.fromLocationSpinner);
         toSpinner = findViewById(R.id.toLocationSpinner);
         estimatedTimeText = findViewById(R.id.estimatedTime);
@@ -378,7 +378,7 @@ public class HomeActivity extends BaseActivity {
 
     private void showStatus(String message, boolean error) {
         statusMessage.setText(message);
-        statusMessage.setTextColor(getColor(error ? R.color.colorFlag : R.color.webSuccess));
+        statusMessage.setTextColor(getColor(error ? R.color.colorFlag : R.color.colorSuccess));
     }
 
     private void autoDetectLocation() {
@@ -450,8 +450,8 @@ public class HomeActivity extends BaseActivity {
         String name = (user != null && user.getDisplayName() != null) ? user.getDisplayName().split(" ")[0] : getString(R.string.nav_guest_title);
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String prefix = hour < 12 ? getString(R.string.greeting_morning) : hour < 18 ? getString(R.string.greeting_afternoon) : getString(R.string.greeting_evening);
-        // The website header owns the greeting, so keep the accessible navigation title there.
-        TextView title = findViewById(R.id.webProductTitle);
+        // The header owns the title
+        TextView title = findViewById(R.id.navProductTitle);
         if (title != null) title.setText(getString(R.string.app_name));
     }
 

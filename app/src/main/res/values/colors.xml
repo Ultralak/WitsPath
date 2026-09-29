@@ -28,6 +28,8 @@
     <color name="colorRuleStrong">#C4CED9</color>
     <color name="colorInkText">@color/colorTextPrimary</color>
     <color name="colorInkTextMuted">@color/colorTextMuted</color>
+    <color name="colorOnBackground">@color/colorTextPrimary</color>
+    <color name="colorOnBackgroundMuted">@color/colorTextMuted</color>
 
     <color name="colorAccessible">#00897B</color>
     <color name="colorFlag">#D32F2F</color>
