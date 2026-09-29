@@ -1,41 +1,48 @@
 package com.example.witspath.ui;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.card.MaterialCardView;
-import android.widget.ImageView;
 import com.example.witspath.R;
-import com.example.witspath.model.Edge;
-import com.example.witspath.model.Floor;
+import com.example.witspath.model.EdgeUpdateListener;
 import com.example.witspath.model.FloorPlanEdge;
 import com.example.witspath.model.FloorPlanGraphConverter;
 import com.example.witspath.model.FloorPlanNode;
-import com.example.witspath.model.Graph;
-import com.example.witspath.model.Node;
-import com.example.witspath.model.PathFinder;
+import com.example.witspath.routing.CampusGraph;
+import com.example.witspath.routing.Directions;
+import com.example.witspath.routing.Floor;
+import com.example.witspath.routing.Node;
+import com.example.witspath.routing.PhraseBook;
+import com.example.witspath.util.GraphStore;
+import com.example.witspath.util.Languages;
+import com.example.witspath.util.PathStatusChecker;
+import com.example.witspath.util.PhraseBookLoader;
+import com.example.witspath.util.Prefs;
+import com.example.witspath.util.RoutePlanner;
 import com.example.witspath.util.WifiPositionManager;
-
-import android.Manifest;
-import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class NavigationActivity extends BaseActivity {
 
@@ -45,20 +52,33 @@ public class NavigationActivity extends BaseActivity {
     private TextView fromNodeText;
     private TextView toNodeText;
     private TextView instructionText;
+    private TextView noticeText;
     private ProgressBar progressBar;
     private RecyclerView stepsRecyclerView;
     private StepsAdapter stepsAdapter;
 
-    private LinkedList<Node> routeNodes;
+    private Prefs prefs;
+    private CampusGraph graph;
+    private Node toNode;
+    private Node fromNode;
+    private RoutePlanner.Plan plan;
+    private PhraseBook phraseBook = PhraseBook.english();
     private int currentStepIndex = 0;
     private double metresPerPixel = 1.0;
     private WifiPositionManager wifiPositionManager;
+    private ListenerRegistration edgeUpdates;
+
+    // Notices shown under the route summary
+    private String blockedNotice = "";
+    private String uncheckedNotice = "";
+    private String rerouteNotice = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        prefs = new Prefs(this);
         initViews();
         loadData();
     }
@@ -71,8 +91,11 @@ public class NavigationActivity extends BaseActivity {
         fromNodeText = findViewById(R.id.navFromNodeText);
         toNodeText = findViewById(R.id.navToNodeText);
         instructionText = findViewById(R.id.navigationInstructionText);
+        noticeText = findViewById(R.id.navigationNoticeText);
         progressBar = findViewById(R.id.navigationProgressBar);
         stepsRecyclerView = findViewById(R.id.navigationStepsList);
+
+        ViewCompat.setAccessibilityLiveRegion(instructionText, ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE);
 
         findViewById(R.id.btnZoomIn).setOnClickListener(v -> zoomContainer.zoomIn());
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
@@ -89,35 +112,116 @@ public class NavigationActivity extends BaseActivity {
         String fromId = getIntent().getStringExtra("from_node");
         String toId = getIntent().getStringExtra("to_node");
 
-        if (Node.searchByName("").isEmpty()) {
-            Graph.loadFromAssets(this, "graph_data.json");
-        }
-
-        Node fromNode = Node.getByID(fromId);
-        Node toNode = Node.getByID(toId);
+        graph = GraphStore.get(this);
+        fromNode = graph == null ? null : graph.node(fromId);
+        toNode = graph == null ? null : graph.node(toId);
 
         if (fromNode == null || toNode == null) {
-            Toast.makeText(this, "Invalid locations", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.route_invalid_locations, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        fromNodeText.setText(fromNode.label != null ? fromNode.label : fromNode.nodeId);
-        toNodeText.setText(toNode.label != null ? toNode.label : toNode.nodeId);
+        fromNodeText.setText(fromNode.displayName());
+        toNodeText.setText(toNode.displayName());
 
-        PathFinder pathFinder = new PathFinder();
-        routeNodes = pathFinder.aStarSearch(fromNode, toNode, false);
-
-        if (routeNodes == null || routeNodes.isEmpty()) {
-            Toast.makeText(this, "No route found", Toast.LENGTH_SHORT).show();
+        plan = RoutePlanner.plan(graph, fromNode, toNode, prefs, phraseBook);
+        if (!plan.ok()) {
+            Toast.makeText(this, getString(R.string.route_no_route_found, plan.error), Toast.LENGTH_LONG).show();
             finish();
             return;
         }
 
-        setupMap(fromNode, toNode);
+        setupMap();
         setupStepsList();
         updateUI();
         initWifiSnapping();
+        checkLivePathStatus();
+        loadTranslatedDirections();
+
+        edgeUpdates = new EdgeUpdateListener(this, this::onEdgesChanged).listenForEdgeUpdates();
+    }
+
+    /** Directions come from phrase templates; only phrases a native speaker verified are translated. */
+    private void loadTranslatedDirections() {
+        String tag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
+        if (tag.isEmpty()) return;
+        PhraseBookLoader.load(tag, book -> {
+            if (isFinishing() || isDestroyed()) return;
+            phraseBook = book;
+            RoutePlanner.Plan translated = RoutePlanner.plan(graph, plan.nodes.get(0), toNode, prefs, phraseBook);
+            if (!translated.ok()) return;
+            plan = translated;
+            setupStepsList();
+            updateUI();
+        });
+    }
+
+    private void checkLivePathStatus() {
+        blockedNotice = "";
+        uncheckedNotice = "";
+        PathStatusChecker.check(plan.nodes, new PathStatusChecker.Callback() {
+            @Override
+            public void onResult(List<String> blockedPlaces) {
+                if (isFinishing() || isDestroyed()) return;
+                if (!blockedPlaces.isEmpty()) {
+                    blockedNotice = getString(R.string.route_blocked_notice, String.join(", ", blockedPlaces));
+                }
+                updateNotice();
+            }
+
+            @Override
+            public void onUnavailable() {
+                if (isFinishing() || isDestroyed()) return;
+                uncheckedNotice = getString(R.string.route_status_unchecked);
+                updateNotice();
+            }
+        });
+    }
+
+    /** A path on the route changed status: plan again from where the user is. */
+    private void onEdgesChanged(Set<String> changedEdgeIds) {
+        if (plan == null || !plan.ok()) return;
+        boolean affectsRoute = false;
+        for (String id : plan.edgeIds) {
+            if (changedEdgeIds.contains(id)) {
+                affectsRoute = true;
+                break;
+            }
+        }
+        if (!affectsRoute) return;
+
+        Node here = plan.nodes.get(Math.min(currentStepIndex, plan.nodes.size() - 1));
+        RoutePlanner.Plan replanned = RoutePlanner.plan(graph, here, toNode, prefs, phraseBook);
+        if (!replanned.ok()) {
+            blockedNotice = getString(R.string.route_cannot_confirm);
+            updateNotice();
+            return;
+        }
+        plan = replanned;
+        fromNode = here;
+        currentStepIndex = 0;
+        rerouteNotice = getString(R.string.route_rerouted);
+        setupMap();
+        setupStepsList();
+        updateUI();
+        checkLivePathStatus();
+    }
+
+    private void updateNotice() {
+        StringBuilder b = new StringBuilder(plan.directions.summaryText());
+        String[] extras = {rerouteNotice, blockedNotice, uncheckedNotice, fallbackNotice()};
+        for (String e : extras) {
+            if (e != null && !e.isEmpty()) b.append('\n').append(e);
+        }
+        noticeText.setText(b.toString());
+        noticeText.setVisibility(View.VISIBLE);
+    }
+
+    private String fallbackNotice() {
+        if (!plan.directions.fallbackToEnglish()) return "";
+        String tag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
+        return getString(R.string.route_directions_english_fallback, Languages.displayNameForTag(this, tag));
     }
 
     private void initWifiSnapping() {
@@ -125,20 +229,20 @@ public class NavigationActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
             return;
         }
+        if (wifiPositionManager != null) return;
 
-        Collection<Node> allNodes = Node.searchByName("");
-        wifiPositionManager = new WifiPositionManager(this, allNodes, this::onNodeSnapped);
+        wifiPositionManager = new WifiPositionManager(this, graph.nodes(), this::onNodeSnapped);
         wifiPositionManager.start();
     }
 
     private void onNodeSnapped(Node node) {
-        if (routeNodes == null) return;
-        
-        int index = routeNodes.indexOf(node);
+        if (plan == null || !plan.ok()) return;
+
+        int index = plan.nodes.indexOf(node);
         if (index != -1 && index != currentStepIndex) {
             currentStepIndex = index;
             runOnUiThread(this::updateUI);
-            Toast.makeText(this, "Snapped to " + (node.label != null ? node.label : node.nodeId), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Snapped to " + node.displayName(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -147,6 +251,9 @@ public class NavigationActivity extends BaseActivity {
         super.onDestroy();
         if (wifiPositionManager != null) {
             wifiPositionManager.stop();
+        }
+        if (edgeUpdates != null) {
+            edgeUpdates.remove();
         }
     }
 
@@ -158,30 +265,22 @@ public class NavigationActivity extends BaseActivity {
         }
     }
 
-    private void setupMap(Node fromNode, Node toNode) {
+    private void setupMap() {
         String floorId = fromNode.floorId;
-        Floor floor = Floor.getById(floorId);
+        Floor floor = graph.floor(floorId);
         this.metresPerPixel = (floor != null) ? floor.metresPerPixel : 1.0;
 
-        Collection<Node> allNodes = Node.searchByName("");
-        List<FloorPlanNode> renderNodes = FloorPlanGraphConverter.toFloorPlanNodes(allNodes, floorId, metresPerPixel);
-        
-        List<Edge> allEdges = new ArrayList<>();
-        for (Node node : allNodes) {
-            for (Edge edge : node.edges) {
-                if (!allEdges.contains(edge)) allEdges.add(edge);
-            }
-        }
-        List<FloorPlanEdge> renderEdges = FloorPlanGraphConverter.toFloorPlanEdges(allEdges);
+        List<FloorPlanNode> renderNodes = FloorPlanGraphConverter.toFloorPlanNodes(graph, floorId);
+        List<FloorPlanEdge> renderEdges = FloorPlanGraphConverter.toFloorPlanEdges(graph, floorId);
 
         routeView.setGraph(renderNodes, renderEdges);
         graphOverlay.setData(renderNodes, renderEdges);
-        
+
         List<String> routeIds = new ArrayList<>();
-        for (Node n : routeNodes) routeIds.add(n.nodeId);
+        for (Node n : plan.nodes) routeIds.add(n.nodeId);
         routeView.setHighlightedRoute(routeIds);
         graphOverlay.setRoute(routeIds, fromNode.nodeId, toNode.nodeId);
-        
+
         routeView.setDestination(toNode.nodeId);
         if (floor != null) {
             zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
@@ -194,14 +293,14 @@ public class NavigationActivity extends BaseActivity {
     }
 
     private void setupStepsList() {
-        stepsAdapter = new StepsAdapter(this, routeNodes);
+        stepsAdapter = new StepsAdapter(this, plan.nodes, plan.directions);
         stepsRecyclerView.setAdapter(stepsAdapter);
     }
 
     private void updateUI() {
-        if (routeNodes == null || currentStepIndex >= routeNodes.size()) return;
+        if (plan == null || currentStepIndex >= plan.nodes.size()) return;
 
-        Node currentNode = routeNodes.get(currentStepIndex);
+        Node currentNode = plan.nodes.get(currentStepIndex);
         routeView.setCurrentPosition(currentNode.nodeId);
 
         // Center map on current node
@@ -211,30 +310,22 @@ public class NavigationActivity extends BaseActivity {
             zoomContainer.panTo(pxX, pxY);
         }
 
-        // Update instruction
-        if (currentStepIndex == routeNodes.size() - 1) {
-            instructionText.setText("You have arrived at " + (currentNode.label != null ? currentNode.label : currentNode.nodeId));
-        } else {
-            Node nextNode = routeNodes.get(currentStepIndex + 1);
-            double dist = calculateDistance(currentNode, nextNode);
-            instructionText.setText("Walk " + (int)dist + "m towards " + (nextNode.label != null ? nextNode.label : nextNode.nodeId));
-        }
+        instructionText.setText(plan.directions.instructionAt(currentStepIndex));
+        updateNotice();
 
-        // Update progress
-        int progress = (int) (((float) currentStepIndex / (routeNodes.size() - 1)) * 100);
+        int progress = (int) (((float) currentStepIndex / (plan.nodes.size() - 1)) * 100);
         progressBar.setProgress(progress);
 
-        // Update steps list highlighting
         stepsAdapter.setCurrentIndex(currentStepIndex);
         stepsRecyclerView.scrollToPosition(currentStepIndex);
     }
 
     private void nextStep() {
-        if (currentStepIndex < routeNodes.size() - 1) {
+        if (currentStepIndex < plan.nodes.size() - 1) {
             currentStepIndex++;
             updateUI();
         } else {
-            Toast.makeText(this, "Destination reached", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.route_destination_reached, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -245,21 +336,16 @@ public class NavigationActivity extends BaseActivity {
         }
     }
 
-    private double calculateDistance(Node a, Node b) {
-        if (a.point == null || b.point == null) return 0;
-        double dx = a.point.x - b.point.x;
-        double dy = a.point.y - b.point.y;
-        return Math.sqrt(dx * dx + dy * dy); // Simplified distance
-    }
-
     private static class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
         private final Context context;
         private final List<Node> steps;
+        private final Directions directions;
         private int currentIndex = 0;
 
-        StepsAdapter(Context context, List<Node> steps) {
+        StepsAdapter(Context context, List<Node> steps, Directions directions) {
             this.context = context;
             this.steps = steps;
+            this.directions = directions;
         }
 
         void setCurrentIndex(int index) {
@@ -277,15 +363,8 @@ public class NavigationActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Node node = steps.get(position);
-            holder.labelText.setText(node.label != null ? node.label : node.nodeId);
-            
-            if (position == steps.size() - 1) {
-                holder.distanceText.setText("Arrival");
-            } else {
-                Node nextNode = steps.get(position + 1);
-                double dist = ((NavigationActivity)context).calculateDistance(node, nextNode);
-                holder.distanceText.setText((int)dist + "m to next");
-            }
+            holder.labelText.setText(node.displayName());
+            holder.distanceText.setText(directions.instructionAt(position));
 
             // Highlighting
             if (position == currentIndex) {

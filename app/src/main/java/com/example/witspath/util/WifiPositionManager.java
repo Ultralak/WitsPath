@@ -11,7 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.example.witspath.model.Node;
+import com.example.witspath.routing.Node;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -110,7 +110,7 @@ public class WifiPositionManager {
         }
 
         if (matchedNode != null) {
-            Log.d(TAG, "Detected position: " + matchedNode.label + " (RSSI: " + bestMatch.level + ")");
+            Log.d(TAG, "Detected position: " + matchedNode.displayName() + " (RSSI: " + bestMatch.level + ")");
             listener.onNodeDetected(matchedNode);
         }
     }

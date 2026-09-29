@@ -21,9 +21,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import android.widget.ImageView;
 import com.example.witspath.R;
-import com.example.witspath.model.Floor;
-import com.example.witspath.model.Graph;
-import com.example.witspath.model.Node;
+import com.example.witspath.routing.CampusGraph;
+import com.example.witspath.routing.Floor;
+import com.example.witspath.routing.Node;
+import com.example.witspath.util.GraphStore;
 import com.example.witspath.util.Languages;
 import com.example.witspath.util.Prefs;
 import com.example.witspath.util.FirestorePopulator;
@@ -221,8 +222,9 @@ public class HomeActivity extends BaseActivity {
 
     private void updateFromLocation(String nodeId) {
         selectedFromNodeId = nodeId;
-        Node node = Node.getByID(nodeId);
-        String label = (node != null && node.label != null) ? node.label : nodeId;
+        CampusGraph graph = GraphStore.get(this);
+        Node node = graph == null ? null : graph.node(nodeId);
+        String label = node != null ? node.displayName() : nodeId;
         currentLocationNameText.setText(label);
         currentLocationNameText.setTextColor(getColor(R.color.colorInkText));
         currentLocationLabelText.setText(R.string.home_label_selected_start);
@@ -231,8 +233,9 @@ public class HomeActivity extends BaseActivity {
 
     private void updateToLocation(String nodeId) {
         selectedDestinationId = nodeId;
-        Node node = Node.getByID(nodeId);
-        String label = (node != null && node.label != null) ? node.label : nodeId;
+        CampusGraph graph = GraphStore.get(this);
+        Node node = graph == null ? null : graph.node(nodeId);
+        String label = node != null ? node.displayName() : nodeId;
         toLocationNameText.setText(label);
         toLocationNameText.setTextColor(getColor(R.color.colorInkText));
         toLocationLabelText.setText(R.string.home_label_selected_destination);
@@ -339,14 +342,12 @@ public class HomeActivity extends BaseActivity {
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
         findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
 
-        // Ensure graph is loaded to get floor dimensions
-        if (Node.searchByName("").isEmpty()) {
-            Graph.loadFromAssets(this, "graph_data.json");
+        // The bundled graph carries the floor dimensions
+        CampusGraph graph = GraphStore.get(this);
+        Floor floor = null;
+        if (graph != null && !graph.floors().isEmpty()) {
+            floor = graph.floors().get(0);
         }
-
-        // West Campus floor ID from JSON
-        String floorId = "flr_mu2x3cer0";
-        Floor floor = Floor.getById(floorId);
         if (floor != null && routeView != null) {
             zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
             routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);

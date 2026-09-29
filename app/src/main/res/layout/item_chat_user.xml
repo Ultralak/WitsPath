@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:paddingStart="48dp"
+    android:paddingTop="2dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="2dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bubble_user"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:elevation="1dp">
+
+        <TextView
+            android:id="@+id/chatUserText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorOnPrimary"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/chatUserTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/colorOnPrimaryMuted"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/chatUserAvatar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_avatar_circle"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"
+        android:padding="4dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_person" />
+</LinearLayout>

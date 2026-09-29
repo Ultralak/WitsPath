@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "WitsPath"
 include(":app")
+include(":routing-core")

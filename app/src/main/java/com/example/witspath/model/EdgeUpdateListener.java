@@ -1,49 +1,57 @@
 package com.example.witspath.model;
 
+import android.content.Context;
+
+import com.example.witspath.routing.CampusGraph;
+import com.example.witspath.routing.Edge;
+import com.example.witspath.util.GraphStore;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.LinkedList;
+import com.google.firebase.firestore.ListenerRegistration;
 
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * Applies live edge status changes (ok, flagged, blocked) from Firestore to the routing graph, and
+ * tells the caller which edges changed so it can re-route. Every instance applies the change itself,
+ * so listeners do not depend on each other.
+ */
 public class EdgeUpdateListener {
 
     public interface RouteRefreshCallback {
-        void onRouteNeedsRefresh();
+        /** Edge ids whose status changed. */
+        void onEdgesChanged(Set<String> edgeIds);
     }
 
-    private RouteRefreshCallback refreshCallback;
+    private final Context context;
+    private final RouteRefreshCallback refreshCallback;
 
-    public EdgeUpdateListener(RouteRefreshCallback callback) {
+    public EdgeUpdateListener(Context context, RouteRefreshCallback callback) {
+        this.context = context.getApplicationContext();
         this.refreshCallback = callback;
     }
 
-    public void listenForEdgeUpdates() {
-        FirebaseFirestore.getInstance()
+    /** Keep the registration and call {@code remove()} when the screen goes away. */
+    public ListenerRegistration listenForEdgeUpdates() {
+        return FirebaseFirestore.getInstance()
                 .collection("edges")
                 .addSnapshotListener((snapshots, error) -> {
                     if (error != null || snapshots == null) return;
-                    boolean triggerRefresh = false;
+                    CampusGraph graph = GraphStore.get(context);
+                    if (graph == null) return;
+                    Set<String> changed = new HashSet<>();
                     for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        if (dc.getType() == DocumentChange.Type.MODIFIED) {
-                            EdgeDTO dto = dc.getDocument().toObject(EdgeDTO.class);
-                            if (dto == null) continue;
-                            Node from = Node.getByName(dto.getFromNodeId());
-                            if (from != null) {
-                                for (Edge e : from.edges) {
-                                    if ((e.node1 == from && e.node2.name.equals(dto.getToNodeId())) ||
-                                        (e.node2 == from && e.node1.name.equals(dto.getToNodeId()))) {
-                                        boolean wasOk = e.status;
-                                        e.status = "ok".equalsIgnoreCase(dto.getStatus()) || dto.getStatus() == null;
-                                        if (wasOk && !e.status && "flagged".equalsIgnoreCase(dto.getStatus())) {
-                                            triggerRefresh = true;
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                        }
+                        if (dc.getType() != DocumentChange.Type.MODIFIED) continue;
+                        String edgeId = dc.getDocument().getString("edgeId");
+                        Edge e = graph.edge(edgeId != null ? edgeId : dc.getDocument().getId());
+                        if (e == null) continue;
+                        String before = e.statusText();
+                        e.setStatus(dc.getDocument().getString("status"));
+                        if (!before.equalsIgnoreCase(e.statusText())) changed.add(e.edgeId);
                     }
-                    if (triggerRefresh && refreshCallback != null) {
-                        refreshCallback.onRouteNeedsRefresh();
+                    if (!changed.isEmpty() && refreshCallback != null) {
+                        refreshCallback.onEdgesChanged(changed);
                     }
                 });
     }

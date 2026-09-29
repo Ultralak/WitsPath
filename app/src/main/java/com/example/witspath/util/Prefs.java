@@ -24,6 +24,8 @@ public final class Prefs {
     public static final String KEY_PREFER_LIFTS = "pref_prefer_lifts";
     public static final String KEY_AVOID_STEEP_RAMPS = "pref_avoid_steep_ramps";
     public static final String KEY_MAX_ROUTE_METRES = "pref_max_route_metres";
+    /** Walking speed as a percentage of the profile default (100 = normal). Read via RoutePlanner. */
+    public static final String KEY_WALKING_SPEED_PERCENT = "pref_walking_speed_percent";
 
     public static final String KEY_VOICE_GUIDANCE = "pref_voice_guidance";
     public static final String KEY_HAPTICS = "pref_haptics";
@@ -71,6 +73,14 @@ public final class Prefs {
 
     public void setInt(String key, int value) {
         prefs.edit().putInt(key, value).apply();
+    }
+
+    public float getFloat(String key, float defaultValue) {
+        return prefs.getFloat(key, defaultValue);
+    }
+
+    public void setFloat(String key, float value) {
+        prefs.edit().putFloat(key, value).apply();
     }
 
     public void clearAll() {

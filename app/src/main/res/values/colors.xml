@@ -25,6 +25,8 @@
     <!-- Semantic colours -->
     <color name="colorAccessible">#00897B</color>
     <color name="colorFlag">#D32F2F</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnPrimaryMuted">#DDE3EA</color>
 
     <!-- DYNAMIC ACCENT TOKENS -->
     <color name="colorAccent">@color/colorLangSystem</color>
