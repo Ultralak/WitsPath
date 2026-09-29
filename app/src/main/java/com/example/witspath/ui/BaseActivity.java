@@ -80,9 +80,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        params.gravity = Gravity.BOTTOM | Gravity.END;
+        params.gravity = Gravity.CENTER_VERTICAL | Gravity.END;
         float dp = getResources().getDisplayMetrics().density;
-        params.setMargins((int) (16 * dp), (int) (16 * dp), (int) (16 * dp), (int) (96 * dp));
+        params.setMargins((int) (16 * dp), 0, (int) (16 * dp), 0);
         fabCompanion.setLayoutParams(params);
 
         Prefs prefs = new Prefs(this);
