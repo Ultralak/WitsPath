@@ -123,11 +123,24 @@ public class PathFinder {
 
     public LinkedList<Node> aStarSearch(Node src, Node goal, boolean requireAccessible)
     {
+        return aStarSearch(src, goal, requireAccessible ? "wheelchair" : "no-preference", requireAccessible, false, false);
+    }
+
+    /**
+     * Website-parity route search. The web implementation treats accessibilityCost
+     * as a multiplier on distance and applies profile-specific access rules/penalties.
+     */
+    public LinkedList<Node> aStarSearch(Node src, Node goal, String mobilityProfile,
+                                        boolean requireStepFree, boolean preferLifts,
+                                        boolean avoidSteepRamps)
+    {
 
         if (src == goal)
         {
             return null;
         }
+
+        boolean requireAccessible = requireStepFree || "wheelchair".equals(mobilityProfile) || "low-vision".equals(mobilityProfile);
 
         Set<Node> closedSet = new HashSet<>();
         Map<Node, NodeDetails> details = new HashMap<>();
@@ -164,34 +177,38 @@ public class PathFinder {
                 return tracePath(details, src, goal);
             }
 
-            for (Edge edge : getSuccessors(currentNode, requireAccessible))
+            for (Edge edge : currentNode.edges)
             {
+                if (!edge.status) continue;
+
+                boolean stairsOnly = edge.stairs && !edge.ramp && !edge.elevator;
+                boolean blockedByAccessibilityCost = edge.accessibilityCost >= 999;
+                boolean excludesStairs = stairsOnly && (requireStepFree || "wheelchair".equals(mobilityProfile) || "low-vision".equals(mobilityProfile));
+                if (blockedByAccessibilityCost || excludesStairs) continue;
 
                 Node neighbour = currentNode.other(edge);
-                if (neighbour == null)
+                if (neighbour == null || closedSet.contains(neighbour)) continue;
+
+                double profilePenalty = ("walking-aid".equals(mobilityProfile) && stairsOnly) ? 1.5 : 1.0;
+                double liftPreference = preferLifts && edge.elevator ? 0.75 : (preferLifts && edge.ramp ? 1.35 : 1.0);
+                double accessibilityMultiplier = edge.accessibilityCost > 0 ? edge.accessibilityCost : 1.0;
+                double weightedDistance = edge.distance * accessibilityMultiplier * profilePenalty * liftPreference;
+
+                double gNew = Objects.requireNonNull(details.get(currentNode)).g + weightedDistance;
+                double hNew = calculateHValue(neighbour, goal);
+                double fNew = gNew + hNew;
+
+                NodeDetails neighbourDetails = details.computeIfAbsent(neighbour, k -> new NodeDetails());
+
+                if (neighbourDetails.f == Double.MAX_VALUE
+                        || neighbourDetails.f > fNew)
                 {
-                    continue;
-                }
+                    openList.offer(new PQNode(fNew, neighbour));
 
-                if (!closedSet.contains(neighbour))
-                {
-
-                    double gNew = Objects.requireNonNull(details.get(currentNode)).g + edge.distance;
-                    double hNew = calculateHValue(neighbour, goal);
-                    double fNew = gNew + hNew;
-
-                    NodeDetails neighbourDetails = details.computeIfAbsent(neighbour, k -> new NodeDetails());
-
-                    if (neighbourDetails.f == Double.MAX_VALUE
-                            || neighbourDetails.f > fNew)
-                    {
-                        openList.offer(new PQNode(fNew, neighbour));
-
-                        neighbourDetails.f = fNew;
-                        neighbourDetails.g = gNew;
-                        neighbourDetails.h = hNew;
-                        neighbourDetails.parent = currentNode;
-                    }
+                    neighbourDetails.f = fNew;
+                    neighbourDetails.g = gNew;
+                    neighbourDetails.h = hNew;
+                    neighbourDetails.parent = currentNode;
                 }
             }
         }

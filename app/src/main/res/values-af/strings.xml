@@ -201,4 +201,37 @@
     <string name="my_reports_sign_in_prompt">Meld aan om jou ingediende verslae en hul status te sien.</string>
     <string name="units_metres_format">%d m</string>
     <string name="nav_populate_firestore">Vul Firestore in</string>
+
+    <string name="web_accessible_navigation">Toeganklike navigasie</string>
+    <string name="web_inclusive_subtitle">’n Meer inklusiewe kampus vir almal</string>
+    <string name="web_home">Tuis</string>
+    <string name="web_account_settings">Rekeninginstellings</string>
+    <string name="web_destination">Bestemming</string>
+    <string name="web_campus_name">Wits West Campus</string>
+    <string name="web_estimated_time">Geskatte tyd</string>
+    <string name="web_start">Begin</string>
+    <string name="web_guidance_initial">Kies ’n roete en begin navigasie vir stap-vir-stap aanwysings.</string>
+    <string name="web_suggested_route">Voorgestelde roete</string>
+    <string name="web_route_ready">Roete gereed. Begin navigasie vir stap-vir-stap aanwysings.</string>
+    <string name="web_navigation_started">Navigasie begin • Volg die stappe.</string>
+    <string name="web_navigation_ended">Navigasie beëindig.</string>
+    <string name="web_no_step_free_route">Geen trapvrye roete is vir dié reis beskikbaar nie.</string>
+    <string name="web_no_route">Geen roete tussen dié liggings kon gevind word nie.</string>
+    <string name="web_end_navigation">Beëindig navigasie</string>
+    <string name="web_main_entrance">Hoofingang</string>
+    <string name="web_legend_start_destination">●  Start     ●  Destination</string>
+    <string name="web_legend_accessible">♿  Accessible entrance</string>
+    <string name="web_mode_wheelchair">Rolstoel
+Toeganklik</string>
+    <string name="web_mode_walking_aid">Loop
+hulpmiddel</string>
+    <string name="web_mode_visual">Visuele
+bystand</string>
+    <string name="web_mode_general">Algemene
+roete</string>
+    <string name="web_route_ready_status">Route ready • %1$d m</string>
+    <string name="web_total_route_length">Totale roetelengte: %1$d m</string>
+    <string name="web_arrive_at">Kom aan by %1$s</string>
+    <string name="web_continue_for">Gaan voort vir %1$d m</string>
+    <string name="web_follow_toward">Volg die toeganklike pad na %1$s</string>
 </resources>

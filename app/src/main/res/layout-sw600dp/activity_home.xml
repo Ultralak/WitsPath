@@ -18,9 +18,8 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/homeToolbar"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="68dp"
             android:background="@drawable/bg_header_topbar"
-            app:contentInsetStartWithNavigation="0dp"
             app:navigationContentDescription="@string/cd_open_menu"
             app:navigationIcon="@drawable/ic_menu"
             app:navigationIconTint="@color/colorTextOnPrimary">
@@ -30,8 +29,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="4dp"
-                android:paddingEnd="12dp">
+                android:paddingStart="8dp"
+                android:paddingEnd="16dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -43,56 +42,51 @@
                         android:id="@+id/webProductTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
                         android:text="@string/web_accessible_navigation"
                         android:textColor="@color/colorTextOnPrimary"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
                         android:text="@string/web_inclusive_subtitle"
                         android:textColor="#D6E7FA"
-                        android:textSize="10sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="#55FFFFFF" />
+                    android:layout_height="40dp"
+                    android:background="#73FFFFFF" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
                     android:gravity="center"
-                    android:letterSpacing="0.08"
-                    android:lines="2"
+                    android:letterSpacing="0.12"
                     android:text="@string/web_wits_wordmark"
                     android:textColor="@color/colorTextOnPrimary"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <ScrollView
+        <LinearLayout
             android:id="@+id/homePhoneScroll"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/colorPanel"
-            android:fillViewport="true">
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/homePhoneContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <ScrollView
+                android:id="@+id/homeRouteScroll"
+                android:layout_width="352dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPanel"
+                android:fillViewport="true">
 
                 <LinearLayout
                     android:id="@+id/homeRoutePanel"
@@ -415,186 +409,188 @@
                         app:iconTint="@color/colorTextOnPrimary" />
                 </LinearLayout>
 
-                <FrameLayout
-                    android:id="@+id/homeMapPanel"
-                    android:layout_width="match_parent"
-                    android:layout_height="420dp"
-                    android:background="@color/colorBackground"
-                    android:minHeight="310dp">
+            </ScrollView>
 
-                    <com.example.witspath.ui.ZoomableFrameLayout
-                        android:id="@+id/homeMapContainer"
+            <FrameLayout
+                android:id="@+id/homeMapPanel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorBackground"
+                android:minHeight="310dp">
+
+                <com.example.witspath.ui.ZoomableFrameLayout
+                    android:id="@+id/homeMapContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBackground"
+                    android:clipChildren="true"
+                    android:contentDescription="@string/cd_map_view">
+
+                    <ImageView
+                        android:id="@+id/homeFloorPlanImageView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/colorBackground"
-                        android:clipChildren="true"
-                        android:contentDescription="@string/cd_map_view">
+                        android:contentDescription="@string/floor_plan"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/campusmap" />
+
+                    <com.example.witspath.ui.FloorPlanRouteView
+                        android:id="@+id/homeFloorPlanRouteView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </com.example.witspath.ui.ZoomableFrameLayout>
+
+                <include
+                    layout="@layout/map_controls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end" />
+
+                <!-- Detailed Map Legend Card -->
+                <LinearLayout
+                    android:id="@+id/mapLegend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/bg_card_legend"
+                    android:elevation="4dp"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="16dp"
+                            android:layout_height="3dp"
+                            android:background="@color/colorRoute" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/web_suggested_route"
+                            android:textColor="@color/colorTextPrimary"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/homeFloorPlanImageView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:contentDescription="@string/floor_plan"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/campusmap" />
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_route_start" />
 
-                        <com.example.witspath.ui.FloorPlanRouteView
-                            android:id="@+id/homeFloorPlanRouteView"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </com.example.witspath.ui.ZoomableFrameLayout>
-
-                    <include
-                        layout="@layout/map_controls"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|end" />
-
-                    <!-- Detailed Map Legend Card -->
-                    <LinearLayout
-                        android:id="@+id/mapLegend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|start"
-                        android:layout_margin="12dp"
-                        android:background="@drawable/bg_card_legend"
-                        android:elevation="4dp"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <LinearLayout
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="16dp"
-                                android:layout_height="3dp"
-                                android:background="@color/colorRoute" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="@string/web_suggested_route"
-                                android:textColor="@color/colorTextPrimary"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_route_start" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="@string/web_start"
-                                android:textColor="@color/colorTextMuted"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_route_destination" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="@string/web_destination"
-                                android:textColor="@color/colorTextMuted"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_wheelchair"
-                                app:tint="@color/colorBrandPrimary" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="@string/web_legend_accessible"
-                                android:textColor="@color/colorTextMuted"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="16dp"
-                                android:layout_height="6dp"
-                                android:background="@color/colorRampPath" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="@string/legend_ramp_path"
-                                android:textColor="@color/colorTextMuted"
-                                android:textSize="10sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="16dp"
-                                android:layout_height="6dp"
-                                android:background="@color/colorBorder" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="@string/legend_stairs"
-                                android:textColor="@color/colorTextMuted"
-                                android:textSize="10sp" />
-                        </LinearLayout>
+                            android:layout_marginStart="8dp"
+                            android:text="@string/web_start"
+                            android:textColor="@color/colorTextMuted"
+                            android:textSize="10sp" />
                     </LinearLayout>
-                </FrameLayout>
-            </LinearLayout>
-        </ScrollView>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_route_destination" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/web_destination"
+                            android:textColor="@color/colorTextMuted"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_wheelchair"
+                            app:tint="@color/colorBrandPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/web_legend_accessible"
+                            android:textColor="@color/colorTextMuted"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="16dp"
+                            android:layout_height="6dp"
+                            android:background="@color/colorRampPath" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/legend_ramp_path"
+                            android:textColor="@color/colorTextMuted"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="16dp"
+                            android:layout_height="6dp"
+                            android:background="@color/colorBorder" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/legend_stairs"
+                            android:textColor="@color/colorTextMuted"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

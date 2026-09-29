@@ -7,7 +7,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -17,13 +17,10 @@ import com.example.witspath.R;
 import com.example.witspath.model.FloorPlanEdge;
 import com.example.witspath.model.FloorPlanNode;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Draws the floor-plan graph (all edges, junctions, ramps/lifts), the currently
@@ -52,15 +49,13 @@ public class FloorPlanRouteView extends View {
 
     private OnFitMatrixChangeListener fitMatrixListener;
 
+    private Drawable startMarkerDrawable;
+    private Drawable destMarkerDrawable;
+    private Drawable wheelchairDrawable;
+
     private final Paint edgePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint blockedEdgePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint routePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint nodePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint accessibleNodePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint currentPositionFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint currentPositionRingPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint destinationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint routeBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public FloorPlanRouteView(Context context) {
@@ -77,48 +72,29 @@ public class FloorPlanRouteView extends View {
     }
 
     private void initPaints(Context context) {
-        edgePaint.setColor(ContextCompat.getColor(context, R.color.colorRule));
-        edgePaint.setStrokeWidth(dp(1.5f));
+        edgePaint.setColor(ContextCompat.getColor(context, R.color.webLine));
+        edgePaint.setStrokeWidth(dp(2.5f));
         edgePaint.setStyle(Paint.Style.STROKE);
         edgePaint.setStrokeCap(Paint.Cap.ROUND);
-        edgePaint.setAlpha(40);
 
-        blockedEdgePaint.setColor(ContextCompat.getColor(context, R.color.colorFlag));
-        blockedEdgePaint.setStrokeWidth(dp(2));
+        blockedEdgePaint.setColor(ContextCompat.getColor(context, R.color.webLine));
+        blockedEdgePaint.setStrokeWidth(dp(3f));
         blockedEdgePaint.setStyle(Paint.Style.STROKE);
         blockedEdgePaint.setStrokeCap(Paint.Cap.ROUND);
         blockedEdgePaint.setPathEffect(new DashPathEffect(new float[]{dp(4), dp(4)}, 0));
-        blockedEdgePaint.setAlpha(100);
 
-        routePaint.setColor(ContextCompat.getColor(context, R.color.colorRoute));
-        routePaint.setStrokeWidth(dp(6));
+        routePaint.setColor(ContextCompat.getColor(context, R.color.webRoute));
+        routePaint.setStrokeWidth(dp(5f));
         routePaint.setStyle(Paint.Style.STROKE);
         routePaint.setStrokeCap(Paint.Cap.ROUND);
         routePaint.setStrokeJoin(Paint.Join.ROUND);
 
-        routeBorderPaint.setColor(Color.BLACK);
-        routeBorderPaint.setAlpha(80);
-        routeBorderPaint.setStrokeWidth(dp(10));
-        routeBorderPaint.setStyle(Paint.Style.STROKE);
-        routeBorderPaint.setStrokeCap(Paint.Cap.ROUND);
-        routeBorderPaint.setStrokeJoin(Paint.Join.ROUND);
-
-        nodePaint.setColor(ContextCompat.getColor(context, R.color.colorInkTextMuted));
-        nodePaint.setStyle(Paint.Style.FILL);
-
-        accessibleNodePaint.setColor(ContextCompat.getColor(context, R.color.colorAccessible));
-        accessibleNodePaint.setStyle(Paint.Style.FILL);
-
-        currentPositionFillPaint.setColor(ContextCompat.getColor(context, R.color.colorRoute));
-        currentPositionFillPaint.setStyle(Paint.Style.FILL);
-
-        currentPositionRingPaint.setColor(ContextCompat.getColor(context, R.color.colorRoute));
-        currentPositionRingPaint.setStyle(Paint.Style.STROKE);
-        currentPositionRingPaint.setStrokeWidth(dp(2));
-        currentPositionRingPaint.setAlpha(140);
-
-        destinationPaint.setColor(ContextCompat.getColor(context, R.color.colorFlag));
-        destinationPaint.setStyle(Paint.Style.FILL);
+        startMarkerDrawable = ContextCompat.getDrawable(context, R.drawable.ic_route_start);
+        destMarkerDrawable = ContextCompat.getDrawable(context, R.drawable.ic_route_destination);
+        wheelchairDrawable = ContextCompat.getDrawable(context, R.drawable.ic_wheelchair);
+        if (wheelchairDrawable != null) {
+            wheelchairDrawable.setTint(ContextCompat.getColor(context, R.color.webBlue700));
+        }
 
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(dp(10));
@@ -185,7 +161,6 @@ public class FloorPlanRouteView extends View {
             return;
         }
 
-        // Initial map scale must fill the entire available width of the map area.
         float scale = (float) getWidth() / floorPlanWidth;
         fitMatrix.setScale(scale, scale);
 
@@ -264,18 +239,22 @@ public class FloorPlanRouteView extends View {
             }
         }
 
-        canvas.drawPath(path, routeBorderPaint);
         canvas.drawPath(path, routePaint);
     }
 
     private void drawNodeMarkers(Canvas canvas) {
         for (FloorPlanNode node : nodes) {
             boolean isAccessibilityFeature = "ramp".equals(node.getType()) || "lift".equals(node.getType());
-            // Only draw accessibility features; intermediate junctions are hidden
             if (!isAccessibilityFeature) continue;
 
             float[] p = mapNode(node);
-            canvas.drawCircle(p[0], p[1], dp(5), accessibleNodePaint);
+            if (wheelchairDrawable != null) {
+                int size = (int) dp(20);
+                int left = (int) (p[0] - size / 2f);
+                int top = (int) (p[1] - size / 2f);
+                wheelchairDrawable.setBounds(left, top, left + size, top + size);
+                wheelchairDrawable.draw(canvas);
+            }
         }
     }
 
@@ -283,14 +262,27 @@ public class FloorPlanRouteView extends View {
         FloorPlanNode destination = (destinationNodeId != null) ? nodesById.get(destinationNodeId) : null;
         if (destination == null) return;
         float[] p = mapNode(destination);
-        canvas.drawCircle(p[0], p[1], dp(7), destinationPaint);
+        if (destMarkerDrawable != null) {
+            int width = (int) dp(28);
+            int height = (int) dp(34);
+            int left = (int) (p[0] - width / 2f);
+            int top = (int) (p[1] - height);
+            destMarkerDrawable.setBounds(left, top, left + width, top + height);
+            destMarkerDrawable.draw(canvas);
+        }
     }
 
     private void drawCurrentPositionMarker(Canvas canvas) {
         FloorPlanNode current = (currentPositionNodeId != null) ? nodesById.get(currentPositionNodeId) : null;
         if (current == null) return;
         float[] p = mapNode(current);
-        canvas.drawCircle(p[0], p[1], dp(10), currentPositionRingPaint);
-        canvas.drawCircle(p[0], p[1], dp(6), currentPositionFillPaint);
+        if (startMarkerDrawable != null) {
+            int width = (int) dp(28);
+            int height = (int) dp(34);
+            int left = (int) (p[0] - width / 2f);
+            int top = (int) (p[1] - height);
+            startMarkerDrawable.setBounds(left, top, left + width, top + height);
+            startMarkerDrawable.draw(canvas);
+        }
     }
 }

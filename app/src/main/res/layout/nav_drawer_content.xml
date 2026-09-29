@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorInk"
+    android:background="@color/colorSurface"
     android:fillViewport="true">
 
     <LinearLayout
@@ -18,15 +18,14 @@
             android:id="@+id/navHeaderAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@color/colorRoute"
+            android:background="@drawable/bg_header_topbar"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingStart="20dp"
-            android:paddingEnd="16dp"
             android:paddingTop="48dp"
+            android:paddingEnd="16dp"
             android:paddingBottom="24dp">
 
             <ImageView
@@ -35,16 +34,16 @@
                 android:layout_height="56dp"
                 android:background="@drawable/bg_avatar_circle"
                 android:backgroundTint="#22FFFFFF"
+                android:importantForAccessibility="no"
                 android:padding="12dp"
                 android:src="@drawable/ic_account"
-                app:tint="#FFFFFF"
-                android:importantForAccessibility="no" />
+                app:tint="#FFFFFF" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -52,8 +51,8 @@
                     style="@style/TextAppearance.WitsPath.Code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
                     android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="#FFFFFF"
                     tools:text="Guest User" />
 
@@ -63,8 +62,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:maxLines="1"
                     android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="#CCFFFFFF"
                     tools:text="Tap to sign in" />
 
@@ -73,9 +72,9 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_chevron_right"
-                app:tint="#FFFFFF"
-                android:importantForAccessibility="no" />
+                app:tint="#FFFFFF" />
 
         </LinearLayout>
 
@@ -95,9 +94,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_home"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -116,9 +115,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_flag"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -133,10 +132,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/bg_language_swatch"
-                android:backgroundTint="@color/colorAccent"
+                android:backgroundTint="@color/colorBrandPrimary"
                 android:paddingStart="8dp"
-                android:paddingEnd="8dp"
                 android:paddingTop="2dp"
+                android:paddingEnd="8dp"
                 android:paddingBottom="2dp"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
@@ -160,9 +159,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_settings"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -181,9 +180,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_language"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -204,28 +203,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:textColor="@color/colorTextMuted"
                 tools:text="English" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/navAccessibilityRow"
-            style="@style/WitsPath.DrawerRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_accessible"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
-
-            <TextView
-                style="@style/WitsPath.DrawerRow.Label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/nav_accessibility" />
 
         </LinearLayout>
 
@@ -238,9 +217,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_tune"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -266,9 +245,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_login"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -287,9 +266,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_person_add"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -315,9 +294,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_help"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -336,9 +315,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_info"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -357,9 +336,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_sync"
-                app:tint="#002C5F"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorBrandPrimary" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -375,7 +354,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/colorRule" />
+            android:background="@color/colorBorder" />
 
         <LinearLayout
             android:id="@+id/navLogOutRow"
@@ -386,9 +365,9 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/ic_logout"
-                app:tint="@color/colorFlag"
-                android:importantForAccessibility="no" />
+                app:tint="@color/colorFlag" />
 
             <TextView
                 style="@style/WitsPath.DrawerRow.Label"
@@ -407,7 +386,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="12dp"
             android:text="@string/app_version"
-            android:textColor="@color/colorInkTextMuted" />
+            android:textColor="@color/colorTextMuted" />
 
     </LinearLayout>
 

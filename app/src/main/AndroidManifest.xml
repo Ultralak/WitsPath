@@ -57,9 +57,6 @@
         <activity
             android:name=".ui.FloorPlanActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.NavigationActivity"
-            android:exported="false" />
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"

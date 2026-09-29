@@ -1,17 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorInk">#121212</color>
-    <color name="colorPlate">#1E1E1E</color>
-    <color name="colorPlateRaised">#2C2C2C</color>
-    <color name="colorRule">#37474F</color>
-    <color name="colorRuleStrong">#455A64</color>
+    <!-- High-Contrast Dark Mode Color Tokens -->
+    <color name="colorInk">#050C1A</color>
+    <color name="colorPlate">#122036</color>
+    <color name="colorPlateRaised">#1E304F</color>
+    <color name="colorRule">#2D466B</color>
+    <color name="colorRuleStrong">#3F5D85</color>
     <color name="colorInkText">#FFFFFF</color>
-    <color name="colorInkTextMuted">#B0BEC5</color>
-    <color name="colorRoute">#64B5F6</color>
+    <color name="colorInkTextMuted">#C2D5E8</color>
+    <color name="colorRoute">#3B93FF</color>
     <color name="colorBackground">@color/colorInk</color>
     <color name="colorSurface">@color/colorPlate</color>
     <color name="colorOnBackground">@color/colorInkText</color>
     <color name="colorOnBackgroundMuted">@color/colorInkTextMuted</color>
     <color name="colorOutline">@color/colorRule</color>
-    <color name="colorOutlineVariant">#2C2C2C</color>
+    <color name="colorOutlineVariant">#1E304F</color>
+
+    <!-- Header Gradient & Web Visual System (Increased Contrast) -->
+    <color name="webBlue900">#010915</color>
+    <color name="webBlue800">#0C2B54</color>
+    <color name="webBlue700">#1E6BB3</color>
+    <color name="webBlue600">#3B8AE0</color>
+    <color name="webBlue500">#4E9BFF</color>
+    <color name="webBlue100">#1D3758</color>
+    <color name="webInk">#FFFFFF</color>
+    <color name="webMuted">#C2D5E8</color>
+    <color name="webWhite">#122036</color>
+    <color name="webPanel">#091322</color>
+    <color name="webLine">#2D466B</color>
+    <color name="webBody">#050C1A</color>
+    <color name="webModeSelected">#1E385D</color>
+    <color name="webRoute">#3B93FF</color>
+    <color name="webSuccess">#38E090</color>
+    <color name="webStepBadgeBg">#1E3554</color>
 </resources>

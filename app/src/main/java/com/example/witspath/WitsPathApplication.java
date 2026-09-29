@@ -27,8 +27,8 @@ public class WitsPathApplication extends Application {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag));
         }
 
-        boolean darkTheme = appPrefs.getBoolean("pref_dark_theme", false);
-        AppCompatDelegate.setDefaultNightMode(darkTheme ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        boolean darkTheme = appPrefs.getBoolean(Prefs.KEY_DARK_THEME, false);
+        AppCompatDelegate.setDefaultNightMode(darkTheme ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
 
         new EdgeUpdateListener(null).listenForEdgeUpdates();
 

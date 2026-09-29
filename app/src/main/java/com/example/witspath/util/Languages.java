@@ -22,9 +22,14 @@ public final class Languages {
     public static final int SETSWANA = 4;
     public static final int XHOSA = 5;
     public static final int AFRIKAANS = 6;
+    public static final int NDEBELE = 7;
+    public static final int SEPEDI = 8;
+    public static final int SWATI = 9;
+    public static final int VENDA = 10;
+    public static final int TSONGA = 11;
 
     /** "" means "follow the phone's system locale". */
-    public static final String[] TAGS = {"", "en", "zu", "st", "tn", "xh", "af"};
+    public static final String[] TAGS = {"", "en", "zu", "st", "tn", "xh", "af", "nr", "nso", "ss", "ve", "ts"};
 
     public static final int[] COLORS = {
             R.color.colorLangSystem,
@@ -33,7 +38,12 @@ public final class Languages {
             R.color.colorLangSesotho,
             R.color.colorLangSetswana,
             R.color.colorLangXhosa,
-            R.color.colorLangAfrikaans
+            R.color.colorLangAfrikaans,
+            R.color.colorLangNdebele,
+            R.color.colorLangSepedi,
+            R.color.colorLangSwati,
+            R.color.colorLangVenda,
+            R.color.colorLangTsonga
     };
 
     public static final int[] COLORS_DIM = {
@@ -43,7 +53,12 @@ public final class Languages {
             R.color.colorLangSesothoDim,
             R.color.colorLangSetswanaDim,
             R.color.colorLangXhosaDim,
-            R.color.colorLangAfrikaansDim
+            R.color.colorLangAfrikaansDim,
+            R.color.colorLangNdebeleDim,
+            R.color.colorLangSepediDim,
+            R.color.colorLangSwatiDim,
+            R.color.colorLangVendaDim,
+            R.color.colorLangTsongaDim
     };
 
     public static final int[] DISPLAY_NAMES = {
@@ -53,7 +68,12 @@ public final class Languages {
             R.string.language_sesotho,
             R.string.language_setswana,
             R.string.language_xhosa,
-            R.string.language_afrikaans
+            R.string.language_afrikaans,
+            R.string.language_ndebele,
+            R.string.language_sepedi,
+            R.string.language_swati,
+            R.string.language_venda,
+            R.string.language_tsonga
     };
 
     public static final int[] NATIVE_NAMES = {
@@ -63,7 +83,12 @@ public final class Languages {
             R.string.language_sesotho_native,
             R.string.language_setswana_native,
             R.string.language_xhosa_native,
-            R.string.language_afrikaans_native
+            R.string.language_afrikaans_native,
+            R.string.language_ndebele_native,
+            R.string.language_sepedi_native,
+            R.string.language_swati_native,
+            R.string.language_venda_native,
+            R.string.language_tsonga_native
     };
 
     private Languages() {

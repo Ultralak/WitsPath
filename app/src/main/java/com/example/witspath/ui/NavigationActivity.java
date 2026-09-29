@@ -105,8 +105,14 @@ public class NavigationActivity extends BaseActivity {
         fromNodeText.setText(fromNode.label != null ? fromNode.label : fromNode.nodeId);
         toNodeText.setText(toNode.label != null ? toNode.label : toNode.nodeId);
 
+        String mobilityProfile = getIntent().getStringExtra("mobility_profile");
+        if (mobilityProfile == null || mobilityProfile.isEmpty()) mobilityProfile = "wheelchair";
+        boolean requireStepFree = getIntent().getBooleanExtra("require_step_free", "wheelchair".equals(mobilityProfile) || "low-vision".equals(mobilityProfile));
+        boolean preferLifts = getIntent().getBooleanExtra("prefer_lifts", false);
+        boolean avoidSteepRamps = getIntent().getBooleanExtra("avoid_steep_ramps", false);
+
         PathFinder pathFinder = new PathFinder();
-        routeNodes = pathFinder.aStarSearch(fromNode, toNode, false);
+        routeNodes = pathFinder.aStarSearch(fromNode, toNode, mobilityProfile, requireStepFree, preferLifts, avoidSteepRamps);
 
         if (routeNodes == null || routeNodes.isEmpty()) {
             Toast.makeText(this, "No route found", Toast.LENGTH_SHORT).show();

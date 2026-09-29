@@ -201,4 +201,37 @@
     <string name="my_reports_sign_in_prompt">Ngena ukuze ubone imibiko yakho ethunyelwe nesimo sayo.</string>
     <string name="units_metres_format">%d m</string>
     <string name="nav_populate_firestore">Gcwalisa i-Firestore</string>
+
+    <string name="web_accessible_navigation">Ukuzulazula okufinyelelekayo</string>
+    <string name="web_inclusive_subtitle">Ikhampasi ebandakanya wonke umuntu</string>
+    <string name="web_home">Ekhaya</string>
+    <string name="web_account_settings">Izilungiselelo ze-akhawunti</string>
+    <string name="web_destination">Indawo oya kuyo</string>
+    <string name="web_campus_name">Wits West Campus</string>
+    <string name="web_estimated_time">Isikhathi esilinganisiwe</string>
+    <string name="web_start">Isiqalo</string>
+    <string name="web_guidance_initial">Khetha umzila, bese uqala ukuzulazula ukuze ubone iziqondiso zesinyathelo ngesinyathelo.</string>
+    <string name="web_suggested_route">Umzila ophakanyisiwe</string>
+    <string name="web_route_ready">Umzila usulungile. Qala ukuzulazula ukuze ubone izinyathelo.</string>
+    <string name="web_navigation_started">Ukuzulazula kuqalile • Landela izinyathelo.</string>
+    <string name="web_navigation_ended">Ukuzulazula kuphelile.</string>
+    <string name="web_no_step_free_route">Awukho umzila ongenazitebhisi walolo hambo.</string>
+    <string name="web_no_route">Awutholakalanga umzila phakathi kwalezo zindawo.</string>
+    <string name="web_end_navigation">Misa ukuzulazula</string>
+    <string name="web_main_entrance">Isango elikhulu</string>
+    <string name="web_legend_start_destination">●  Start     ●  Destination</string>
+    <string name="web_legend_accessible">♿  Accessible entrance</string>
+    <string name="web_mode_wheelchair">Isihlalo sabakhubazekile
+Efinyelelekayo</string>
+    <string name="web_mode_walking_aid">Ukuhamba
+Usizo</string>
+    <string name="web_mode_visual">Ukubona
+Usizo</string>
+    <string name="web_mode_general">Okujwayelekile
+Umzila</string>
+    <string name="web_route_ready_status">Route ready • %1$d m</string>
+    <string name="web_total_route_length">Ubude bomzila sebebonke: %1$d m</string>
+    <string name="web_arrive_at">Fika e-%1$s</string>
+    <string name="web_continue_for">Qhubeka ngo-%1$d m</string>
+    <string name="web_follow_toward">Landela umzila ofinyelelekayo oya e-%1$s</string>
 </resources>

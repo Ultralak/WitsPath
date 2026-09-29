@@ -16,6 +16,7 @@ public final class Prefs {
     public static final String KEY_UI_LANGUAGE = "pref_ui_language";
     public static final String KEY_TEXT_SIZE = "pref_text_size";
     public static final String KEY_HIGH_CONTRAST = "pref_high_contrast";
+    public static final String KEY_DARK_THEME = "pref_dark_theme";
     public static final String KEY_SCREEN_READER_HINTS = "pref_screen_reader_hints";
     public static final String KEY_SYNC_ENABLED = "pref_sync_enabled";
 
