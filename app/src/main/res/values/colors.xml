@@ -1,32 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- WITSPATH DESIGN SYSTEM - BASE PALETTE (LIGHT THEME) -->
+    <!-- WITSPATH DESIGN SYSTEM - NATIVE SEMANTIC PALETTE (LIGHT THEME) -->
+    <color name="colorHeaderStart">#07234D</color>
+    <color name="colorHeaderEnd">#17539B</color>
+    <color name="colorBrandPrimary">#195394</color>
 
-    <!-- Screen Background - Neutral grey for depth -->
-    <color name="colorInk">#E8EDF2</color>
+    <color name="colorTextPrimary">#182130</color>
+    <color name="colorTextMuted">#4D5D73</color>
+    <color name="colorTextOnPrimary">#FFFFFF</color>
 
-    <!-- Card/Surface fill - Pure White for maximum contrast -->
-    <color name="colorPlate">#FFFFFF</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorPanel">#F5F8FC</color>
+    <color name="colorBorder">#D9E3F0</color>
+    <color name="colorBackground">#EDF3FB</color>
 
-    <!-- Elevated surfaces -->
+    <color name="colorModeSelected">#EAF2FF</color>
+    <color name="colorRoute">#1B7AEE</color>
+    <color name="colorSuccess">#1A8F5A</color>
+    <color name="colorStepBadgeBg">#E2E8F0</color>
+    <color name="colorRampPath">#EAF2FF</color>
+
+    <!-- Legacy compatibility mappings -->
+    <color name="colorInk">@color/colorBackground</color>
+    <color name="colorPlate">@color/colorSurface</color>
     <color name="colorPlateRaised">#DDE3EA</color>
-
-    <!-- Hairline dividers -->
-    <color name="colorRule">#DDE3EA</color>
+    <color name="colorRule">@color/colorBorder</color>
     <color name="colorRuleStrong">#C4CED9</color>
+    <color name="colorInkText">@color/colorTextPrimary</color>
+    <color name="colorInkTextMuted">@color/colorTextMuted</color>
 
-    <!-- Typography - Wits-inspired Dark Blue -->
-    <color name="colorInkText">#002C5F</color>
-    <color name="colorInkTextMuted">#556B8D</color>
-
-    <!-- Active branding - Wits Blue -->
-    <color name="colorRoute">#003B7E</color>
-
-    <!-- Semantic colours -->
     <color name="colorAccessible">#00897B</color>
     <color name="colorFlag">#D32F2F</color>
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnPrimaryMuted">#DDE3EA</color>
+
+    <!-- Backward compatibility aliases -->
+    <color name="webBlue900">@color/colorHeaderStart</color>
+    <color name="webBlue800">#123D73</color>
+    <color name="webBlue700">@color/colorBrandPrimary</color>
+    <color name="webBlue600">#1F67B8</color>
+    <color name="webBlue500">#2C7BE6</color>
+    <color name="webBlue100">@color/colorRampPath</color>
+    <color name="webInk">@color/colorTextPrimary</color>
+    <color name="webMuted">@color/colorTextMuted</color>
+    <color name="webWhite">@color/colorSurface</color>
+    <color name="webPanel">@color/colorPanel</color>
+    <color name="webLine">@color/colorBorder</color>
+    <color name="webBody">@color/colorBackground</color>
+    <color name="webModeSelected">@color/colorModeSelected</color>
+    <color name="webRoute">@color/colorRoute</color>
+    <color name="webSuccess">@color/colorSuccess</color>
+    <color name="webStepBadgeBg">@color/colorStepBadgeBg</color>
 
     <!-- DYNAMIC ACCENT TOKENS -->
     <color name="colorAccent">@color/colorLangSystem</color>
@@ -36,7 +60,6 @@
     <color name="colorAccentBorder">@color/colorLangSystemBorder</color>
 
     <!-- LANGUAGE ACCENT PALETTES -->
-    <!-- System Default (Darker Grey for visibility) -->
     <color name="colorLangSystem">#556B8D</color>
     <color name="colorLangSystemDark">#3A4D6B</color>
     <color name="colorLangSystemLight">#7A8A9E</color>
@@ -86,11 +109,38 @@
     <color name="colorLangAfrikaansBorder">#D0EFC8</color>
     <color name="colorLangAfrikaansDim">#3363C55F</color>
 
-    <!-- Legacy Compatibility mappings -->
-    <color name="colorBackground">@color/colorInk</color>
-    <color name="colorSurface">@color/colorPlate</color>
-    <color name="colorOnBackground">@color/colorInkText</color>
-    <color name="colorOnBackgroundMuted">@color/colorInkTextMuted</color>
-    <color name="colorOutline">@color/colorRule</color>
+    <color name="colorOutline">@color/colorBorder</color>
     <color name="colorOutlineVariant">#DDE3EA</color>
+
+    <color name="colorLangNdebele">#E6A23C</color>
+    <color name="colorLangNdebeleDark">#B97816</color>
+    <color name="colorLangNdebeleLight">#F4CF94</color>
+    <color name="colorLangNdebeleSurface">#FFF8EC</color>
+    <color name="colorLangNdebeleBorder">#F3D6A8</color>
+    <color name="colorLangNdebeleDim">#33E6A23C</color>
+    <color name="colorLangSepedi">#7B61C8</color>
+    <color name="colorLangSepediDark">#5A419F</color>
+    <color name="colorLangSepediLight">#B6A6E3</color>
+    <color name="colorLangSepediSurface">#F5F1FC</color>
+    <color name="colorLangSepediBorder">#D9D0F0</color>
+    <color name="colorLangSepediDim">#337B61C8</color>
+    <color name="colorLangSwati">#D95757</color>
+    <color name="colorLangSwatiDark">#A83C3C</color>
+    <color name="colorLangSwatiLight">#ED9A9A</color>
+    <color name="colorLangSwatiSurface">#FDF1F1</color>
+    <color name="colorLangSwatiBorder">#F2CCCC</color>
+    <color name="colorLangSwatiDim">#33D95757</color>
+    <color name="colorLangVenda">#2E9F8B</color>
+    <color name="colorLangVendaDark">#1F7768</color>
+    <color name="colorLangVendaLight">#83CDBF</color>
+    <color name="colorLangVendaSurface">#EEF9F7</color>
+    <color name="colorLangVendaBorder">#C8E9E2</color>
+    <color name="colorLangVendaDim">#332E9F8B</color>
+    <color name="colorLangTsonga">#C16A3A</color>
+    <color name="colorLangTsongaDark">#8F4826</color>
+    <color name="colorLangTsongaLight">#E0A77F</color>
+    <color name="colorLangTsongaSurface">#FCF4EF</color>
+    <color name="colorLangTsongaBorder">#EED7C7</color>
+    <color name="colorLangTsongaDim">#33C16A3A</color>
+
 </resources>

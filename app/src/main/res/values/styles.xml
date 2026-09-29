@@ -165,4 +165,26 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <!-- ============================== NATIVE COMPONENT STYLES ============================== -->
+    <style name="Widget" />
+    <style name="Widget.WitsPath" />
+
+    <style name="Widget.WitsPath.Card">
+        <item name="android:background">@drawable/bg_card_surface</item>
+    </style>
+
+    <style name="Widget.WitsPath.OutlineBox">
+        <item name="android:background">@drawable/bg_card_outline</item>
+    </style>
+
+    <style name="Widget.WitsPath.Legend">
+        <item name="android:background">@drawable/bg_card_legend</item>
+    </style>
+
+    <style name="Widget.WitsPath.ModeCard">
+        <item name="android:background">@drawable/bg_mode_selector</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
 </resources>

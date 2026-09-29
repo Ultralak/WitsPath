@@ -1,42 +1,52 @@
 package com.example.witspath.ui;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.witspath.R;
+import com.example.witspath.model.FloorPlanEdge;
+import com.example.witspath.model.FloorPlanGraphConverter;
+import com.example.witspath.model.FloorPlanNode;
+import com.example.witspath.routing.CampusGraph;
+import com.example.witspath.routing.Floor;
+import com.example.witspath.routing.Node;
+import com.example.witspath.routing.PhraseBook;
+import com.example.witspath.routing.RouteOptions;
+import com.example.witspath.routing.TravelTimeConfig;
+import com.example.witspath.util.FirestorePopulator;
+import com.example.witspath.util.GraphStore;
+import com.example.witspath.util.Languages;
+import com.example.witspath.util.Prefs;
+import com.example.witspath.util.RoutePlanner;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import android.widget.ImageView;
-import com.example.witspath.R;
-import com.example.witspath.routing.CampusGraph;
-import com.example.witspath.routing.Floor;
-import com.example.witspath.routing.Node;
-import com.example.witspath.util.GraphStore;
-import com.example.witspath.util.Languages;
-import com.example.witspath.util.Prefs;
-import com.example.witspath.util.FirestorePopulator;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class HomeActivity extends BaseActivity {
 
     private DrawerLayout drawerLayout;
     private Prefs prefs;
 
-    // Drawer views
     private TextView navUserNameText;
     private TextView navUserEmailText;
     private View navLogInRow;
@@ -45,44 +55,32 @@ public class HomeActivity extends BaseActivity {
     private View navLanguageSwatch;
     private TextView navLanguageValueText;
 
-    // Main content
     private TextView greetingText;
-    private TextView currentLocationNameText;
-    private TextView currentLocationLabelText;
-    private TextView toLocationNameText;
-    private TextView toLocationLabelText;
-    private View currentLocationPlate;
-    private View toLocationPlate;
-    private View autoDetectButton;
+    private Spinner fromSpinner;
+    private Spinner toSpinner;
+    private TextView estimatedTimeText;
+    private TextView estimatedDistanceText;
+    private TextView guidanceText;
+    private TextView statusMessage;
+    private LinearLayout stepsContainer;
+    private ImageView refreshLocation;
     private FloorPlanRouteView routeView;
     private ZoomableFrameLayout zoomContainer;
 
-    private String selectedFromNodeId = null;
-    private String selectedDestinationId = null;
+    private final List<Node> selectableNodes = new ArrayList<>();
+    private String selectedFromNodeId;
+    private String selectedDestinationId;
+    private String mobilityProfile = "wheelchair";
+    private boolean navigationStarted = false;
+    private CampusGraph graph;
+    private RoutePlanner.Plan currentPlan;
+    private List<Node> currentRoute;
 
-    private final ActivityResultLauncher<Intent> fromPickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    String nodeId = result.getData().getStringExtra("selected_room");
-                    if (nodeId != null) {
-                        updateFromLocation(nodeId);
-                    }
-                }
-            }
-    );
-
-    private final ActivityResultLauncher<Intent> destinationPickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    String nodeId = result.getData().getStringExtra("selected_room");
-                    if (nodeId != null) {
-                        updateToLocation(nodeId);
-                    }
-                }
-            }
-    );
+    private enum Mode {
+        WHEELCHAIR("wheelchair"), WALKING_AID("walking-aid"), VISUAL("low-vision"), GENERAL("no-preference");
+        final String profile;
+        Mode(String profile) { this.profile = profile; }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,37 +89,20 @@ public class HomeActivity extends BaseActivity {
 
         prefs = new Prefs(this);
         drawerLayout = findViewById(R.id.homeDrawerLayout);
-
         MaterialToolbar toolbar = findViewById(R.id.homeToolbar);
         toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         bindDrawerViews();
         bindDrawerClicks();
         bindMainContent();
-        initMap();
+        loadGraphAndMap();
 
         if (savedInstanceState != null) {
-            String fromId = savedInstanceState.getString("selectedFromNodeId");
-            String destId = savedInstanceState.getString("selectedDestinationId");
-            if (fromId != null) {
-                updateFromLocation(fromId);
-            }
-            if (destId != null) {
-                updateToLocation(destId);
-            }
+            selectedFromNodeId = savedInstanceState.getString("selectedFromNodeId");
+            selectedDestinationId = savedInstanceState.getString("selectedDestinationId");
+            mobilityProfile = savedInstanceState.getString("mobilityProfile", "wheelchair");
+            navigationStarted = savedInstanceState.getBoolean("navigationStarted", false);
         }
-
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-                    setEnabled(false);
-                    getOnBackPressedDispatcher().onBackPressed();
-                }
-            }
-        });
     }
 
     @Override
@@ -129,6 +110,8 @@ public class HomeActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         outState.putString("selectedFromNodeId", selectedFromNodeId);
         outState.putString("selectedDestinationId", selectedDestinationId);
+        outState.putString("mobilityProfile", mobilityProfile);
+        outState.putBoolean("navigationStarted", navigationStarted);
     }
 
     @Override
@@ -137,43 +120,269 @@ public class HomeActivity extends BaseActivity {
         refreshAccountState();
         refreshLanguageIndicator();
         refreshGreeting();
-        refreshCurrentLocation();
-    }
-
-    private void refreshAccountState() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        boolean signedIn = user != null && !user.isAnonymous();
-
-        navLogInRow.setVisibility(signedIn ? View.GONE : View.VISIBLE);
-        navSignUpRow.setVisibility(signedIn ? View.GONE : View.VISIBLE);
-        navLogOutRow.setVisibility(signedIn ? View.VISIBLE : View.GONE);
-
-        if (signedIn) {
-            String name = user.getDisplayName();
-            navUserNameText.setText(name != null && !name.isEmpty() ? name : getString(R.string.field_full_name));
-            navUserEmailText.setText(user.getEmail());
-            updateReportsCount(user.getUid());
-        } else {
-            navUserNameText.setText(R.string.nav_guest_title);
-            navUserEmailText.setText(R.string.nav_guest_subtitle);
-            findViewById(R.id.navMyReportsCount).setVisibility(View.GONE);
+        if (fromSpinner != null && toSpinner != null) {
+            restoreSpinnerSelections();
         }
     }
 
-    private void updateReportsCount(String uid) {
-        FirebaseFirestore.getInstance().collection("reports")
-                .whereEqualTo("userId", uid)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    TextView countText = findViewById(R.id.navMyReportsCount);
-                    int count = queryDocumentSnapshots.size();
-                    if (count > 0) {
-                        countText.setVisibility(View.VISIBLE);
-                        countText.setText(String.valueOf(count));
-                    } else {
-                        countText.setVisibility(View.GONE);
-                    }
-                });
+    private void bindMainContent() {
+        greetingText = findViewById(R.id.webProductTitle);
+        fromSpinner = findViewById(R.id.fromLocationSpinner);
+        toSpinner = findViewById(R.id.toLocationSpinner);
+        estimatedTimeText = findViewById(R.id.estimatedTime);
+        estimatedDistanceText = findViewById(R.id.estimatedDistance);
+        guidanceText = findViewById(R.id.guidanceText);
+        statusMessage = findViewById(R.id.statusMessage);
+        stepsContainer = findViewById(R.id.stepsContainer);
+        refreshLocation = findViewById(R.id.refreshLocation);
+
+        refreshLocation.setOnClickListener(v -> autoDetectLocation());
+
+        fromSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0 && position < selectableNodes.size()) selectedFromNodeId = selectableNodes.get(position).nodeId;
+                requestRoute(false);
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
+        toSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0 && position < selectableNodes.size()) selectedDestinationId = selectableNodes.get(position).nodeId;
+                requestRoute(false);
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        bindMode(R.id.modeWheelchair, Mode.WHEELCHAIR);
+        bindMode(R.id.modeWalkingAid, Mode.WALKING_AID);
+        bindMode(R.id.modeVisual, Mode.VISUAL);
+        bindMode(R.id.modeGeneral, Mode.GENERAL);
+
+        findViewById(R.id.navigateButton).setOnClickListener(v -> toggleNavigation());
+    }
+
+    private void bindMode(int id, Mode mode) {
+        View view = findViewById(id);
+        view.setOnClickListener(v -> {
+            mobilityProfile = mode.profile;
+            prefs.setString(Prefs.KEY_MOBILITY_PROFILE, mobilityProfile);
+            updateModeSelection(id);
+            requestRoute(false);
+        });
+    }
+
+    private void updateModeSelection(int selectedId) {
+        int[] ids = {R.id.modeWheelchair, R.id.modeWalkingAid, R.id.modeVisual, R.id.modeGeneral};
+        for (int id : ids) findViewById(id).setSelected(id == selectedId);
+    }
+
+    private int modeIdForProfile(String profile) {
+        switch (RouteOptions.normaliseProfile(profile)) {
+            case RouteOptions.WALKING_AID: return R.id.modeWalkingAid;
+            case RouteOptions.LOW_VISION: return R.id.modeVisual;
+            case RouteOptions.NONE: return R.id.modeGeneral;
+            default: return R.id.modeWheelchair;
+        }
+    }
+
+    private void loadGraphAndMap() {
+        graph = GraphStore.get(this);
+
+        selectableNodes.clear();
+        if (graph != null) selectableNodes.addAll(graph.nodes());
+        selectableNodes.removeIf(node -> "ramp".equals(node.type));
+        Collections.sort(selectableNodes, Comparator.comparing(Node::displayName, String.CASE_INSENSITIVE_ORDER));
+
+        List<String> labels = new ArrayList<>();
+        for (Node node : selectableNodes) labels.add(node.displayName());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, labels);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fromSpinner.setAdapter(adapter);
+        toSpinner.setAdapter(adapter);
+
+        String storedProfile = prefs.getString(Prefs.KEY_MOBILITY_PROFILE, "wheelchair");
+        mobilityProfile = storedProfile == null || storedProfile.isEmpty() ? "wheelchair" : storedProfile;
+        updateModeSelection(modeIdForProfile(mobilityProfile));
+
+        String defaultFrom = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu84hhsut");
+        String defaultTo = "nd_mu842rrrm";
+        selectedFromNodeId = findNodeOrFirst(defaultFrom);
+        selectedDestinationId = findNodeOrSecond(defaultTo);
+        restoreSpinnerSelections();
+
+        routeView = findViewById(R.id.homeFloorPlanRouteView);
+        zoomContainer = findViewById(R.id.homeMapContainer);
+        ImageView imageView = findViewById(R.id.homeFloorPlanImageView);
+        routeView.setOnFitMatrixChangeListener(imageView::setImageMatrix);
+
+        findViewById(R.id.btnZoomIn).setOnClickListener(v -> zoomContainer.zoomIn());
+        findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
+        findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
+
+        Floor floor = null;
+        if (graph != null) {
+            floor = graph.floor("flr_mu83yzmd0");
+            if (floor == null && !graph.floors().isEmpty()) floor = graph.floors().get(0);
+        }
+        if (floor != null) {
+            zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
+            routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
+            List<FloorPlanNode> renderNodes = FloorPlanGraphConverter.toFloorPlanNodes(graph, floor.floorId);
+            List<FloorPlanEdge> renderEdges = FloorPlanGraphConverter.toFloorPlanEdges(graph, floor.floorId);
+            routeView.setGraph(renderNodes, renderEdges);
+        }
+
+        requestRoute(false);
+    }
+
+    private String findNodeOrFirst(String id) {
+        if (graph != null && graph.node(id) != null) return id;
+        return selectableNodes.isEmpty() ? null : selectableNodes.get(0).nodeId;
+    }
+
+    private String findNodeOrSecond(String id) {
+        if (graph != null && graph.node(id) != null) return id;
+        return selectableNodes.size() > 1 ? selectableNodes.get(1).nodeId : findNodeOrFirst(id);
+    }
+
+    private void restoreSpinnerSelections() {
+        if (selectableNodes.isEmpty()) return;
+        int fromIndex = indexOfNode(selectedFromNodeId);
+        int toIndex = indexOfNode(selectedDestinationId);
+        if (fromIndex >= 0) fromSpinner.setSelection(fromIndex, false);
+        if (toIndex >= 0) toSpinner.setSelection(toIndex, false);
+    }
+
+    private int indexOfNode(String nodeId) {
+        for (int i = 0; i < selectableNodes.size(); i++) if (selectableNodes.get(i).nodeId.equals(nodeId)) return i;
+        return -1;
+    }
+
+    private void requestRoute(boolean showErrors) {
+        if (selectedFromNodeId == null || selectedDestinationId == null || selectedFromNodeId.equals(selectedDestinationId)) {
+            if (showErrors) showStatus(getString(R.string.home_toast_select_destination), true);
+            return;
+        }
+        if (graph == null) return;
+        Node from = graph.node(selectedFromNodeId);
+        Node to = graph.node(selectedDestinationId);
+        if (from == null || to == null) return;
+
+        boolean stepFree = "wheelchair".equals(mobilityProfile) || "low-vision".equals(mobilityProfile);
+        boolean preferLifts = prefs.getBoolean(Prefs.KEY_PREFER_LIFTS, false);
+        boolean avoidSteepRamps = prefs.getBoolean(Prefs.KEY_AVOID_STEEP_RAMPS, false);
+
+        // Same A* module as the navigation screen and the companion.
+        RouteOptions options = new RouteOptions(mobilityProfile, stepFree, preferLifts, avoidSteepRamps);
+        currentPlan = RoutePlanner.plan(graph, from, to, options, RoutePlanner.speedMultiplier(prefs), PhraseBook.english());
+        currentRoute = currentPlan.ok() ? currentPlan.nodes : null;
+        if (currentRoute == null || currentRoute.size() < 2) {
+            estimatedTimeText.setText("—");
+            estimatedDistanceText.setText("");
+            guidanceText.setText(stepFree ? getString(R.string.web_no_step_free_route) : getString(R.string.web_no_route));
+            stepsContainer.setVisibility(View.GONE);
+            if (routeView != null) routeView.setHighlightedRoute(Collections.emptyList());
+            return;
+        }
+
+        double distance = currentPlan.distanceMetres;
+        estimatedTimeText.setText(currentPlan.minutes() + " min");
+        estimatedDistanceText.setText("(" + formatDistance(distance) + ")");
+        guidanceText.setText(navigationStarted ? getString(R.string.web_total_route_length, Math.round(distance)) : getString(R.string.web_route_ready));
+        showStatus(getString(R.string.web_route_ready_status, Math.round(distance)), false);
+
+        if (routeView != null) {
+            List<String> ids = new ArrayList<>();
+            for (Node n : currentRoute) ids.add(n.nodeId);
+            routeView.setHighlightedRoute(ids);
+            routeView.setCurrentPosition(from.nodeId);
+            routeView.setDestination(to.nodeId);
+        }
+        if (navigationStarted) renderSteps(currentRoute);
+        else stepsContainer.setVisibility(View.GONE);
+    }
+
+    private double calculateDistance(Node a, Node b) {
+        if (a.point == null || b.point == null) return 0;
+        return Math.hypot(a.point.x - b.point.x, a.point.y - b.point.y);
+    }
+
+    private String formatDistance(double metres) {
+        String units = prefs.getString(Prefs.KEY_UNITS, "meters");
+        if ("feet".equalsIgnoreCase(units)) return Math.round(metres * 3.28084) + " ft";
+        if ("minutes".equalsIgnoreCase(units)) return Math.max(1, Math.round(metres / TravelTimeConfig.speedFor(mobilityProfile) / 60)) + " min";
+        return Math.round(metres) + " m";
+    }
+
+    private void toggleNavigation() {
+        if (currentRoute == null || currentRoute.size() < 2) {
+            requestRoute(true);
+            if (currentRoute == null) return;
+        }
+        navigationStarted = !navigationStarted;
+        TextView button = findViewById(R.id.navigateButton);
+        if (button != null) {
+            button.setText(navigationStarted ? R.string.web_end_navigation : R.string.start_navigation);
+        }
+        if (navigationStarted) {
+            renderSteps(currentRoute);
+            guidanceText.setText(getString(R.string.web_total_route_length, Math.round(currentPlan.distanceMetres)));
+            showStatus(getString(R.string.web_navigation_started), false);
+
+            if (routeView != null && selectedFromNodeId != null && selectedDestinationId != null) {
+                List<String> ids = new ArrayList<>();
+                for (Node n : currentRoute) ids.add(n.nodeId);
+                routeView.setHighlightedRoute(ids);
+                routeView.setCurrentPosition(selectedFromNodeId);
+                routeView.setDestination(selectedDestinationId);
+            }
+        } else {
+            stepsContainer.setVisibility(View.GONE);
+            guidanceText.setText(getString(R.string.web_route_ready));
+            showStatus(getString(R.string.web_navigation_ended), false);
+        }
+    }
+
+    private void renderSteps(List<Node> route) {
+        stepsContainer.removeAllViews();
+        for (int i = 0; i < route.size(); i++) {
+            Node node = route.get(i);
+            View stepView = getLayoutInflater().inflate(R.layout.item_route_step, stepsContainer, false);
+            TextView numberText = stepView.findViewById(R.id.stepNumberText);
+            ImageView iconView = stepView.findViewById(R.id.stepIcon);
+            TextView titleText = stepView.findViewById(R.id.stepTitleText);
+            TextView subtitleText = stepView.findViewById(R.id.stepSubtitleText);
+
+            numberText.setText(String.valueOf(i + 1));
+
+            if (i == route.size() - 1) {
+                iconView.setImageResource(R.drawable.ic_flag);
+                titleText.setText(getString(R.string.web_arrive_at, safeLabel(node)));
+                subtitleText.setText(R.string.web_main_entrance);
+            } else {
+                double distance = calculateDistance(node, route.get(i + 1));
+                iconView.setImageResource(R.drawable.ic_next);
+                titleText.setText(getString(R.string.web_continue_for, Math.round(distance)));
+                subtitleText.setText(getString(R.string.web_follow_toward, safeLabel(route.get(i + 1))));
+            }
+            stepsContainer.addView(stepView);
+        }
+        stepsContainer.setVisibility(View.VISIBLE);
+    }
+
+    private String safeLabel(Node node) { return node.displayName(); }
+
+    private void showStatus(String message, boolean error) {
+        statusMessage.setText(message);
+        statusMessage.setTextColor(getColor(error ? R.color.colorFlag : R.color.webSuccess));
+    }
+
+    private void autoDetectLocation() {
+        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu84hhsut");
+        selectedFromNodeId = findNodeOrFirst(homeNode);
+        restoreSpinnerSelections();
+        showStatus(getString(R.string.home_toast_location_detected), false);
+        requestRoute(false);
     }
 
     private void bindDrawerViews() {
@@ -186,102 +395,66 @@ public class HomeActivity extends BaseActivity {
         navLanguageValueText = findViewById(R.id.navLanguageValueText);
     }
 
-    private void bindMainContent() {
-        greetingText = findViewById(R.id.greetingText);
-        currentLocationNameText = findViewById(R.id.currentLocationNameText);
-        currentLocationLabelText = findViewById(R.id.currentLocationLabelText);
-        toLocationNameText = findViewById(R.id.toLocationNameText);
-        toLocationLabelText = findViewById(R.id.toLocationLabelText);
-        currentLocationPlate = findViewById(R.id.currentLocationPlate);
-        toLocationPlate = findViewById(R.id.toLocationPlate);
-        autoDetectButton = findViewById(R.id.autoDetectButton);
-
-        currentLocationPlate.setOnClickListener(v ->
-                fromPickerLauncher.launch(new Intent(this, RoomPickerActivity.class)));
-
-        toLocationPlate.setOnClickListener(v ->
-                destinationPickerLauncher.launch(new Intent(this, RoomPickerActivity.class)));
-
-        autoDetectButton.setOnClickListener(v -> autoDetectLocation());
-
-        findViewById(R.id.navigateButton).setOnClickListener(v -> {
-            if (selectedDestinationId == null) {
-                Toast.makeText(this, R.string.home_toast_select_destination, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (selectedFromNodeId == null) {
-                Toast.makeText(this, R.string.home_toast_select_start, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Intent intent = new Intent(this, NavigationActivity.class);
-            intent.putExtra("to_node", selectedDestinationId);
-            intent.putExtra("from_node", selectedFromNodeId);
-            startActivity(intent);
-        });
-    }
-
-    private void updateFromLocation(String nodeId) {
-        selectedFromNodeId = nodeId;
-        CampusGraph graph = GraphStore.get(this);
-        Node node = graph == null ? null : graph.node(nodeId);
-        String label = node != null ? node.displayName() : nodeId;
-        currentLocationNameText.setText(label);
-        currentLocationNameText.setTextColor(getColor(R.color.colorInkText));
-        currentLocationLabelText.setText(R.string.home_label_selected_start);
-        currentLocationLabelText.setVisibility(View.VISIBLE);
-    }
-
-    private void updateToLocation(String nodeId) {
-        selectedDestinationId = nodeId;
-        CampusGraph graph = GraphStore.get(this);
-        Node node = graph == null ? null : graph.node(nodeId);
-        String label = node != null ? node.displayName() : nodeId;
-        toLocationNameText.setText(label);
-        toLocationNameText.setTextColor(getColor(R.color.colorInkText));
-        toLocationLabelText.setText(R.string.home_label_selected_destination);
-        toLocationLabelText.setVisibility(View.VISIBLE);
-    }
-
-    private void autoDetectLocation() {
-        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu84hhsut");
-        updateFromLocation(homeNode);
-        currentLocationLabelText.setText(R.string.auto_detected);
-        Toast.makeText(this, R.string.home_toast_location_detected, Toast.LENGTH_SHORT).show();
-    }
-
     private void bindDrawerClicks() {
         findViewById(R.id.navHeaderAccount).setOnClickListener(v -> onAccountRowClicked());
         findViewById(R.id.navHomeRow).setOnClickListener(v -> closeDrawer());
         findViewById(R.id.navMyReportsRow).setOnClickListener(v -> openAndCloseDrawer(MyReportsActivity.class));
         findViewById(R.id.navSettingsRow).setOnClickListener(v -> openAndCloseDrawer(SettingsActivity.class));
         findViewById(R.id.navLanguageRow).setOnClickListener(v -> openAndCloseDrawer(LanguageActivity.class));
-        findViewById(R.id.navAccessibilityRow).setOnClickListener(v -> {
-            closeDrawer();
-            Intent intent = new Intent(this, SettingsActivity.class);
-            intent.putExtra("scrollToSection", "accessibility");
-            startActivity(intent);
-        });
         findViewById(R.id.navPreferencesRow).setOnClickListener(v -> openAndCloseDrawer(PreferencesActivity.class));
-
         navLogInRow.setOnClickListener(v -> openAndCloseDrawer(LoginActivity.class));
         navSignUpRow.setOnClickListener(v -> openAndCloseDrawer(SignUpActivity.class));
         navLogOutRow.setOnClickListener(v -> confirmLogOut());
-
         findViewById(R.id.navHelpRow).setOnClickListener(v -> closeDrawer());
         findViewById(R.id.navAboutRow).setOnClickListener(v -> closeDrawer());
-        findViewById(R.id.navPopulateFirestoreRow).setOnClickListener(v -> {
-            closeDrawer();
-            FirestorePopulator.populateFromAssets(this);
+        findViewById(R.id.navPopulateFirestoreRow).setOnClickListener(v -> { closeDrawer(); FirestorePopulator.populateFromAssets(this); });
+    }
+
+    private void refreshAccountState() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        boolean signedIn = user != null && !user.isAnonymous();
+        navLogInRow.setVisibility(signedIn ? View.GONE : View.VISIBLE);
+        navSignUpRow.setVisibility(signedIn ? View.GONE : View.VISIBLE);
+        navLogOutRow.setVisibility(signedIn ? View.VISIBLE : View.GONE);
+        if (signedIn) {
+            navUserNameText.setText(user.getDisplayName() != null && !user.getDisplayName().isEmpty() ? user.getDisplayName() : getString(R.string.field_full_name));
+            navUserEmailText.setText(user.getEmail());
+            updateReportsCount(user.getUid());
+        } else {
+            navUserNameText.setText(R.string.nav_guest_title);
+            navUserEmailText.setText(R.string.nav_guest_subtitle);
+            findViewById(R.id.navMyReportsCount).setVisibility(View.GONE);
+        }
+    }
+
+    private void updateReportsCount(String uid) {
+        FirebaseFirestore.getInstance().collection("reports").whereEqualTo("userId", uid).get().addOnSuccessListener(snap -> {
+            TextView countText = findViewById(R.id.navMyReportsCount);
+            if (snap.size() > 0) { countText.setVisibility(View.VISIBLE); countText.setText(String.valueOf(snap.size())); }
+            else countText.setVisibility(View.GONE);
         });
+    }
+
+    private void refreshLanguageIndicator() {
+        String tag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
+        navLanguageValueText.setText(Languages.displayNameForTag(this, tag));
+        navLanguageSwatch.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Languages.colorForTag(this, tag)));
+    }
+
+    private void refreshGreeting() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String name = (user != null && user.getDisplayName() != null) ? user.getDisplayName().split(" ")[0] : getString(R.string.nav_guest_title);
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        String prefix = hour < 12 ? getString(R.string.greeting_morning) : hour < 18 ? getString(R.string.greeting_afternoon) : getString(R.string.greeting_evening);
+        // The website header owns the greeting, so keep the accessible navigation title there.
+        TextView title = findViewById(R.id.webProductTitle);
+        if (title != null) title.setText(getString(R.string.app_name));
     }
 
     private void onAccountRowClicked() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null || user.isAnonymous()) {
-            openAndCloseDrawer(LoginActivity.class);
-        } else {
-            openAndCloseDrawer(SettingsActivity.class);
-        }
+        if (user == null || user.isAnonymous()) openAndCloseDrawer(LoginActivity.class);
+        else openAndCloseDrawer(SettingsActivity.class);
     }
 
     private void confirmLogOut() {
@@ -289,77 +462,10 @@ public class HomeActivity extends BaseActivity {
                 .setTitle(R.string.dialog_log_out_title)
                 .setMessage(R.string.dialog_log_out_message)
                 .setNegativeButton(R.string.dialog_cancel, null)
-                .setPositiveButton(R.string.dialog_log_out_confirm, (d, w) -> {
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(this, R.string.toast_logged_out, Toast.LENGTH_SHORT).show();
-                    recreate();
-                })
+                .setPositiveButton(R.string.dialog_log_out_confirm, (d, w) -> { FirebaseAuth.getInstance().signOut(); Toast.makeText(this, R.string.toast_logged_out, Toast.LENGTH_SHORT).show(); recreate(); })
                 .show();
     }
 
-    private void refreshLanguageIndicator() {
-        String tag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
-        navLanguageValueText.setText(Languages.displayNameForTag(this, tag));
-        navLanguageSwatch.setBackgroundTintList(
-                ColorStateList.valueOf(Languages.colorForTag(this, tag)));
-    }
-
-    private void refreshGreeting() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String name = (user != null && user.getDisplayName() != null)
-                ? user.getDisplayName().split(" ")[0]
-                : getString(R.string.nav_guest_title);
-
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        String prefix;
-        if (hour < 12) prefix = getString(R.string.greeting_morning);
-        else if (hour < 18) prefix = getString(R.string.greeting_afternoon);
-        else prefix = getString(R.string.greeting_evening);
-
-        greetingText.setText(String.format("%s, %s!", prefix, name));
-    }
-
-    private void refreshCurrentLocation() {
-        if (selectedFromNodeId == null) {
-            String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "");
-            if (!homeNode.isEmpty()) {
-                updateFromLocation(homeNode);
-            } else {
-                currentLocationNameText.setText("---");
-                currentLocationLabelText.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void initMap() {
-        routeView = findViewById(R.id.homeFloorPlanRouteView);
-        zoomContainer = findViewById(R.id.homeMapContainer);
-        ImageView imageView = findViewById(R.id.homeFloorPlanImageView);
-
-        routeView.setOnFitMatrixChangeListener(imageView::setImageMatrix);
-
-        findViewById(R.id.btnZoomIn).setOnClickListener(v -> zoomContainer.zoomIn());
-        findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
-        findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
-
-        // The bundled graph carries the floor dimensions
-        CampusGraph graph = GraphStore.get(this);
-        Floor floor = null;
-        if (graph != null && !graph.floors().isEmpty()) {
-            floor = graph.floors().get(0);
-        }
-        if (floor != null && routeView != null) {
-            zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
-            routeView.setFloorPlanSize(floor.imageWidth, floor.imageHeight);
-        }
-    }
-
-    private void closeDrawer() {
-        drawerLayout.closeDrawer(GravityCompat.START);
-    }
-
-    private void openAndCloseDrawer(Class<? extends BaseActivity> target) {
-        closeDrawer();
-        startActivity(new Intent(this, target));
-    }
+    private void closeDrawer() { drawerLayout.closeDrawer(GravityCompat.START); }
+    private void openAndCloseDrawer(Class<? extends BaseActivity> target) { closeDrawer(); startActivity(new Intent(this, target)); }
 }

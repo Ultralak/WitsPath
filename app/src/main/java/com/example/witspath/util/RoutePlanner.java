@@ -65,14 +65,19 @@ public final class RoutePlanner {
     }
 
     public static Plan plan(CampusGraph graph, Node from, Node to, Prefs prefs, PhraseBook book) {
-        RouteOptions options = optionsFrom(prefs);
+        return plan(graph, from, to, optionsFrom(prefs), speedMultiplier(prefs), book);
+    }
+
+    /** For screens that choose the mobility options themselves (the home screen's mode buttons). */
+    public static Plan plan(CampusGraph graph, Node from, Node to, RouteOptions options,
+                            double speedMultiplier, PhraseBook book) {
         PathFinder finder = new PathFinder();
         List<Node> path = finder.aStarSearch(from, to, options);
         if (path == null || path.isEmpty()) {
             return new Plan(Collections.<Node>emptyList(), Collections.<String>emptyList(), 0, 0, null,
                     finder.errorMessage);
         }
-        double seconds = new TravelTimeEstimator(graph, speedMultiplier(prefs), options.mobilityProfile)
+        double seconds = new TravelTimeEstimator(graph, speedMultiplier, options.mobilityProfile)
                 .estimateSeconds(path);
         Directions directions = Directions.build(graph, path, seconds, book);
         return new Plan(path, graph.pathEdgeIds(path), directions.distanceMetres, seconds, directions, null);

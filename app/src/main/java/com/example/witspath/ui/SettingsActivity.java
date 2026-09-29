@@ -101,12 +101,12 @@ public class SettingsActivity extends BaseActivity {
 
     private void bindDarkThemeToggleRow() {
         MaterialSwitch sw = findViewById(R.id.settingsDarkThemeSwitch);
-        sw.setChecked(prefs.getBoolean("pref_dark_theme", false));
+        sw.setChecked(prefs.getBoolean(Prefs.KEY_DARK_THEME, false));
         sw.setOnCheckedChangeListener((b, isChecked) -> {
-            prefs.setBoolean("pref_dark_theme", isChecked);
+            prefs.setBoolean(Prefs.KEY_DARK_THEME, isChecked);
             AppCompatDelegate.setDefaultNightMode(isChecked
                 ? AppCompatDelegate.MODE_NIGHT_YES
-                : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                : AppCompatDelegate.MODE_NIGHT_NO);
         });
         View parentRow = (View) sw.getParent();
         parentRow.setFocusable(true);

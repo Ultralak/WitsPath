@@ -201,4 +201,37 @@
     <string name="my_reports_sign_in_prompt">Kena ho bona ditlaleho tsa hao tse rometsoeng le boemo ba tsona.</string>
     <string name="units_metres_format">%d m</string>
     <string name="nav_populate_firestore">Tatsa Firestore</string>
+
+    <string name="web_accessible_navigation">Tataiso ya tsela e fumanehang</string>
+    <string name="web_inclusive_subtitle">Khampase e kenyeletsang bohle</string>
+    <string name="web_home">Lapeng</string>
+    <string name="web_account_settings">Diseting tsa akhaonto</string>
+    <string name="web_destination">Sebaka seo o yang ho sona</string>
+    <string name="web_campus_name">Wits West Campus</string>
+    <string name="web_estimated_time">Nako e hakanyeditsweng</string>
+    <string name="web_start">Qalo</string>
+    <string name="web_guidance_initial">Kgetha tsela, ebe o qala tataiso ho bona ditaelo tsa mehato.</string>
+    <string name="web_suggested_route">Tsela e kgothaletswang</string>
+    <string name="web_route_ready">Tsela e lokile. Qala tataiso ho bona mehato.</string>
+    <string name="web_navigation_started">Tataiso e qadile • Latela mehato.</string>
+    <string name="web_navigation_ended">Tataiso ya tsela e fedile.</string>
+    <string name="web_no_step_free_route">Ha ho tsela e se nang ditepisi bakeng sa leeto leo.</string>
+    <string name="web_no_route">Ha ho tsela e fumanweng pakeng tsa dibaka tseo.</string>
+    <string name="web_end_navigation">Emisa tataiso ya tsela</string>
+    <string name="web_main_entrance">Monyako o moholo</string>
+    <string name="web_legend_start_destination">●  Start     ●  Destination</string>
+    <string name="web_legend_accessible">♿  Accessible entrance</string>
+    <string name="web_mode_wheelchair">Setulo sa mabidi
+Fumanehang</string>
+    <string name="web_mode_walking_aid">Ho tsamaya
+Thuso</string>
+    <string name="web_mode_visual">Pono
+Thuso</string>
+    <string name="web_mode_general">Kakaretso
+Tsela</string>
+    <string name="web_route_ready_status">Route ready • %1$d m</string>
+    <string name="web_total_route_length">Bolelele bohle ba tsela: %1$d m</string>
+    <string name="web_arrive_at">Fihla ho %1$s</string>
+    <string name="web_continue_for">Tswela pele ka %1$d m</string>
+    <string name="web_follow_toward">Latela tsela e fumanehang ho ya %1$s</string>
 </resources>

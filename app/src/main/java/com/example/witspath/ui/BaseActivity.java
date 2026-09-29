@@ -71,8 +71,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         fabCompanion.setImageTintList(null);
         fabCompanion.setBackgroundTintList(getResources().getColorStateList(R.color.colorRoute, getTheme()));
         fabCompanion.setContentDescription(getString(R.string.companion_entry));
-        fabCompanion.setMinimumWidth(48);
-        fabCompanion.setMinimumHeight(48);
+        fabCompanion.setMinimumWidth((int) (48 * getResources().getDisplayMetrics().density));
+        fabCompanion.setMinimumHeight((int) (48 * getResources().getDisplayMetrics().density));
         fabCompanion.setSize(FloatingActionButton.SIZE_NORMAL);
         fabCompanion.setElevation(12f);
 
@@ -81,7 +81,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
         params.gravity = Gravity.BOTTOM | Gravity.END;
-        params.setMargins(16, 16, 16, 120);
+        float dp = getResources().getDisplayMetrics().density;
+        params.setMargins((int) (16 * dp), (int) (16 * dp), (int) (16 * dp), (int) (96 * dp));
         fabCompanion.setLayoutParams(params);
 
         Prefs prefs = new Prefs(this);
@@ -126,7 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                             View root = v.getRootView();
                             float rootWidth = root.getWidth();
                             float currentX = v.getX();
-                            float targetTranslationX = (currentX < rootWidth / 2f) ? (16f - v.getLeft()) : (rootWidth - v.getWidth() - 16f - v.getLeft());
+                            float targetTranslationX = (currentX < rootWidth / 2f) ? (16f * dp - v.getLeft()) : (rootWidth - v.getWidth() - 16f * dp - v.getLeft());
                             v.animate().translationX(targetTranslationX).setDuration(250).start();
                             Prefs p = new Prefs(v.getContext());
                             p.setFloat(PREF_FAB_X, v.getX());

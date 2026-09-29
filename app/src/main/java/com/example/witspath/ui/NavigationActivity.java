@@ -29,6 +29,7 @@ import com.example.witspath.routing.Directions;
 import com.example.witspath.routing.Floor;
 import com.example.witspath.routing.Node;
 import com.example.witspath.routing.PhraseBook;
+import com.example.witspath.routing.RouteOptions;
 import com.example.witspath.util.GraphStore;
 import com.example.witspath.util.Languages;
 import com.example.witspath.util.PathStatusChecker;
@@ -63,6 +64,7 @@ public class NavigationActivity extends BaseActivity {
     private Node fromNode;
     private RoutePlanner.Plan plan;
     private PhraseBook phraseBook = PhraseBook.english();
+    private RouteOptions options;
     private int currentStepIndex = 0;
     private double metresPerPixel = 1.0;
     private WifiPositionManager wifiPositionManager;
@@ -125,7 +127,8 @@ public class NavigationActivity extends BaseActivity {
         fromNodeText.setText(fromNode.displayName());
         toNodeText.setText(toNode.displayName());
 
-        plan = RoutePlanner.plan(graph, fromNode, toNode, prefs, phraseBook);
+        options = optionsFromIntentOrPrefs();
+        plan = planRoute(fromNode, toNode);
         if (!plan.ok()) {
             Toast.makeText(this, getString(R.string.route_no_route_found, plan.error), Toast.LENGTH_LONG).show();
             finish();
@@ -142,6 +145,23 @@ public class NavigationActivity extends BaseActivity {
         edgeUpdates = new EdgeUpdateListener(this, this::onEdgesChanged).listenForEdgeUpdates();
     }
 
+    /**
+     * The home screen passes the mobility choices it planned with, so this screen routes the same way.
+     * Without them (for example from the companion), the saved Settings are used.
+     */
+    private RouteOptions optionsFromIntentOrPrefs() {
+        String profile = getIntent().getStringExtra("mobility_profile");
+        if (profile == null || profile.isEmpty()) return RoutePlanner.optionsFrom(prefs);
+        return new RouteOptions(profile,
+                getIntent().getBooleanExtra("require_step_free", false),
+                getIntent().getBooleanExtra("prefer_lifts", false),
+                getIntent().getBooleanExtra("avoid_steep_ramps", false));
+    }
+
+    private RoutePlanner.Plan planRoute(Node from, Node to) {
+        return RoutePlanner.plan(graph, from, to, options, RoutePlanner.speedMultiplier(prefs), phraseBook);
+    }
+
     /** Directions come from phrase templates; only phrases a native speaker verified are translated. */
     private void loadTranslatedDirections() {
         String tag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
@@ -149,7 +169,7 @@ public class NavigationActivity extends BaseActivity {
         PhraseBookLoader.load(tag, book -> {
             if (isFinishing() || isDestroyed()) return;
             phraseBook = book;
-            RoutePlanner.Plan translated = RoutePlanner.plan(graph, plan.nodes.get(0), toNode, prefs, phraseBook);
+            RoutePlanner.Plan translated = planRoute(plan.nodes.get(0), toNode);
             if (!translated.ok()) return;
             plan = translated;
             setupStepsList();
@@ -192,7 +212,7 @@ public class NavigationActivity extends BaseActivity {
         if (!affectsRoute) return;
 
         Node here = plan.nodes.get(Math.min(currentStepIndex, plan.nodes.size() - 1));
-        RoutePlanner.Plan replanned = RoutePlanner.plan(graph, here, toNode, prefs, phraseBook);
+        RoutePlanner.Plan replanned = planRoute(here, toNode);
         if (!replanned.ok()) {
             blockedNotice = getString(R.string.route_cannot_confirm);
             updateNotice();
