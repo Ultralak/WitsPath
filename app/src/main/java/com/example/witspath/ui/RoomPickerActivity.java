@@ -14,7 +14,10 @@ import android.widget.TextView;
 import com.example.witspath.ui.BaseActivity;
 
 import com.example.witspath.R;
-import com.example.witspath.model.Node;
+import com.example.witspath.routing.CampusGraph;
+import com.example.witspath.routing.Node;
+import com.example.witspath.util.GraphStore;
+import java.util.Locale;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
@@ -56,33 +59,38 @@ public class RoomPickerActivity extends BaseActivity {
     private void populateNodes(String query) {
         container.removeAllViews();
         
-        List<Node> filteredNodes = new ArrayList<>(Node.searchByName(query));
-        
+        List<Node> filteredNodes = new ArrayList<>();
+        CampusGraph graph = GraphStore.get(this);
+        String q = query.toLowerCase(Locale.ROOT);
+        if (graph != null) {
+            for (Node node : graph.nodes()) {
+                if (node.label.toLowerCase(Locale.ROOT).contains(q)
+                        || node.nodeId.toLowerCase(Locale.ROOT).contains(q)) {
+                    filteredNodes.add(node);
+                }
+            }
+        }
+
         // Sort by label for user convenience
-        Collections.sort(filteredNodes, (n1, n2) -> {
-            String l1 = n1.label != null ? n1.label : n1.name;
-            String l2 = n2.label != null ? n2.label : n2.name;
-            return l1.compareToIgnoreCase(l2);
-        });
+        Collections.sort(filteredNodes, (n1, n2) -> n1.displayName().compareToIgnoreCase(n2.displayName()));
 
         for (Node node : filteredNodes) {
-            if (node.type == Node.NodeType.RAMP) {
+            if ("ramp".equals(node.type)) {
                 continue;
             }
-            String displayLabel = node.label != null ? node.label : node.name;
-            
+            String displayLabel = node.displayName();
+
             View row = getLayoutInflater().inflate(R.layout.item_room, container, false);
             TextView nameText = row.findViewById(R.id.roomNameText);
             //TextView detailText = row.findViewById(R.id.roomDetailText);
             
             nameText.setText(displayLabel);
             
-            int resId = getResources().getIdentifier("node_type_" + node.type.name().toLowerCase(), "string", getPackageName());
             //detailText.setText(resId != 0 ? getString(resId) : node.type.name());
             
             row.setOnClickListener(v -> {
                 Intent result = new Intent();
-                result.putExtra("selected_room", node.name);
+                result.putExtra("selected_room", node.nodeId);
                 setResult(RESULT_OK, result);
                 finish();
             });

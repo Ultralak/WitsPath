@@ -9,6 +9,8 @@
     <color name="colorInkText">#FFFFFF</color>
     <color name="colorInkTextMuted">#C2D5E8</color>
     <color name="colorRoute">#3B93FF</color>
+    <color name="colorOnPrimary">#121212</color>
+    <color name="colorOnPrimaryMuted">#B0BEC5</color>
     <color name="colorBackground">@color/colorInk</color>
     <color name="colorSurface">@color/colorPlate</color>
     <color name="colorOnBackground">@color/colorInkText</color>

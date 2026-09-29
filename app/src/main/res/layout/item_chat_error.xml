@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="start"
+    android:orientation="horizontal"
+    android:paddingStart="8dp"
+    android:paddingTop="2dp"
+    android:paddingEnd="48dp"
+    android:paddingBottom="2dp">
+
+    <ImageView
+        android:id="@+id/chatCompanionAvatar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_avatar_circle"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_app_logo" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bubble_companion"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:elevation="1dp">
+
+        <TextView
+            android:id="@+id/chatErrorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorFlag"
+            android:textSize="16sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/chatRetryButton"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/companion_retry"
+            android:textColor="@color/colorRoute" />
+    </LinearLayout>
+</LinearLayout>
