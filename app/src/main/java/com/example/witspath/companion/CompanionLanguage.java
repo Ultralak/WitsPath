@@ -2,12 +2,15 @@ package com.example.witspath.companion;
 
 import java.util.Locale;
 
-/** The 11 companion languages and how well each is supported (B.2). */
+/**
+ * The 11 companion languages and how well each is supported (B.2). Only English is "full" until a native
+ * speaker has reviewed real replies in the others.
+ */
 public enum CompanionLanguage {
     EN("en", "English", true, "en-ZA"),
-    AF("af", "Afrikaans", true, "af-ZA"),
-    ZU("zu", "isiZulu", true, "zu-ZA"),
-    ST("st", "Sesotho", true, "st-ZA"),
+    AF("af", "Afrikaans", false, "af-ZA"),
+    ZU("zu", "isiZulu", false, "zu-ZA"),
+    ST("st", "Sesotho", false, "st-ZA"),
     XH("xh", "isiXhosa", false, null),
     TN("tn", "Setswana", false, null),
     NSO("nso", "Sepedi", false, null),
@@ -19,7 +22,7 @@ public enum CompanionLanguage {
     public final String code;
     public final String displayName;
     public final boolean full;
-    /** BCP-47 tag for speech recognition; only full-tier languages have one. */
+    /** BCP-47 tag for speech recognition; only the four recogniser-supported languages have one. */
     public final String speechTag;
 
     CompanionLanguage(String code, String displayName, boolean full, String speechTag) {
@@ -33,9 +36,9 @@ public enum CompanionLanguage {
         return speechTag != null ? Locale.forLanguageTag(speechTag) : new Locale(code);
     }
 
-    /** Voice input is offered only for full languages. */
+    /** Speech recognition is separate from reply quality: offered wherever a recogniser tag exists. */
     public boolean voiceInputSupported() {
-        return full && speechTag != null;
+        return speechTag != null;
     }
 
     public static CompanionLanguage fromCode(String code) {

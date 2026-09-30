@@ -1,0 +1,30 @@
+// EXAMPLE ONLY. This is not wired into firebase.json, so deploying the functions never overwrites the
+// rules you already have. Merge the rules the companion needs into your existing rules file by hand.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // The app reads the campus graph. Only the server (Admin SDK, which bypasses rules) writes edge status.
+    match /nodes/{id}  { allow read: if true; allow write: if false; }
+    match /floors/{id} { allow read: if true; allow write: if false; }
+    match /edges/{id}  { allow read: if true; allow write: if false; }
+
+    // Live path status is written by the team
+    match /path_status/{id} { allow read: if true; allow write: if false; }
+
+    // Verified direction phrases: public read, team write
+    match /phrase_templates/{lang}/phrases/{key} { allow read: if true; allow write: if false; }
+
+    // A signed-in user can file a report as themselves and read their own
+    match /reports/{id} {
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // Companion chat history: server only
+    match /chat_sessions/{id} { allow read, write: if false; }
+
+    match /users/{uid} { allow read, write: if request.auth != null && request.auth.uid == uid; }
+  }
+}
