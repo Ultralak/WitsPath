@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.witspath.model.Graph;
 import com.example.witspath.ui.BaseActivity;
 
 import com.example.witspath.R;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class LoginActivity extends BaseActivity {
 
+    public static Graph graph = new Graph();
     private TextInputEditText emailInput;
     private TextInputEditText passwordInput;
     private MaterialButton loginButton;
@@ -35,6 +37,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
