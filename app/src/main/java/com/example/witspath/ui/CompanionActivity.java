@@ -10,7 +10,11 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.graphics.Typeface;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.witspath.R;
 import com.example.witspath.companion.CompanionClient;
 import com.example.witspath.companion.CompanionEndpoint;
+import com.example.witspath.companion.MarkdownLite;
 import com.example.witspath.companion.CompanionLanguage;
 import com.example.witspath.companion.CompanionReply;
 import com.example.witspath.util.Prefs;
@@ -418,7 +423,7 @@ public class CompanionActivity extends BaseActivity {
         if (!ttsReady) return;
         Locale locale = replyLocale(reply);
         tts.setLanguage(locale);
-        tts.speak(reply.reply, TextToSpeech.QUEUE_FLUSH, null, "reply_" + System.currentTimeMillis());
+        tts.speak(MarkdownLite.plain(reply.reply), TextToSpeech.QUEUE_FLUSH, null, "reply_" + System.currentTimeMillis());
     }
 
     private void stopSpeaking() {
@@ -427,13 +432,23 @@ public class CompanionActivity extends BaseActivity {
         adapter.notifyDataSetChanged();
     }
 
+    /** Replies may contain a little markdown; show bold as bold and never show the asterisks. */
+    private static CharSequence styled(String text) {
+        MarkdownLite.Result r = MarkdownLite.parse(text);
+        SpannableStringBuilder out = new SpannableStringBuilder(r.text);
+        for (int[] range : r.bold) {
+            out.setSpan(new StyleSpan(Typeface.BOLD), range[0], range[1], Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return out;
+    }
+
     private void shareChat() {
         StringBuilder sb = new StringBuilder("WitsPath AI Companion Chat Transcript:\n\n");
         for (ChatItem item : items) {
             if (item.type == ChatItem.Type.USER) {
                 sb.append("You: ").append(item.text).append("\n");
             } else if (item.type == ChatItem.Type.COMPANION) {
-                sb.append("Companion: ").append(item.text).append("\n");
+                sb.append("Companion: ").append(MarkdownLite.plain(item.text)).append("\n");
             }
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -567,7 +582,7 @@ public class CompanionActivity extends BaseActivity {
                 });
             } else if (holder instanceof CompanionHolder) {
                 CompanionHolder ch = (CompanionHolder) holder;
-                ch.text.setText(item.text);
+                ch.text.setText(styled(item.text));
                 ch.timestamp.setText(item.timestamp);
                 boolean hasNextCompanion = hasNextSame && isCompanionType(items.get(position + 1).type);
                 ch.avatar.setVisibility(hasNextCompanion ? View.INVISIBLE : View.VISIBLE);
