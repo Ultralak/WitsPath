@@ -11,8 +11,8 @@
     <color name="colorRoute">#3B93FF</color>
     <color name="colorOnPrimary">#121212</color>
     <color name="colorOnPrimaryMuted">#B0BEC5</color>
-    <color name="colorBackground">@color/colorInk</color>
-    <color name="colorSurface">@color/colorPlate</color>
+    <color name="colorBackground">#050C1A</color>
+    <color name="colorSurface">#122036</color>
     <color name="colorOnBackground">@color/colorInkText</color>
     <color name="colorOnBackgroundMuted">@color/colorInkTextMuted</color>
     <color name="colorOutline">@color/colorRule</color>
