@@ -18,4 +18,9 @@
         android:id="@+id/action_share_chat"
         android:title="@string/companion_share_chat"
         app:showAsAction="never" />
+    <!-- Shown in debug builds only; hidden in code otherwise -->
+    <item
+        android:id="@+id/action_debug_endpoint"
+        android:title="@string/companion_debug_endpoint"
+        app:showAsAction="never" />
 </menu>
