@@ -38,6 +38,8 @@ public final class Prefs {
     public static final String KEY_ANON_USAGE = "pref_anon_usage";
 
     public static final String KEY_HOME_NODE_ID = "pref_home_node_id";
+    /** Debug builds only: companion backend address override. See CompanionEndpoint. */
+    public static final String KEY_DEBUG_COMPANION_ENDPOINT = "pref_debug_companion_endpoint";
 
     private final SharedPreferences prefs;
 

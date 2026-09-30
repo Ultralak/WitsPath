@@ -288,6 +288,14 @@
     <string name="companion_share">Share</string>
     <string name="companion_share_title">Share route</string>
     <string name="companion_endpoint" translatable="false"></string>
+    <string name="companion_debug_endpoint" translatable="false">Set backend address (debug)</string>
+    <string name="companion_debug_endpoint_title" translatable="false">Companion backend address</string>
+    <string name="companion_debug_endpoint_hint" translatable="false">https://name.trycloudflare.com</string>
+    <string name="companion_debug_endpoint_help" translatable="false">Debug builds only. Paste the https address from your tunnel. Leave empty to use the built-in address.</string>
+    <string name="companion_debug_endpoint_saved" translatable="false">Backend address saved. Starting a new chat.</string>
+    <string name="companion_debug_endpoint_reset" translatable="false">Using the built-in backend address.</string>
+    <string name="companion_debug_endpoint_invalid" translatable="false">Enter a full https address, for example https://name.trycloudflare.com</string>
+    <string name="companion_debug_save" translatable="false">Save</string>
     <string name="web_accessible_navigation">Accessible Navigation</string>
     <string name="web_inclusive_subtitle">A more inclusive campus for everyone</string>
     <string name="web_wits_wordmark">WITS

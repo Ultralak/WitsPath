@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.witspath.R;
 import com.example.witspath.companion.CompanionClient;
+import com.example.witspath.companion.CompanionEndpoint;
 import com.example.witspath.companion.CompanionLanguage;
 import com.example.witspath.companion.CompanionReply;
 import com.example.witspath.util.Prefs;
@@ -99,13 +100,14 @@ public class CompanionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_companion);
 
-        client = new CompanionClient(getString(R.string.companion_endpoint), new Prefs(this));
+        client = newClient();
 
         toolbar = findViewById(R.id.companionToolbar);
         subtitle = findViewById(R.id.companionSubtitle);
         toolbar.setNavigationOnClickListener(v -> finish());
         toolbar.inflateMenu(R.menu.menu_companion);
         toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
+        toolbar.getMenu().findItem(R.id.action_debug_endpoint).setVisible(CompanionEndpoint.overrideAllowed(this));
 
         messages = findViewById(R.id.companionMessages);
         input = findViewById(R.id.companionInput);
@@ -186,8 +188,59 @@ public class CompanionActivity extends BaseActivity {
         } else if (id == R.id.action_share_chat) {
             shareChat();
             return true;
+        } else if (id == R.id.action_debug_endpoint) {
+            showDebugEndpointDialog();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private CompanionClient newClient() {
+        Prefs prefs = new Prefs(this);
+        return new CompanionClient(CompanionEndpoint.resolve(this, prefs), prefs);
+    }
+
+    /** Debug builds only: paste the current tunnel address without rebuilding the app. */
+    private void showDebugEndpointDialog() {
+        if (!CompanionEndpoint.overrideAllowed(this)) return;
+        Prefs prefs = new Prefs(this);
+        EditText field = new EditText(this);
+        field.setHint(R.string.companion_debug_endpoint_hint);
+        field.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_URI);
+        field.setSingleLine(true);
+        field.setText(prefs.getString(Prefs.KEY_DEBUG_COMPANION_ENDPOINT, ""));
+        int pad = (int) (20 * getResources().getDisplayMetrics().density);
+        android.widget.FrameLayout holder = new android.widget.FrameLayout(this);
+        holder.setPadding(pad, pad / 2, pad, 0);
+        holder.addView(field);
+
+        androidx.appcompat.app.AlertDialog dialog = new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.companion_debug_endpoint_title)
+                .setMessage(R.string.companion_debug_endpoint_help)
+                .setView(holder)
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.companion_debug_save, null)
+                .create();
+        dialog.setOnShowListener(d -> dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String typed = field.getText().toString().trim();
+            if (typed.isEmpty()) {
+                prefs.setString(Prefs.KEY_DEBUG_COMPANION_ENDPOINT, "");
+                Toast.makeText(this, R.string.companion_debug_endpoint_reset, Toast.LENGTH_SHORT).show();
+            } else {
+                String url = CompanionEndpoint.normalise(typed);
+                if (url == null) {
+                    field.setError(getString(R.string.companion_debug_endpoint_invalid));
+                    return;
+                }
+                prefs.setString(Prefs.KEY_DEBUG_COMPANION_ENDPOINT, url);
+                Toast.makeText(this, R.string.companion_debug_endpoint_saved, Toast.LENGTH_SHORT).show();
+            }
+            client.shutdown();
+            client = newClient();
+            initConversation();
+            dialog.dismiss();
+        }));
+        dialog.show();
     }
 
     private void showLanguageBottomSheet() {
