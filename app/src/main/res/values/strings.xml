@@ -245,12 +245,11 @@
     <string name="companion_share_subject" translatable="false">WitsPath AI Companion Chat</string>
     <string-array name="companion_suggestions">
         <item>Where is the Commerce Library?</item>
-        <item>Show step-free route</item>
-        <item>How long will it take?</item>
-        <item>Is my path blocked?</item>
-        <item>Where is the nearest lift?</item>
-        <item>Report a broken ramp or lift</item>
-        <item>Which entrances are accessible?</item>
+        <item>How do I get to the School of Business Sciences?</item>
+        <item>I\'m lost. Can you help me find my way?</item>
+        <item>Show me the easiest way with no stairs</item>
+        <item>How long will it take to walk there?</item>
+        <item>Is the way to my class blocked?</item>
     </string-array>
     <string name="companion_back">Back</string>
     <string name="companion_language_label">Reply language</string>
@@ -265,7 +264,7 @@
     <string name="companion_thinking">Let me check that for you right away…</string>
     <string name="companion_send">Send</string>
     <string name="companion_input_hint">Ask about a place or route</string>
-    <string name="companion_welcome">Hello there! I\'m here to help you navigate campus comfortably and safely. What can I help you find today?</string>
+    <string name="companion_welcome">Hi! I\'m your campus guide. I can help you find buildings, show you the easiest way there, and tell you roughly how long it will take. Where would you like to go?</string>
     <string name="companion_unavailable">I\'m so sorry, but I\'m having trouble connecting right now. Please don\'t worry—you can still easily plan your route using the map!</string>
     <string name="companion_you_said">You said: %1$s</string>
     <string name="companion_said">Companion: %1$s</string>
