@@ -1,0 +1,7 @@
+# Run from the repository root:
+#   gcloud builds submit --config routing-service/cloudbuild.yaml .
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "routing-service/Dockerfile", "-t", "gcr.io/$PROJECT_ID/witspath-routing", "."]
+images:
+  - gcr.io/$PROJECT_ID/witspath-routing
