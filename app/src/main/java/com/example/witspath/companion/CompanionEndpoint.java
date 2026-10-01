@@ -56,4 +56,32 @@ public final class CompanionEndpoint {
             return null;
         }
     }
+
+    /** The server's address without the companion path, or null if the endpoint is not a usable https address. */
+    public static String baseUrl(String endpoint) {
+        if (endpoint == null) return null;
+        String s = endpoint.trim();
+        if (s.isEmpty()) return null;
+        try {
+            URI uri = new URI(s);
+            if (!"https".equalsIgnoreCase(uri.getScheme()) || uri.getHost() == null) return null;
+            String origin = "https://" + uri.getHost() + (uri.getPort() > 0 ? ":" + uri.getPort() : "");
+            return origin;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** Where the backend says whether voice transcription is switched on. */
+    public static String configUrl(String endpoint) {
+        String base = baseUrl(endpoint);
+        return base == null ? null : base + "/api/companion/config";
+    }
+
+    /** Where to send a recorded clip for transcription. {@code lang} is a code such as "zu". */
+    public static String transcribeUrl(String endpoint, String lang) {
+        String base = baseUrl(endpoint);
+        if (base == null || lang == null || !lang.matches("[a-z]{2,3}")) return null;
+        return base + "/api/speech/transcribe?lang=" + lang;
+    }
 }
