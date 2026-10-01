@@ -1,54 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- WITSPATH DESIGN SYSTEM - NATIVE SEMANTIC PALETTE (DARK THEME) -->
-    <color name="colorHeaderStart">#010915</color>
-    <color name="colorHeaderEnd">#1E6BB3</color>
-    <color name="colorBrandPrimary">#3A82C4</color>
-
-    <color name="colorTextPrimary">#FFFFFF</color>
-    <color name="colorTextMuted">#C2D5E8</color>
-    <color name="colorTextOnPrimary">#FFFFFF</color>
-
-    <color name="colorSurface">#122036</color>
-    <color name="colorPanel">#091322</color>
-    <color name="colorBorder">#2D466B</color>
-    <color name="colorBackground">#050C1A</color>
-
-    <color name="colorModeSelected">#1E385D</color>
-    <color name="colorRoute">#3B93FF</color>
-    <color name="colorSuccess">#38E090</color>
-    <color name="colorStepBadgeBg">#1E3554</color>
-    <color name="colorRampPath">#1D3758</color>
-
-    <!-- Legacy compatibility mappings -->
-    <color name="colorInk">@color/colorBackground</color>
-    <color name="colorPlate">@color/colorSurface</color>
+    <!-- High-Contrast Dark Mode Color Tokens -->
+    <color name="colorInk">#050C1A</color>
+    <color name="colorPlate">#122036</color>
     <color name="colorPlateRaised">#1E304F</color>
-    <color name="colorRule">@color/colorBorder</color>
+    <color name="colorRule">#2D466B</color>
     <color name="colorRuleStrong">#3F5D85</color>
-    <color name="colorInkText">@color/colorTextPrimary</color>
-    <color name="colorInkTextMuted">@color/colorTextMuted</color>
-    <color name="colorOnBackground">@color/colorTextPrimary</color>
-    <color name="colorOnBackgroundMuted">@color/colorTextMuted</color>
+    <color name="colorInkText">#FFFFFF</color>
+    <color name="colorInkTextMuted">#C2D5E8</color>
+    <color name="colorRoute">#3B93FF</color>
+    <color name="colorOnPrimary">#121212</color>
+    <color name="colorOnPrimaryMuted">#B0BEC5</color>
+    <color name="colorBackground">@color/colorInk</color>
+    <color name="colorSurface">@color/colorPlate</color>
+    <color name="colorOnBackground">@color/colorInkText</color>
+    <color name="colorOnBackgroundMuted">@color/colorInkTextMuted</color>
+    <color name="colorOutline">@color/colorRule</color>
+    <color name="colorOutlineVariant">#1E304F</color>
 
-    <color name="colorAccessible">#26A69A</color>
-    <color name="colorFlag">#EF5350</color>
-
-    <!-- Backward compatibility aliases -->
-    <color name="webBlue900">@color/colorHeaderStart</color>
+    <!-- Header Gradient & Web Visual System (Increased Contrast) -->
+    <color name="webBlue900">#010915</color>
     <color name="webBlue800">#0C2B54</color>
-    <color name="webBlue700">@color/colorBrandPrimary</color>
+    <color name="webBlue700">#1E6BB3</color>
     <color name="webBlue600">#3B8AE0</color>
     <color name="webBlue500">#4E9BFF</color>
-    <color name="webBlue100">@color/colorRampPath</color>
-    <color name="webInk">@color/colorTextPrimary</color>
-    <color name="webMuted">@color/colorTextMuted</color>
-    <color name="webWhite">@color/colorSurface</color>
-    <color name="webPanel">@color/colorPanel</color>
-    <color name="webLine">@color/colorBorder</color>
-    <color name="webBody">@color/colorBackground</color>
-    <color name="webModeSelected">@color/colorModeSelected</color>
-    <color name="webRoute">@color/colorRoute</color>
-    <color name="webSuccess">@color/colorSuccess</color>
-    <color name="webStepBadgeBg">@color/colorStepBadgeBg</color>
+    <color name="webBlue100">#1D3758</color>
+    <color name="webInk">#FFFFFF</color>
+    <color name="webMuted">#C2D5E8</color>
+    <color name="webWhite">#122036</color>
+    <color name="webPanel">#091322</color>
+    <color name="webLine">#2D466B</color>
+    <color name="webBody">#050C1A</color>
+    <color name="webModeSelected">#1E385D</color>
+    <color name="webRoute">#3B93FF</color>
+    <color name="webSuccess">#38E090</color>
+    <color name="webStepBadgeBg">#1E3554</color>
 </resources>
