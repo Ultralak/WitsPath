@@ -20,61 +20,59 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myReportsRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="32dp"
         android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/myReportsToolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="32dp">
+    <TextView
+        android:id="@+id/myReportsEmptyText"
+        style="@style/TextAppearance.WitsPath.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="32dp"
+        android:text="@string/my_reports_empty"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/myReportsToolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/myReportsContainer"
-                style="@style/WitsPath.Plate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/myReportsSignInPromptText"
+        style="@style/TextAppearance.WitsPath.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="32dp"
+        android:text="@string/my_reports_sign_in_prompt"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/myReportsToolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:id="@+id/myReportsEmptyText"
-                style="@style/TextAppearance.WitsPath.Body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="32dp"
-                android:text="@string/my_reports_empty"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/myReportsSignInPromptText"
-                style="@style/TextAppearance.WitsPath.Body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="32dp"
-                android:text="@string/my_reports_sign_in_prompt"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/myReportsErrorText"
-                style="@style/TextAppearance.WitsPath.Body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="32dp"
-                android:textColor="@color/colorFlag"
-                android:text="@string/my_reports_error"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+    <TextView
+        android:id="@+id/myReportsErrorText"
+        style="@style/TextAppearance.WitsPath.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="32dp"
+        android:textColor="@color/colorFlag"
+        android:text="@string/my_reports_error"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/myReportsToolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

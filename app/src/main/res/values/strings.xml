@@ -161,6 +161,10 @@
     <string name="dialog_reset_title">Reset preferences?</string>
     <string name="dialog_reset_message">This clears your saved places, history and accessibility settings on this device.</string>
     <string name="dialog_reset_confirm">Reset</string>
+    <string name="dialog_delete_report_title" translatable="false">Delete report?</string>
+    <string name="dialog_delete_report_message" translatable="false">Are you sure you want to delete this obstacle report?</string>
+    <string name="dialog_delete_confirm" translatable="false">Delete</string>
+    <string name="report_deleted_success" translatable="false">Report deleted.</string>
     <string name="toast_logged_out">You are logged out</string>
     <string name="login_error_empty">Email and password are required.</string>
     <string name="login_error_guest_failed">Guest sign-in failed.</string>

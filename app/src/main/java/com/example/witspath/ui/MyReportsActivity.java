@@ -1,18 +1,24 @@
 package com.example.witspath.ui;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.witspath.ui.BaseActivity;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.witspath.R;
 import com.example.witspath.model.ReportEntry;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldPath;
@@ -29,23 +35,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-/**
- * Team Wavelets - WitsPath
- * Shows every report the signed-in user has submitted (reports/{reportId} where
- * userId == current uid), newest first. Cross-references each report's edgeId
- * against edges/{edgeId}.status so the user can see whether their report is
- * still pending or has tipped the edge into "flagged" (3 unique reports, per
- * the schema note in wavelets-graph.json / EdgeUpdateListener).
- * Guests (no Firebase user, or an anonymous one) see a sign-in prompt instead
- * of a list, since anonymous reports aren't tied to a stable identity that can
- * be re-queried across sessions.
- */
 public class MyReportsActivity extends BaseActivity {
 
-    private LinearLayout container;
+    private RecyclerView recyclerView;
     private View emptyText;
     private View signInPromptText;
     private View errorText;
+    private ReportsAdapter adapter;
+    private final List<ReportEntry> reportsList = new ArrayList<>();
+    private final Map<String, String> edgeStatusesMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +53,9 @@ public class MyReportsActivity extends BaseActivity {
         MaterialToolbar toolbar = findViewById(R.id.myReportsToolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        container = findViewById(R.id.myReportsContainer);
+        recyclerView = findViewById(R.id.myReportsRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         emptyText = findViewById(R.id.myReportsEmptyText);
         signInPromptText = findViewById(R.id.myReportsSignInPromptText);
         errorText = findViewById(R.id.myReportsErrorText);
@@ -87,26 +87,25 @@ public class MyReportsActivity extends BaseActivity {
     }
 
     private void onReportsLoaded(QuerySnapshot snapshot) {
-        List<ReportEntry> reports = new ArrayList<>();
+        reportsList.clear();
         Set<String> edgeIds = new HashSet<>();
         for (QueryDocumentSnapshot doc : snapshot) {
             ReportEntry entry = doc.toObject(ReportEntry.class);
             entry.setReportId(doc.getId());
-            reports.add(entry);
+            reportsList.add(entry);
             if (entry.getEdgeId() != null) {
                 edgeIds.add(entry.getEdgeId());
             }
         }
 
         if (edgeIds.isEmpty()) {
-            renderReports(reports, new HashMap<>());
+            renderReports(new HashMap<>());
             return;
         }
 
-        fetchEdgeStatuses(edgeIds, statuses -> renderReports(reports, statuses));
+        fetchEdgeStatuses(edgeIds, this::renderReports);
     }
 
-    /** Firestore whereIn caps at 10 values per query, so this chunks the edgeId set. */
     private void fetchEdgeStatuses(Set<String> edgeIds, Consumer<Map<String, String>> callback) {
         List<String> ids = new ArrayList<>(edgeIds);
         Map<String, String> statuses = new HashMap<>();
@@ -137,46 +136,67 @@ public class MyReportsActivity extends BaseActivity {
     }
 
     private void showSignInPrompt() {
-        container.removeAllViews();
-        container.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
         emptyText.setVisibility(View.GONE);
         errorText.setVisibility(View.GONE);
         signInPromptText.setVisibility(View.VISIBLE);
     }
 
     private void showErrorState() {
-        container.removeAllViews();
-        container.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
         emptyText.setVisibility(View.GONE);
         signInPromptText.setVisibility(View.GONE);
         errorText.setVisibility(View.VISIBLE);
     }
 
-    private void renderReports(List<ReportEntry> reports, Map<String, String> edgeStatuses) {
+    private void renderReports(Map<String, String> edgeStatuses) {
         signInPromptText.setVisibility(View.GONE);
         errorText.setVisibility(View.GONE);
-        container.removeAllViews();
 
-        emptyText.setVisibility(reports.isEmpty() ? View.VISIBLE : View.GONE);
-        container.setVisibility(reports.isEmpty() ? View.GONE : View.VISIBLE);
-
-        LayoutInflater inflater = LayoutInflater.from(this);
-        for (ReportEntry report : reports) {
-            View row = inflater.inflate(R.layout.item_report, container, false);
-
-            TextView issueText = row.findViewById(R.id.reportIssueTypeText);
-            TextView dateText = row.findViewById(R.id.reportDateText);
-            TextView statusText = row.findViewById(R.id.reportStatusText);
-
-            issueText.setText(issueTypeLabel(report.getIssueType()));
-            dateText.setText(relativeDate(report));
-
-            boolean flagged = "flagged".equalsIgnoreCase(edgeStatuses.get(report.getEdgeId()));
-            statusText.setText(flagged ? R.string.report_status_flagged : R.string.report_status_pending);
-            statusText.setTextColor(getColor(flagged ? R.color.colorFlag : R.color.colorRoute));
-
-            container.addView(row);
+        edgeStatusesMap.clear();
+        if (edgeStatuses != null) {
+            edgeStatusesMap.putAll(edgeStatuses);
         }
+
+        boolean isEmpty = reportsList.isEmpty();
+        emptyText.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+
+        adapter = new ReportsAdapter(reportsList, edgeStatusesMap);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void confirmDeleteReport(ReportEntry report, int position) {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.dialog_delete_report_title)
+                .setMessage(R.string.dialog_delete_report_message)
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .setPositiveButton(R.string.dialog_delete_confirm, (dialog, which) -> deleteReportFromFirestore(report, position))
+                .show();
+    }
+
+    private void deleteReportFromFirestore(ReportEntry report, int position) {
+        if (report.getReportId() == null) return;
+
+        FirebaseFirestore.getInstance()
+                .collection("reports")
+                .document(report.getReportId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    if (position >= 0 && position < reportsList.size()) {
+                        reportsList.remove(position);
+                        if (adapter != null) {
+                            adapter.notifyItemRemoved(position);
+                            adapter.notifyItemRangeChanged(position, reportsList.size());
+                        }
+                        if (reportsList.isEmpty()) {
+                            recyclerView.setVisibility(View.GONE);
+                            emptyText.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    Toast.makeText(MyReportsActivity.this, R.string.report_deleted_success, Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(MyReportsActivity.this, R.string.report_failed, Toast.LENGTH_SHORT).show());
     }
 
     private CharSequence relativeDate(ReportEntry report) {
@@ -202,6 +222,65 @@ public class MyReportsActivity extends BaseActivity {
                 return getString(R.string.path_obstructed);
             default:
                 return getString(R.string.other);
+        }
+    }
+
+    private class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ViewHolder> {
+
+        private final List<ReportEntry> reports;
+        private final Map<String, String> edgeStatuses;
+
+        ReportsAdapter(List<ReportEntry> reports, Map<String, String> edgeStatuses) {
+            this.reports = reports;
+            this.edgeStatuses = edgeStatuses;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_report, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            ReportEntry report = reports.get(position);
+
+            holder.issueText.setText(issueTypeLabel(report.getIssueType()));
+            holder.dateText.setText(relativeDate(report));
+
+            boolean flagged = "flagged".equalsIgnoreCase(edgeStatuses.get(report.getEdgeId()));
+            if (flagged) {
+                holder.statusButton.setImageResource(R.drawable.ic_check);
+                holder.statusButton.setImageTintList(ColorStateList.valueOf(getColor(R.color.colorAccent)));
+                holder.statusButton.setContentDescription(getString(R.string.report_status_flagged));
+            } else {
+                holder.statusButton.setImageResource(R.drawable.ic_clock_outline);
+                holder.statusButton.setImageTintList(ColorStateList.valueOf(getColor(R.color.colorRoute)));
+                holder.statusButton.setContentDescription(getString(R.string.report_status_pending));
+            }
+
+            holder.deleteButton.setOnClickListener(v -> confirmDeleteReport(report, holder.getAdapterPosition()));
+        }
+
+        @Override
+        public int getItemCount() {
+            return reports.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView issueText;
+            TextView dateText;
+            ImageButton deleteButton;
+            ImageButton statusButton;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                issueText = itemView.findViewById(R.id.reportIssueTypeText);
+                dateText = itemView.findViewById(R.id.reportDateText);
+                deleteButton = itemView.findViewById(R.id.reportDeleteButton);
+                statusButton = itemView.findViewById(R.id.reportStatusButton);
+            }
         }
     }
 }
