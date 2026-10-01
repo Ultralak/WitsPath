@@ -37,12 +37,24 @@ import com.example.witspath.util.PhraseBookLoader;
 import com.example.witspath.util.Prefs;
 import com.example.witspath.util.RoutePlanner;
 import com.example.witspath.util.WifiPositionManager;
+import android.view.MenuItem;
+import android.widget.RadioGroup;
+import com.example.witspath.routing.Edge;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class NavigationActivity extends BaseActivity {
@@ -103,7 +115,18 @@ public class NavigationActivity extends BaseActivity {
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
         findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
 
-        ((MaterialToolbar) findViewById(R.id.navigationToolbar)).setNavigationOnClickListener(v -> finish());
+        MaterialToolbar toolbar = findViewById(R.id.navigationToolbar);
+        toolbar.setNavigationOnClickListener(v -> finish());
+        MenuItem reportItem = toolbar.getMenu().add(0, 1001, 0, R.string.report_issue_on_path);
+        reportItem.setIcon(R.drawable.ic_flag);
+        reportItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == 1001) {
+                showReportIssueSheet();
+                return true;
+            }
+            return false;
+        });
         findViewById(R.id.nextStepButton).setOnClickListener(v -> nextStep());
         findViewById(R.id.prevStepButton).setOnClickListener(v -> prevStep());
 
@@ -354,6 +377,71 @@ public class NavigationActivity extends BaseActivity {
             currentStepIndex--;
             updateUI();
         }
+    }
+
+    private void showReportIssueSheet() {
+        if (plan == null || !plan.ok() || plan.edgeIds.isEmpty()) {
+            Toast.makeText(this, R.string.report_failed, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View sheetView = getLayoutInflater().inflate(R.layout.sheet_report_issue, null);
+        dialog.setContentView(sheetView);
+
+        RadioGroup issueGroup = sheetView.findViewById(R.id.issueTypeRadioGroup);
+        MaterialButton submitButton = sheetView.findViewById(R.id.submitReportButton);
+
+        issueGroup.setOnCheckedChangeListener((group, checkedId) -> submitButton.setEnabled(checkedId != -1));
+
+        submitButton.setOnClickListener(v -> {
+            int checkedId = issueGroup.getCheckedRadioButtonId();
+            if (checkedId == -1) return;
+
+            String issueType;
+            if (checkedId == R.id.issueBrokenLiftRadio) {
+                issueType = "broken_lift";
+            } else if (checkedId == R.id.issueBlockedRampRadio) {
+                issueType = "blocked_or_broken_ramp";
+            } else if (checkedId == R.id.issuePathObstructedRadio) {
+                issueType = "path_obstructed";
+            } else {
+                issueType = "other";
+            }
+
+            int targetIndex = Math.min(currentStepIndex, plan.edgeIds.size() - 1);
+            String edgeId = plan.edgeIds.get(targetIndex);
+
+            submitObstacleReport(edgeId, issueType);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void submitObstacleReport(String edgeId, String issueType) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user != null ? user.getUid() : "anonymous";
+
+        Map<String, Object> report = new HashMap<>();
+        report.put("userId", userId);
+        report.put("edgeId", edgeId);
+        report.put("issueType", issueType);
+        report.put("source", "android-app");
+        report.put("timestamp", FieldValue.serverTimestamp());
+
+        FirebaseFirestore.getInstance().collection("reports").add(report)
+                .addOnSuccessListener(doc -> {
+                    Toast.makeText(this, R.string.report_success, Toast.LENGTH_SHORT).show();
+                    if (graph != null) {
+                        Edge e = graph.edge(edgeId);
+                        if (e != null) {
+                            e.setStatus("flagged");
+                            onEdgesChanged(Collections.singleton(edgeId));
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, R.string.report_failed, Toast.LENGTH_SHORT).show());
     }
 
     private static class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
