@@ -246,19 +246,7 @@ public class FloorPlanRouteView extends View {
     }
 
     private void drawNodeMarkers(Canvas canvas) {
-        for (FloorPlanNode node : nodes) {
-            boolean isAccessibilityFeature = "ramp".equals(node.getType()) || "lift".equals(node.getType());
-            if (!isAccessibilityFeature) continue;
-
-            float[] p = mapNode(node);
-            if (wheelchairDrawable != null) {
-                int size = (int) dp(20);
-                int left = (int) (p[0] - size / 2f);
-                int top = (int) (p[1] - size / 2f);
-                wheelchairDrawable.setBounds(left, top, left + size, top + size);
-                wheelchairDrawable.draw(canvas);
-            }
-        }
+        // Wheelchair icon overlay removed per request
     }
 
     private void drawDestinationMarker(Canvas canvas) {
