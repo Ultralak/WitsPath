@@ -265,44 +265,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    style="@style/WitsPath.SettingRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_contrast"
-                        app:tint="#002C5F"
-                        android:importantForAccessibility="no" />
-
-                    <LinearLayout
-                        style="@style/WitsPath.SettingRow.TextGroup"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/WitsPath.SettingRow.Title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_high_contrast_title" />
-
-                        <TextView
-                            style="@style/WitsPath.SettingRow.Subtitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_high_contrast_subtitle" />
-
-                    </LinearLayout>
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingsHighContrastSwitch"
-                        style="@style/WitsPath.SettingRow.Switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
 
                 <LinearLayout
                     style="@style/WitsPath.SettingRow"
@@ -343,44 +306,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    style="@style/WitsPath.SettingRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_accessible"
-                        app:tint="#002C5F"
-                        android:importantForAccessibility="no" />
-
-                    <LinearLayout
-                        style="@style/WitsPath.SettingRow.TextGroup"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/WitsPath.SettingRow.Title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_screen_reader_title" />
-
-                        <TextView
-                            style="@style/WitsPath.SettingRow.Subtitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_screen_reader_subtitle" />
-
-                    </LinearLayout>
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingsScreenReaderSwitch"
-                        style="@style/WitsPath.SettingRow.Switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -743,47 +669,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/settingsDefaultBuildingRow"
-                    style="@style/WitsPath.SettingRow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_building"
-                        app:tint="#002C5F"
-                        android:importantForAccessibility="no" />
-
-                    <LinearLayout
-                        style="@style/WitsPath.SettingRow.TextGroup"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            style="@style/WitsPath.SettingRow.Title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/settings_default_building_title" />
-
-                        <TextView
-                            android:id="@+id/settingsDefaultBuildingValueText"
-                            style="@style/WitsPath.SettingRow.Subtitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            tools:text="Braamfontein East" />
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right"
-                        app:tint="#556B8D"
-                        android:importantForAccessibility="no" />
-
-                </LinearLayout>
 
                 <LinearLayout
                     style="@style/WitsPath.SettingRow.Column"

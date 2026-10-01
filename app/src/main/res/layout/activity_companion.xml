@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/companionRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorInk"
@@ -28,7 +29,7 @@
                 android:contentDescription="@null"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/ic_ai_companion_icon" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -109,10 +110,19 @@
             style="@style/Widget.Material3.Button.IconButton"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/colorRoute"
             android:contentDescription="@string/companion_send"
-            app:icon="@drawable/ic_volume_up"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            app:icon="@drawable/ic_mic_on"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="24dp"
             app:iconTint="@android:color/white" />
 
     </LinearLayout>

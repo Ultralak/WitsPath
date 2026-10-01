@@ -8,14 +8,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.witspath.R;
 import com.example.witspath.util.AppConfiguration;
 import com.example.witspath.util.Prefs;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.ShapeAppearanceModel;
 
 /**
  * Team Wavelets - WitsPath
@@ -40,19 +47,33 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        applyStatusBarPadding();
         setupCompanionFab();
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
+        applyStatusBarPadding();
         setupCompanionFab();
     }
 
     @Override
     public void setContentView(View view, ViewGroup.LayoutParams params) {
         super.setContentView(view, params);
+        applyStatusBarPadding();
         setupCompanionFab();
+    }
+
+    private void applyStatusBarPadding() {
+        View contentRoot = findViewById(android.R.id.content);
+        if (contentRoot != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(contentRoot, (v, insets) -> {
+                Insets statusBarInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+                v.setPadding(v.getPaddingLeft(), statusBarInsets.top, v.getPaddingRight(), v.getPaddingBottom());
+                return insets;
+            });
+        }
     }
 
     private void setupCompanionFab() {
@@ -65,33 +86,45 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         if (contentRoot.findViewById(R.id.baseCompanionFab) != null) return;
 
-        FloatingActionButton fabCompanion = new FloatingActionButton(this);
-        fabCompanion.setId(R.id.baseCompanionFab);
-        fabCompanion.setImageResource(R.drawable.ic_app_logo);
-        fabCompanion.setImageTintList(null);
-        fabCompanion.setBackgroundTintList(getResources().getColorStateList(R.color.colorRoute, getTheme()));
-        fabCompanion.setContentDescription(getString(R.string.companion_entry));
-        fabCompanion.setMinimumWidth((int) (48 * getResources().getDisplayMetrics().density));
-        fabCompanion.setMinimumHeight((int) (48 * getResources().getDisplayMetrics().density));
-        fabCompanion.setSize(FloatingActionButton.SIZE_NORMAL);
-        fabCompanion.setElevation(12f);
-
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        params.gravity = Gravity.CENTER_VERTICAL | Gravity.END;
         float dp = getResources().getDisplayMetrics().density;
+        int sizePx = (int) (56 * dp);
+
+        ShapeableImageView fabCompanion =
+                new ShapeableImageView(this);
+        fabCompanion.setId(R.id.baseCompanionFab);
+        fabCompanion.setImageResource(R.drawable.ic_ai_companion_icon);
+        fabCompanion.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        fabCompanion.setShapeAppearanceModel(
+                ShapeAppearanceModel.builder()
+                        .setAllCorners(CornerFamily.ROUNDED, sizePx / 2f)
+                        .build()
+        );
+        fabCompanion.setElevation(12f);
+        fabCompanion.setClickable(true);
+        fabCompanion.setFocusable(true);
+        fabCompanion.setContentDescription(getString(R.string.companion_entry));
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(sizePx, sizePx);
+        params.gravity = Gravity.CENTER_VERTICAL | Gravity.END;
         params.setMargins((int) (16 * dp), 0, (int) (16 * dp), 0);
         fabCompanion.setLayoutParams(params);
 
         Prefs prefs = new Prefs(this);
         float savedX = prefs.getFloat(PREF_FAB_X, -1f);
         float savedY = prefs.getFloat(PREF_FAB_Y, -1f);
-        if (savedX != -1f && savedY != -1f) {
-            fabCompanion.setX(savedX);
-            fabCompanion.setY(savedY);
-        }
+
+        fabCompanion.post(() -> {
+            if (savedX != -1f && savedY != -1f && contentRoot.getWidth() > 0 && contentRoot.getHeight() > 0) {
+                float maxX = contentRoot.getWidth() - fabCompanion.getWidth();
+                float maxY = contentRoot.getHeight() - fabCompanion.getHeight();
+                if (maxX > 0 && maxY > 0) {
+                    float clampedX = Math.max(0, Math.min(savedX, maxX));
+                    float clampedY = Math.max(0, Math.min(savedY, maxY));
+                    fabCompanion.setX(clampedX);
+                    fabCompanion.setY(clampedY);
+                }
+            }
+        });
 
         fabCompanion.setOnClickListener(v -> {
             startActivity(new Intent(this, CompanionActivity.class));
@@ -128,10 +161,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                             float rootWidth = root.getWidth();
                             float currentX = v.getX();
                             float targetTranslationX = (currentX < rootWidth / 2f) ? (16f * dp - v.getLeft()) : (rootWidth - v.getWidth() - 16f * dp - v.getLeft());
-                            v.animate().translationX(targetTranslationX).setDuration(250).start();
-                            Prefs p = new Prefs(v.getContext());
-                            p.setFloat(PREF_FAB_X, v.getX());
-                            p.setFloat(PREF_FAB_Y, v.getY());
+                            v.animate()
+                                    .translationX(targetTranslationX)
+                                    .setDuration(250)
+                                    .withEndAction(() -> {
+                                        Prefs p = new Prefs(v.getContext());
+                                        p.setFloat(PREF_FAB_X, v.getX());
+                                        p.setFloat(PREF_FAB_Y, v.getY());
+                                    })
+                                    .start();
                         }
                         return true;
                 }

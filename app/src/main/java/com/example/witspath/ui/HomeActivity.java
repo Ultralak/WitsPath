@@ -1,7 +1,9 @@
 package com.example.witspath.ui;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -96,12 +98,45 @@ public class HomeActivity extends BaseActivity {
         bindDrawerClicks();
         bindMainContent();
         loadGraphAndMap();
+        handleNavigationIntent(getIntent());
 
         if (savedInstanceState != null) {
             selectedFromNodeId = savedInstanceState.getString("selectedFromNodeId");
             selectedDestinationId = savedInstanceState.getString("selectedDestinationId");
             mobilityProfile = savedInstanceState.getString("mobilityProfile", "wheelchair");
             navigationStarted = savedInstanceState.getBoolean("navigationStarted", false);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleNavigationIntent(intent);
+    }
+
+    private void handleNavigationIntent(Intent intent) {
+        if (intent == null) return;
+        String fromNode = intent.getStringExtra("from_node");
+        String toNode = intent.getStringExtra("to_node");
+        boolean autoStart = intent.getBooleanExtra("start_navigation", false) || intent.getBooleanExtra("startNav", false);
+
+        if (fromNode != null && !fromNode.isEmpty()) {
+            selectedFromNodeId = findNodeOrFirst(fromNode);
+        }
+        if (toNode != null && !toNode.isEmpty()) {
+            selectedDestinationId = findNodeOrSecond(toNode);
+        }
+        if (fromNode != null || toNode != null) {
+            restoreSpinnerSelections();
+            requestRoute(false);
+            if (autoStart) {
+                if (!navigationStarted) {
+                    toggleNavigation();
+                } else {
+                    speakCurrentStep();
+                }
+            }
         }
     }
 
@@ -165,7 +200,6 @@ public class HomeActivity extends BaseActivity {
         View view = findViewById(id);
         view.setOnClickListener(v -> {
             mobilityProfile = mode.profile;
-            prefs.setString(Prefs.KEY_MOBILITY_PROFILE, mobilityProfile);
             updateModeSelection(id);
             requestRoute(false);
         });
@@ -328,6 +362,7 @@ public class HomeActivity extends BaseActivity {
             renderSteps(currentRoute);
             guidanceText.setText(getString(R.string.web_total_route_length, Math.round(currentPlan.distanceMetres)));
             showStatus(getString(R.string.web_navigation_started), false);
+            speakCurrentStep();
 
             if (routeView != null && selectedFromNodeId != null && selectedDestinationId != null) {
                 List<String> ids = new ArrayList<>();
@@ -337,9 +372,48 @@ public class HomeActivity extends BaseActivity {
                 routeView.setDestination(selectedDestinationId);
             }
         } else {
+            if (navTts != null) navTts.stop();
             stepsContainer.setVisibility(View.GONE);
             guidanceText.setText(getString(R.string.web_route_ready));
             showStatus(getString(R.string.web_navigation_ended), false);
+        }
+    }
+
+    private TextToSpeech navTts;
+    private boolean navTtsReady = false;
+
+    private void initNavTts() {
+        if (navTts == null) {
+            navTts = new TextToSpeech(getApplicationContext(), status -> {
+                if (status == TextToSpeech.SUCCESS) {
+                    navTtsReady = true;
+                    if (navigationStarted) {
+                        speakCurrentStep();
+                    }
+                }
+            });
+        }
+    }
+
+    private void speakCurrentStep() {
+        if (!prefs.getBoolean(Prefs.KEY_VOICE_GUIDANCE, true)) return;
+        if (currentRoute == null || currentRoute.size() < 2) return;
+        initNavTts();
+        Node first = currentRoute.get(0);
+        Node second = currentRoute.get(1);
+        double dist = calculateDistance(first, second);
+        String text = getString(R.string.web_continue_for, Math.round(dist)) + " " + getString(R.string.web_follow_toward, safeLabel(second));
+        if (navTts != null && navTtsReady) {
+            navTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "nav_step_" + System.currentTimeMillis());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (navTts != null) {
+            navTts.stop();
+            navTts.shutdown();
         }
     }
 
@@ -401,7 +475,6 @@ public class HomeActivity extends BaseActivity {
         findViewById(R.id.navMyReportsRow).setOnClickListener(v -> openAndCloseDrawer(MyReportsActivity.class));
         findViewById(R.id.navSettingsRow).setOnClickListener(v -> openAndCloseDrawer(SettingsActivity.class));
         findViewById(R.id.navLanguageRow).setOnClickListener(v -> openAndCloseDrawer(LanguageActivity.class));
-        findViewById(R.id.navPreferencesRow).setOnClickListener(v -> openAndCloseDrawer(PreferencesActivity.class));
         navLogInRow.setOnClickListener(v -> openAndCloseDrawer(LoginActivity.class));
         navSignUpRow.setOnClickListener(v -> openAndCloseDrawer(SignUpActivity.class));
         navLogOutRow.setOnClickListener(v -> confirmLogOut());
@@ -438,7 +511,7 @@ public class HomeActivity extends BaseActivity {
     private void refreshLanguageIndicator() {
         String tag = prefs.getString(Prefs.KEY_UI_LANGUAGE, "");
         navLanguageValueText.setText(Languages.displayNameForTag(this, tag));
-        navLanguageSwatch.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Languages.colorForTag(this, tag)));
+        navLanguageSwatch.setBackgroundTintList(ColorStateList.valueOf(Languages.colorForTag(this, tag)));
     }
 
     private void refreshGreeting() {
