@@ -41,6 +41,14 @@ public enum CompanionLanguage {
         return speechTag != null;
     }
 
+    /**
+     * isiZulu and Sesotho are transcribed by Lelapa's Vulavula through the backend, which understands them
+     * better than the phone's built-in recogniser. English and Afrikaans keep using the phone.
+     */
+    public boolean usesCloudVoice() {
+        return this == ZU || this == ST;
+    }
+
     public static CompanionLanguage fromCode(String code) {
         for (CompanionLanguage l : values()) {
             if (l.code.equalsIgnoreCase(code)) return l;

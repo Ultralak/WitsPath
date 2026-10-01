@@ -42,7 +42,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.witspath.R;
 import com.example.witspath.companion.CompanionClient;
+import com.example.witspath.companion.CloudTranscriber;
 import com.example.witspath.companion.CompanionEndpoint;
+import com.example.witspath.companion.SpeechRecorder;
 import com.example.witspath.companion.MarkdownLite;
 import com.example.witspath.companion.CompanionLanguage;
 import com.example.witspath.companion.CompanionReply;
@@ -98,6 +100,11 @@ public class CompanionActivity extends BaseActivity {
     private String speakingId = null;
 
     private SpeechRecognizer recognizer;
+    private final SpeechRecorder recorder = new SpeechRecorder();
+    private final CloudTranscriber transcriber = new CloudTranscriber();
+    /** True once the backend reports that its speech-to-text key is set. Until then the phone recogniser is used. */
+    private boolean cloudVoiceAvailable;
+    private boolean cloudRecording;
     private boolean listening;
     private String listeningLang = "en";
 
@@ -113,6 +120,7 @@ public class CompanionActivity extends BaseActivity {
         setContentView(R.layout.activity_companion);
 
         client = newClient();
+        checkCloudVoice();
 
         toolbar = findViewById(R.id.companionToolbar);
         subtitle = findViewById(R.id.companionSubtitle);
@@ -258,6 +266,7 @@ public class CompanionActivity extends BaseActivity {
             }
             client.shutdown();
             client = newClient();
+            checkCloudVoice();
             initConversation();
             dialog.dismiss();
         }));
@@ -346,14 +355,15 @@ public class CompanionActivity extends BaseActivity {
 
     private void onMicClicked() {
         if (listening) {
-            if (recognizer != null) recognizer.stopListening();
+            if (cloudRecording) recorder.stop();
+            else if (recognizer != null) recognizer.stopListening();
             return;
         }
         if (selectedLanguage != null && !selectedLanguage.voiceInputSupported()) {
             Toast.makeText(this, R.string.companion_voice_only_full, Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+        if (!wantsCloudVoice() && !SpeechRecognizer.isRecognitionAvailable(this)) {
             Toast.makeText(this, R.string.companion_voice_unavailable, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -376,9 +386,74 @@ public class CompanionActivity extends BaseActivity {
         }
     }
 
+    /** isiZulu and Sesotho go to the cloud recogniser when the backend has it switched on. */
+    private boolean wantsCloudVoice() {
+        return cloudVoiceAvailable && selectedLanguage != null && selectedLanguage.usesCloudVoice();
+    }
+
+    private void checkCloudVoice() {
+        cloudVoiceAvailable = false;
+        transcriber.checkAvailable(CompanionEndpoint.resolve(this, new Prefs(this)), available -> cloudVoiceAvailable = available);
+    }
+
     private void startListening() {
         CompanionLanguage lang = selectedLanguage != null ? selectedLanguage : CompanionLanguage.EN;
         listeningLang = lang.code;
+        if (wantsCloudVoice() && startCloudRecording(lang)) return;
+        startBuiltInListening(lang);
+    }
+
+    /** Records up to 20 seconds, then sends the clip to the backend for transcription. */
+    private boolean startCloudRecording(CompanionLanguage lang) {
+        boolean started = recorder.start(this, 20_000, new SpeechRecorder.Listener() {
+            @Override
+            public void onRecorded(byte[] wav, long millis) {
+                cloudRecording = false;
+                if (millis < 600) {
+                    stopListeningUi();
+                    Toast.makeText(CompanionActivity.this, R.string.companion_voice_not_heard, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                setSubtitle(R.string.companion_voice_processing);
+                transcriber.transcribe(CompanionEndpoint.resolve(CompanionActivity.this, new Prefs(CompanionActivity.this)),
+                        wav, lang.code, new CloudTranscriber.Callback() {
+                            @Override
+                            public void onText(String text) {
+                                stopListeningUi();
+                                send(text, "voice", lang.code);
+                            }
+
+                            @Override
+                            public void onUnavailable() {
+                                stopListeningUi();
+                                cloudVoiceAvailable = false; // use the phone recogniser next time
+                                Toast.makeText(CompanionActivity.this, R.string.companion_voice_cloud_failed, Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onNothingHeard() {
+                                stopListeningUi();
+                                Toast.makeText(CompanionActivity.this, R.string.companion_voice_not_heard, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+
+            @Override
+            public void onError() {
+                cloudRecording = false;
+                stopListeningUi();
+                Toast.makeText(CompanionActivity.this, R.string.companion_voice_unavailable, Toast.LENGTH_SHORT).show();
+            }
+        });
+        if (!started) return false;
+        cloudRecording = true;
+        listening = true;
+        setSubtitle(R.string.companion_listening);
+        updateMicSendButton();
+        return true;
+    }
+
+    private void startBuiltInListening(CompanionLanguage lang) {
         if (recognizer == null) {
             recognizer = SpeechRecognizer.createSpeechRecognizer(this);
             recognizer.setRecognitionListener(new SimpleRecognitionListener());
@@ -501,6 +576,8 @@ public class CompanionActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         client.shutdown();
+        recorder.release();
+        transcriber.shutdown();
         if (recognizer != null) recognizer.destroy();
         if (tts != null) {
             tts.stop();
