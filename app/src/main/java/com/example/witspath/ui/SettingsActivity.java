@@ -94,9 +94,7 @@ public class SettingsActivity extends BaseActivity {
                 new int[]{R.id.textSizeSmallChip, R.id.textSizeDefaultChip, R.id.textSizeLargeChip, R.id.textSizeHugeChip},
                 new String[]{"small", "default", "large", "huge"});
 
-        bindToggleRow(R.id.settingsHighContrastSwitch, Prefs.KEY_HIGH_CONTRAST, false);
         bindDarkThemeToggleRow();
-        bindToggleRow(R.id.settingsScreenReaderSwitch, Prefs.KEY_SCREEN_READER_HINTS, true);
     }
 
     private void bindDarkThemeToggleRow() {
@@ -155,9 +153,6 @@ public class SettingsActivity extends BaseActivity {
         bindToggleRow(R.id.settingsVoiceSwitch, Prefs.KEY_VOICE_GUIDANCE, true);
         bindToggleRow(R.id.settingsHapticsSwitch, Prefs.KEY_HAPTICS, true);
         bindToggleRow(R.id.settingsAutoLocateSwitch, Prefs.KEY_AUTO_LOCATE, true);
-
-        ((TextView) findViewById(R.id.settingsDefaultBuildingValueText)).setText(
-                prefs.getString(Prefs.KEY_DEFAULT_BUILDING, getString(R.string.settings_default_building_value)));
 
         setupChipGroup(R.id.settingsUnitsChipGroup, Prefs.KEY_UNITS, "metres",
                 new int[]{R.id.unitsMetresChip, R.id.unitsFeetChip, R.id.unitsMinutesChip},
@@ -239,11 +234,46 @@ public class SettingsActivity extends BaseActivity {
                         return;
                     }
                     
+                    if (key.equals(Prefs.KEY_MOBILITY_PROFILE)) {
+                        applyMobilityProfileCoupling(newVal);
+                    }
+
                     if (updateRoute) onRoutingPreferenceChanged();
                     return;
                 }
             }
         });
+    }
+
+    private void applyMobilityProfileCoupling(String profile) {
+        if ("wheelchair".equalsIgnoreCase(profile)) {
+            prefs.setBoolean(Prefs.KEY_AVOID_STEEP_RAMPS, true);
+            prefs.setBoolean(Prefs.KEY_PREFER_LIFTS, true);
+            prefs.setBoolean(Prefs.KEY_STEP_FREE_ONLY, true);
+        } else if ("walking_aid".equalsIgnoreCase(profile) || "walking-aid".equalsIgnoreCase(profile)) {
+            prefs.setBoolean(Prefs.KEY_AVOID_STEEP_RAMPS, true);
+        } else if ("low_vision".equalsIgnoreCase(profile) || "low-vision".equalsIgnoreCase(profile)) {
+            prefs.setBoolean(Prefs.KEY_VOICE_GUIDANCE, true);
+            prefs.setBoolean(Prefs.KEY_HAPTICS, true);
+        }
+        updateSwitchesFromPrefs();
+    }
+
+    private void updateSwitchesFromPrefs() {
+        MaterialSwitch stepFree = findViewById(R.id.settingsStepFreeSwitch);
+        if (stepFree != null) stepFree.setChecked(prefs.getBoolean(Prefs.KEY_STEP_FREE_ONLY, true));
+
+        MaterialSwitch preferLifts = findViewById(R.id.settingsPreferLiftsSwitch);
+        if (preferLifts != null) preferLifts.setChecked(prefs.getBoolean(Prefs.KEY_PREFER_LIFTS, true));
+
+        MaterialSwitch avoidSteep = findViewById(R.id.settingsAvoidSteepSwitch);
+        if (avoidSteep != null) avoidSteep.setChecked(prefs.getBoolean(Prefs.KEY_AVOID_STEEP_RAMPS, true));
+
+        MaterialSwitch voice = findViewById(R.id.settingsVoiceSwitch);
+        if (voice != null) voice.setChecked(prefs.getBoolean(Prefs.KEY_VOICE_GUIDANCE, true));
+
+        MaterialSwitch haptics = findViewById(R.id.settingsHapticsSwitch);
+        if (haptics != null) haptics.setChecked(prefs.getBoolean(Prefs.KEY_HAPTICS, true));
     }
 
     private void onRoutingPreferenceChanged() {}

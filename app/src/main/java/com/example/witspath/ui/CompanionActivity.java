@@ -12,6 +12,7 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.graphics.Typeface;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,6 +33,10 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +51,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -118,6 +125,17 @@ public class CompanionActivity extends BaseActivity {
         input = findViewById(R.id.companionInput);
         sendMicButton = findViewById(R.id.companionSendMicButton);
 
+        View root = findViewById(R.id.companionRoot);
+        if (root != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+                Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+                Insets sysInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                int bottomPadding = Math.max(imeInsets.bottom, sysInsets.bottom);
+                v.setPadding(0, sysInsets.top, 0, bottomPadding);
+                return WindowInsetsCompat.CONSUMED;
+            });
+        }
+
         adapter = new ChatAdapter();
         LinearLayoutManager lm = new LinearLayoutManager(this);
         lm.setStackFromEnd(true);
@@ -129,9 +147,7 @@ public class CompanionActivity extends BaseActivity {
         input.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean hasText = !s.toString().trim().isEmpty();
-                sendMicButton.setIconResource(hasText ? R.drawable.ic_next : R.drawable.ic_volume_up);
-                sendMicButton.setContentDescription(getString(hasText ? R.string.companion_send : R.string.companion_speak));
+                updateMicSendButton();
             }
             @Override public void afterTextChanged(Editable s) {}
         });
@@ -211,22 +227,22 @@ public class CompanionActivity extends BaseActivity {
         Prefs prefs = new Prefs(this);
         EditText field = new EditText(this);
         field.setHint(R.string.companion_debug_endpoint_hint);
-        field.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_URI);
+        field.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
         field.setSingleLine(true);
         field.setText(prefs.getString(Prefs.KEY_DEBUG_COMPANION_ENDPOINT, ""));
         int pad = (int) (20 * getResources().getDisplayMetrics().density);
-        android.widget.FrameLayout holder = new android.widget.FrameLayout(this);
+        FrameLayout holder = new FrameLayout(this);
         holder.setPadding(pad, pad / 2, pad, 0);
         holder.addView(field);
 
-        androidx.appcompat.app.AlertDialog dialog = new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.companion_debug_endpoint_title)
                 .setMessage(R.string.companion_debug_endpoint_help)
                 .setView(holder)
                 .setNegativeButton(R.string.dialog_cancel, null)
                 .setPositiveButton(R.string.companion_debug_save, null)
                 .create();
-        dialog.setOnShowListener(d -> dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String typed = field.getText().toString().trim();
             if (typed.isEmpty()) {
                 prefs.setString(Prefs.KEY_DEBUG_COMPANION_ENDPOINT, "");
@@ -348,6 +364,18 @@ public class CompanionActivity extends BaseActivity {
         startListening();
     }
 
+    private void updateMicSendButton() {
+        if (input == null || sendMicButton == null) return;
+        boolean hasText = !input.getText().toString().trim().isEmpty();
+        if (hasText) {
+            sendMicButton.setIconResource(R.drawable.ic_next);
+            sendMicButton.setContentDescription(getString(R.string.companion_send));
+        } else {
+            sendMicButton.setIconResource(listening ? R.drawable.ic_mic_off : R.drawable.ic_mic_on);
+            sendMicButton.setContentDescription(getString(listening ? R.string.companion_stop : R.string.companion_speak));
+        }
+    }
+
     private void startListening() {
         CompanionLanguage lang = selectedLanguage != null ? selectedLanguage : CompanionLanguage.EN;
         listeningLang = lang.code;
@@ -361,12 +389,14 @@ public class CompanionActivity extends BaseActivity {
         i.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         listening = true;
         setSubtitle(R.string.companion_listening);
+        updateMicSendButton();
         recognizer.startListening(i);
     }
 
     private void stopListeningUi() {
         listening = false;
         setSubtitle(R.string.companion_online);
+        updateMicSendButton();
     }
 
     private final class SimpleRecognitionListener implements RecognitionListener {
@@ -614,14 +644,26 @@ public class CompanionActivity extends BaseActivity {
                     }
                     ch.detail.setText(detail);
 
-                    View.OnClickListener open = v -> {
-                        Intent intent = new Intent(CompanionActivity.this, NavigationActivity.class);
+                    View.OnClickListener showOnMap = v -> {
+                        Intent intent = new Intent(CompanionActivity.this, HomeActivity.class);
                         intent.putExtra("from_node", c.fromNodeId);
                         intent.putExtra("to_node", c.toNodeId);
+                        intent.putExtra("start_navigation", false);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                     };
-                    ch.showOnMap.setOnClickListener(open);
-                    ch.startNav.setOnClickListener(open);
+
+                    View.OnClickListener startNav = v -> {
+                        Intent intent = new Intent(CompanionActivity.this, HomeActivity.class);
+                        intent.putExtra("from_node", c.fromNodeId);
+                        intent.putExtra("to_node", c.toNodeId);
+                        intent.putExtra("start_navigation", true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    };
+
+                    ch.showOnMap.setOnClickListener(showOnMap);
+                    ch.startNav.setOnClickListener(startNav);
                     ch.share.setOnClickListener(v -> shareRoute(c, detail.toString()));
                 }
 

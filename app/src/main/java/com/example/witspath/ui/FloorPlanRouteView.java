@@ -72,18 +72,18 @@ public class FloorPlanRouteView extends View {
     }
 
     private void initPaints(Context context) {
-        edgePaint.setColor(ContextCompat.getColor(context, R.color.webLine));
+        edgePaint.setColor(ContextCompat.getColor(context, R.color.colorBorder));
         edgePaint.setStrokeWidth(dp(2.5f));
         edgePaint.setStyle(Paint.Style.STROKE);
         edgePaint.setStrokeCap(Paint.Cap.ROUND);
 
-        blockedEdgePaint.setColor(ContextCompat.getColor(context, R.color.webLine));
+        blockedEdgePaint.setColor(ContextCompat.getColor(context, R.color.colorBorder));
         blockedEdgePaint.setStrokeWidth(dp(3f));
         blockedEdgePaint.setStyle(Paint.Style.STROKE);
         blockedEdgePaint.setStrokeCap(Paint.Cap.ROUND);
         blockedEdgePaint.setPathEffect(new DashPathEffect(new float[]{dp(4), dp(4)}, 0));
 
-        routePaint.setColor(ContextCompat.getColor(context, R.color.webRoute));
+        routePaint.setColor(ContextCompat.getColor(context, R.color.colorRoute));
         routePaint.setStrokeWidth(dp(5f));
         routePaint.setStyle(Paint.Style.STROKE);
         routePaint.setStrokeCap(Paint.Cap.ROUND);
@@ -93,7 +93,7 @@ public class FloorPlanRouteView extends View {
         destMarkerDrawable = ContextCompat.getDrawable(context, R.drawable.ic_route_destination);
         wheelchairDrawable = ContextCompat.getDrawable(context, R.drawable.ic_wheelchair);
         if (wheelchairDrawable != null) {
-            wheelchairDrawable.setTint(ContextCompat.getColor(context, R.color.webBlue700));
+            wheelchairDrawable.setTint(ContextCompat.getColor(context, R.color.colorBrandPrimary));
         }
 
         textPaint.setColor(Color.WHITE);

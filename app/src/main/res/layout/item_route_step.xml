@@ -16,7 +16,7 @@
         android:layout_height="28dp"
         android:background="@drawable/bg_step_number"
         android:gravity="center"
-        android:textColor="@color/webInk"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="12sp"
         android:textStyle="bold" />
 
@@ -27,7 +27,7 @@
         android:layout_marginStart="12dp"
         android:contentDescription="@null"
         android:src="@drawable/ic_next"
-        app:tint="@color/webInk" />
+        app:tint="@color/colorTextPrimary" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -40,7 +40,7 @@
             android:id="@+id/stepTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/webInk"
+            android:textColor="@color/colorTextPrimary"
             android:textSize="13sp"
             android:textStyle="bold" />
 
@@ -48,7 +48,7 @@
             android:id="@+id/stepSubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/webMuted"
+            android:textColor="@color/colorTextMuted"
             android:textSize="11sp" />
     </LinearLayout>
 </LinearLayout>
