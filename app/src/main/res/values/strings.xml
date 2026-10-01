@@ -278,6 +278,8 @@
     <string name="companion_no_voice">No voice is installed for %1$s, so this reply is not read aloud.</string>
     <string name="companion_voice_only_full">Voice input is available for English, Afrikaans, isiZulu and Sesotho. Please type your message.</string>
     <string name="companion_voice_unavailable">Voice input isn\'t available on this device. Please type your message.</string>
+    <string name="companion_voice_processing">Working out what you said…</string>
+    <string name="companion_voice_cloud_failed">I couldn\'t reach the voice service. Try again, or type your message.</string>
     <string name="companion_voice_not_heard">I didn\'t catch that. Please try again or type your message.</string>
     <string name="companion_report_sent">Report sent</string>
     <string name="companion_report_signin">Sign in so your report counts toward flagging this path.</string>
