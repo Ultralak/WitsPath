@@ -77,6 +77,12 @@ public final class Edge {
         return stairs && !ramp && !elevator;
     }
 
+    public boolean isStairsEdge() {
+        return accessibilityCost >= IMPASSABLE_COST
+                || (node1 != null && "stairs".equalsIgnoreCase(node1.type))
+                || (node2 != null && "stairs".equalsIgnoreCase(node2.type));
+    }
+
     public double costFor(RouteOptions o) {
         Double own = profileCosts.get(o.dataKey());
         return own != null ? own : accessibilityCost;

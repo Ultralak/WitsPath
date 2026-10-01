@@ -52,7 +52,7 @@
             android:layout_height="44dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/cd_reset_map"
-            android:src="@drawable/ic_my_location"
+            android:src="@drawable/ic_sync"
             app:tint="@color/colorBrandPrimary" />
 
     </LinearLayout>

@@ -19,8 +19,10 @@ import com.example.witspath.model.FloorPlanNode;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Draws the floor-plan graph (all edges, junctions, ramps/lifts), the currently
@@ -44,6 +46,7 @@ public class FloorPlanRouteView extends View {
     private final Map<String, FloorPlanNode> nodesById = new HashMap<>();
 
     private List<String> highlightedRouteNodeIds = Collections.emptyList();
+    private final Set<String> routeEdgeKeys = new HashSet<>();
     private String currentPositionNodeId;
     private String destinationNodeId;
 
@@ -132,6 +135,13 @@ public class FloorPlanRouteView extends View {
 
     public void setHighlightedRoute(List<String> orderedNodeIds) {
         this.highlightedRouteNodeIds = (orderedNodeIds != null) ? orderedNodeIds : Collections.<String>emptyList();
+        routeEdgeKeys.clear();
+        for (int i = 0; i < this.highlightedRouteNodeIds.size() - 1; i++) {
+            String a = this.highlightedRouteNodeIds.get(i);
+            String b = this.highlightedRouteNodeIds.get(i + 1);
+            routeEdgeKeys.add(a + "|" + b);
+            routeEdgeKeys.add(b + "|" + a);
+        }
         invalidate();
     }
 
@@ -195,14 +205,7 @@ public class FloorPlanRouteView extends View {
             FloorPlanNode to = nodesById.get(edge.getToNodeId());
             if (from == null || to == null) continue;
 
-            boolean inRoute = false;
-            for (int i = 0; i < highlightedRouteNodeIds.size() - 1; i++) {
-                if ((highlightedRouteNodeIds.get(i).equals(edge.getFromNodeId()) && highlightedRouteNodeIds.get(i + 1).equals(edge.getToNodeId())) ||
-                        (highlightedRouteNodeIds.get(i).equals(edge.getToNodeId()) && highlightedRouteNodeIds.get(i + 1).equals(edge.getFromNodeId()))) {
-                    inRoute = true;
-                    break;
-                }
-            }
+            boolean inRoute = routeEdgeKeys.contains(edge.getFromNodeId() + "|" + edge.getToNodeId());
 
             if (!inRoute) continue;
 

@@ -218,4 +218,7 @@
     <string name="my_reports_empty">You haven\'t reported any obstacles yet.</string>
     <string name="my_reports_sign_in_prompt">Sign in to see your submitted reports and their status.</string>
     <string name="nav_populate_firestore">Populate Firestore</string>
+    <!-- Navigation step controls -->
+    <string name="nav_previous_step">Previous step</string>
+    <string name="nav_next_step">Next step</string>
 </resources>

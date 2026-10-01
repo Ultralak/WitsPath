@@ -25,6 +25,7 @@ public final class PathFinder {
 
     /** Why the last search returned null. */
     public String errorMessage = "";
+    private Node goalNode;
 
     private static final class Details {
         Node parent;
@@ -56,6 +57,7 @@ public final class PathFinder {
     /** @return the path including both ends, or null (see {@link #errorMessage}). */
     public LinkedList<Node> aStarSearch(Node src, Node goal, RouteOptions options) {
         errorMessage = "";
+        this.goalNode = goal;
         if (src == goal) {
             errorMessage = SAME_PLACE;
             return null;
@@ -114,13 +116,19 @@ public final class PathFinder {
             if (own != null && own >= Edge.IMPASSABLE_COST) continue;
             if (e.inaccessibleFor.contains(options.mobilityProfile)) continue;
             if (options.avoidSteepRamps && e.ramp && e.steepRamp) continue;
+            Node other = node.other(e);
+            if (other != null && other != goalNode && !options.allowsNodeType(other.type)) continue;
+            if (e.isStairsEdge() && Double.isInfinite(options.stairsMultiplier())) continue;
             result.add(e);
         }
         return result;
     }
 
     static double edgeCost(Edge e, RouteOptions options) {
-        double cost = e.distance * Math.max(1.0, e.costFor(options));
+        double baseCost = e.isStairsEdge()
+                ? e.distance * options.stairsMultiplier()
+                : e.distance * Math.max(1.0, e.costFor(options));
+        double cost = baseCost;
         if (RouteOptions.WALKING_AID.equals(options.mobilityProfile) && e.isStairsOnly()) cost *= 1.5;
         if (options.preferLifts) cost *= e.elevator ? 1.0 : e.ramp ? 1.35 / 0.75 : 1.0 / 0.75;
         return cost;

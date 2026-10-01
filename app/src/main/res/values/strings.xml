@@ -335,6 +335,11 @@ Route</string>
     <string name="web_main_entrance">Main entrance</string>
     <string name="web_continue_for">Continue for %1$d m</string>
     <string name="web_follow_toward">Follow the accessible path toward %1$s</string>
+    <!-- Navigation step controls -->
+    <string name="nav_previous_step">Previous step</string>
+    <!-- Button to move to next route step -->
+    <string name="nav_next_step">Next step</string>
+
     <string name="language_ndebele">isiNdebele</string>
     <string name="language_ndebele_native">isiNdebele</string>
     <string name="language_sepedi">Sepedi</string>

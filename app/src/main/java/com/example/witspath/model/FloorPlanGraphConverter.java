@@ -35,8 +35,8 @@ public final class FloorPlanGraphConverter {
                     node.type,
                     node.displayName(),
                     node.bssid,
-                    (float) floor.metresToPixels(node.point.x),
-                    (float) floor.metresToPixels(node.point.y)));
+                    (float) (floor.metresToPixels(node.point.x) - floor.originX),
+                    (float) (floor.metresToPixels(node.point.y) - floor.originY)));
         }
         return result;
     }

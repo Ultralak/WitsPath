@@ -46,4 +46,9 @@ Tsela</string>
     <string name="units_minutes">Metsotso</string>
     <string name="field_email">Aterese ya imeile</string>
     <string name="other">Tše dingwe</string>
+    <!-- Navigation step controls -->
+    <!-- TODO: check translation -->
+    <string name="nav_previous_step">Kgoato ya go feta</string>
+    <!-- TODO: check translation -->
+    <string name="nav_next_step">Kgoato e e latelang</string>
 </resources>

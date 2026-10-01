@@ -234,4 +234,7 @@ roete</string>
     <string name="web_arrive_at">Kom aan by %1$s</string>
     <string name="web_continue_for">Gaan voort vir %1$d m</string>
     <string name="web_follow_toward">Volg die toeganklike pad na %1$s</string>
+    <!-- Navigation step controls -->
+    <string name="nav_previous_step">Vorige stap</string>
+    <string name="nav_next_step">Volgende stap</string>
 </resources>

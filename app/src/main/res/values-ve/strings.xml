@@ -46,4 +46,9 @@ Ndila</string>
     <string name="units_minutes">Minithi</string>
     <string name="field_email">Ḽiresi ya imeili</string>
     <string name="other">Zwinwe</string>
+    <!-- Navigation step controls -->
+    <!-- TODO: check translation -->
+    <string name="nav_previous_step">Muga wo fhiraho</string>
+    <!-- TODO: check translation -->
+    <string name="nav_next_step">Muga u tevhelelo</string>
 </resources>

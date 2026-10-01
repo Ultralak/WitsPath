@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,8 @@ public class HomeActivity extends BaseActivity {
     private String selectedDestinationId;
     private String mobilityProfile = "wheelchair";
     private boolean navigationStarted = false;
+    private int currentStepIndex = 0;
+    private Integer pendingTtsStepIndex = null;
     private CampusGraph graph;
     private RoutePlanner.Plan currentPlan;
     private List<Node> currentRoute;
@@ -94,17 +97,29 @@ public class HomeActivity extends BaseActivity {
         MaterialToolbar toolbar = findViewById(R.id.homeToolbar);
         toolbar.setNavigationOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
+        if (savedInstanceState != null) {
+            selectedFromNodeId = savedInstanceState.getString("selectedFromNodeId");
+            selectedDestinationId = savedInstanceState.getString("selectedDestinationId");
+            mobilityProfile = savedInstanceState.getString("mobilityProfile", "wheelchair");
+            navigationStarted = savedInstanceState.getBoolean("navigationStarted", false);
+            currentStepIndex = savedInstanceState.getInt("currentStepIndex", 0);
+        }
+
         bindDrawerViews();
         bindDrawerClicks();
         bindMainContent();
         loadGraphAndMap();
         handleNavigationIntent(getIntent());
 
-        if (savedInstanceState != null) {
-            selectedFromNodeId = savedInstanceState.getString("selectedFromNodeId");
-            selectedDestinationId = savedInstanceState.getString("selectedDestinationId");
-            mobilityProfile = savedInstanceState.getString("mobilityProfile", "wheelchair");
-            navigationStarted = savedInstanceState.getBoolean("navigationStarted", false);
+        if (navigationStarted && currentRoute != null && currentRoute.size() >= 2 && currentPlan != null) {
+            TextView button = findViewById(R.id.navigateButton);
+            if (button != null) button.setText(R.string.web_end_navigation);
+            renderSteps(currentRoute);
+            guidanceText.setText(getString(R.string.web_total_route_length, Math.round(currentPlan.distanceMetres)));
+            showStatus(getString(R.string.web_navigation_started), false);
+            View navControls = findViewById(R.id.navStepControls);
+            if (navControls != null) navControls.setVisibility(View.VISIBLE);
+            highlightCurrentStep();
         }
     }
 
@@ -147,6 +162,7 @@ public class HomeActivity extends BaseActivity {
         outState.putString("selectedDestinationId", selectedDestinationId);
         outState.putString("mobilityProfile", mobilityProfile);
         outState.putBoolean("navigationStarted", navigationStarted);
+        outState.putInt("currentStepIndex", currentStepIndex);
     }
 
     @Override
@@ -173,27 +189,34 @@ public class HomeActivity extends BaseActivity {
 
         refreshLocation.setOnClickListener(v -> autoDetectLocation());
 
-        fromSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= 0 && position < selectableNodes.size()) selectedFromNodeId = selectableNodes.get(position).nodeId;
-                requestRoute(false);
-            }
-            @Override public void onNothingSelected(AdapterView<?> parent) { }
-        });
-        toSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= 0 && position < selectableNodes.size()) selectedDestinationId = selectableNodes.get(position).nodeId;
-                requestRoute(false);
-            }
-            @Override public void onNothingSelected(AdapterView<?> parent) { }
-        });
-
         bindMode(R.id.modeWheelchair, Mode.WHEELCHAIR);
         bindMode(R.id.modeWalkingAid, Mode.WALKING_AID);
         bindMode(R.id.modeVisual, Mode.VISUAL);
         bindMode(R.id.modeGeneral, Mode.GENERAL);
 
         findViewById(R.id.navigateButton).setOnClickListener(v -> toggleNavigation());
+
+        View btnPrev = findViewById(R.id.btnPrevStep);
+        if (btnPrev != null) {
+            btnPrev.setOnClickListener(v -> {
+                if (currentStepIndex > 0) {
+                    currentStepIndex--;
+                    highlightCurrentStep();
+                    speakStep(currentStepIndex);
+                }
+            });
+        }
+        View btnNext = findViewById(R.id.btnNextStep);
+        if (btnNext != null) {
+            btnNext.setOnClickListener(v -> {
+                List<String> stepTexts = buildStepTexts(currentRoute);
+                if (currentStepIndex < stepTexts.size() - 1) {
+                    currentStepIndex++;
+                    highlightCurrentStep();
+                    speakStep(currentStepIndex);
+                }
+            });
+        }
     }
 
     private void bindMode(int id, Mode mode) {
@@ -224,7 +247,7 @@ public class HomeActivity extends BaseActivity {
 
         selectableNodes.clear();
         if (graph != null) selectableNodes.addAll(graph.nodes());
-        selectableNodes.removeIf(node -> "ramp".equals(node.type));
+        selectableNodes.removeIf(node -> "ramp".equals(node.type) || "node".equals(node.type) || "stairs".equals(node.type));
         Collections.sort(selectableNodes, Comparator.comparing(Node::displayName, String.CASE_INSENSITIVE_ORDER));
 
         List<String> labels = new ArrayList<>();
@@ -234,29 +257,64 @@ public class HomeActivity extends BaseActivity {
         fromSpinner.setAdapter(adapter);
         toSpinner.setAdapter(adapter);
 
-        String storedProfile = prefs.getString(Prefs.KEY_MOBILITY_PROFILE, "wheelchair");
-        mobilityProfile = storedProfile == null || storedProfile.isEmpty() ? "wheelchair" : storedProfile;
+        if (mobilityProfile == null) {
+            String storedProfile = prefs.getString(Prefs.KEY_MOBILITY_PROFILE, "wheelchair");
+            mobilityProfile = storedProfile == null || storedProfile.isEmpty() ? "wheelchair" : storedProfile;
+        }
         updateModeSelection(modeIdForProfile(mobilityProfile));
 
-        String defaultFrom = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu84hhsut");
-        String defaultTo = "nd_mu842rrrm";
-        selectedFromNodeId = findNodeOrFirst(defaultFrom);
-        selectedDestinationId = findNodeOrSecond(defaultTo);
+        if (selectedFromNodeId == null) {
+            String defaultFrom = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_muosnjmh6h");
+            selectedFromNodeId = findNodeOrFirst(defaultFrom);
+        } else {
+            selectedFromNodeId = findNodeOrFirst(selectedFromNodeId);
+        }
+
+        if (selectedDestinationId == null) {
+            String defaultTo = "nd_muosnjmh6r";
+            selectedDestinationId = findNodeOrSecond(defaultTo);
+        } else {
+            selectedDestinationId = findNodeOrSecond(selectedDestinationId);
+        }
         restoreSpinnerSelections();
+
+        fromSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0 && position < selectableNodes.size()) {
+                    String newId = selectableNodes.get(position).nodeId;
+                    if (!newId.equals(selectedFromNodeId)) {
+                        selectedFromNodeId = newId;
+                        currentStepIndex = 0;
+                        requestRoute(false);
+                    }
+                }
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
+        toSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= 0 && position < selectableNodes.size()) {
+                    String newId = selectableNodes.get(position).nodeId;
+                    if (!newId.equals(selectedDestinationId)) {
+                        selectedDestinationId = newId;
+                        currentStepIndex = 0;
+                        requestRoute(false);
+                    }
+                }
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
+        });
 
         routeView = findViewById(R.id.homeFloorPlanRouteView);
         zoomContainer = findViewById(R.id.homeMapContainer);
-        ImageView imageView = findViewById(R.id.homeFloorPlanImageView);
-        routeView.setOnFitMatrixChangeListener(imageView::setImageMatrix);
 
         findViewById(R.id.btnZoomIn).setOnClickListener(v -> zoomContainer.zoomIn());
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
         findViewById(R.id.btnResetZoom).setOnClickListener(v -> zoomContainer.resetZoom());
 
         Floor floor = null;
-        if (graph != null) {
-            floor = graph.floor("flr_mu83yzmd0");
-            if (floor == null && !graph.floors().isEmpty()) floor = graph.floors().get(0);
+        if (graph != null && !graph.floors().isEmpty()) {
+            floor = graph.floors().get(0);
         }
         if (floor != null) {
             zoomContainer.setContentSize(floor.imageWidth, floor.imageHeight);
@@ -332,8 +390,14 @@ public class HomeActivity extends BaseActivity {
             routeView.setCurrentPosition(from.nodeId);
             routeView.setDestination(to.nodeId);
         }
-        if (navigationStarted) renderSteps(currentRoute);
-        else stepsContainer.setVisibility(View.GONE);
+        if (navigationStarted) {
+            currentStepIndex = 0;
+            renderSteps(currentRoute);
+        } else {
+            stepsContainer.setVisibility(View.GONE);
+            View navControls = findViewById(R.id.navStepControls);
+            if (navControls != null) navControls.setVisibility(View.GONE);
+        }
     }
 
     private double calculateDistance(Node a, Node b) {
@@ -341,11 +405,101 @@ public class HomeActivity extends BaseActivity {
         return Math.hypot(a.point.x - b.point.x, a.point.y - b.point.y);
     }
 
+    private List<Node> namedStops(List<Node> route) {
+        List<Node> stops = new ArrayList<>();
+        if (route == null || route.isEmpty()) return stops;
+        for (int i = 0; i < route.size(); i++) {
+            Node n = route.get(i);
+            if (i == 0 || i == route.size() - 1 || !"node".equals(n.type)) {
+                if (!stops.contains(n)) {
+                    stops.add(n);
+                }
+            }
+        }
+        return stops;
+    }
+
+    private double routeDistance(List<Node> route, int fromIndex, int toIndex) {
+        if (route == null || fromIndex < 0 || toIndex < 0) return 0;
+        double dist = 0;
+        for (int i = fromIndex; i < toIndex && i + 1 < route.size(); i++) {
+            dist += calculateDistance(route.get(i), route.get(i + 1));
+        }
+        return dist;
+    }
+
     private String formatDistance(double metres) {
         String units = prefs.getString(Prefs.KEY_UNITS, "meters");
         if ("feet".equalsIgnoreCase(units)) return Math.round(metres * 3.28084) + " ft";
         if ("minutes".equalsIgnoreCase(units)) return Math.max(1, Math.round(metres / TravelTimeConfig.speedFor(mobilityProfile) / 60)) + " min";
         return Math.round(metres) + " m";
+    }
+
+    private List<String> buildStepTexts(List<Node> route) {
+        List<String> stepTexts = new ArrayList<>();
+        if (route == null || route.isEmpty()) return stepTexts;
+        List<Node> stops = namedStops(route);
+        for (int i = 0; i < stops.size(); i++) {
+            Node node = stops.get(i);
+            String title;
+            String subtitle;
+            if (i == stops.size() - 1) {
+                title = getString(R.string.web_arrive_at, safeLabel(node));
+                subtitle = getString(R.string.web_main_entrance);
+            } else {
+                Node nextStop = stops.get(i + 1);
+                double distance = routeDistance(route, route.indexOf(node), route.indexOf(nextStop));
+                title = getString(R.string.web_continue_for, Math.round(distance));
+                subtitle = getString(R.string.web_follow_toward, safeLabel(nextStop));
+            }
+            stepTexts.add(title + " " + subtitle);
+        }
+        return stepTexts;
+    }
+
+    private void highlightCurrentStep() {
+        int count = stepsContainer.getChildCount();
+        if (currentStepIndex < 0) currentStepIndex = 0;
+        if (count > 0 && currentStepIndex >= count) currentStepIndex = count - 1;
+
+        for (int i = 0; i < count; i++) {
+            View child = stepsContainer.getChildAt(i);
+            boolean isCurrent = (i == currentStepIndex);
+            child.setSelected(isCurrent);
+            child.setBackgroundResource(isCurrent ? R.drawable.bg_mode_selected : 0);
+        }
+
+        if (count > 0 && currentStepIndex < count) {
+            View target = stepsContainer.getChildAt(currentStepIndex);
+            if (target != null) {
+                View phoneScroll = findViewById(R.id.homePhoneScroll);
+                if (phoneScroll instanceof ScrollView) {
+                    ((ScrollView) phoneScroll).smoothScrollTo(0, target.getTop() + stepsContainer.getTop());
+                } else {
+                    View routeScroll = findViewById(R.id.homeRouteScroll);
+                    if (routeScroll instanceof ScrollView) {
+                        ((ScrollView) routeScroll).smoothScrollTo(0, target.getTop() + stepsContainer.getTop());
+                    }
+                }
+            }
+        }
+
+        View navControls = findViewById(R.id.navStepControls);
+        if (navControls != null && navigationStarted) {
+            navControls.setVisibility(View.VISIBLE);
+            View btnPrev = findViewById(R.id.btnPrevStep);
+            View btnNext = findViewById(R.id.btnNextStep);
+            if (btnPrev != null) {
+                boolean enablePrev = currentStepIndex > 0;
+                btnPrev.setEnabled(enablePrev);
+                btnPrev.setAlpha(enablePrev ? 1.0f : 0.4f);
+            }
+            if (btnNext != null) {
+                boolean enableNext = currentStepIndex < count - 1;
+                btnNext.setEnabled(enableNext);
+                btnNext.setAlpha(enableNext ? 1.0f : 0.4f);
+            }
+        }
     }
 
     private void toggleNavigation() {
@@ -358,11 +512,15 @@ public class HomeActivity extends BaseActivity {
         if (button != null) {
             button.setText(navigationStarted ? R.string.web_end_navigation : R.string.start_navigation);
         }
+        View navControls = findViewById(R.id.navStepControls);
         if (navigationStarted) {
+            currentStepIndex = 0;
             renderSteps(currentRoute);
             guidanceText.setText(getString(R.string.web_total_route_length, Math.round(currentPlan.distanceMetres)));
             showStatus(getString(R.string.web_navigation_started), false);
-            speakCurrentStep();
+            if (navControls != null) navControls.setVisibility(View.VISIBLE);
+            highlightCurrentStep();
+            speakStep(0);
 
             if (routeView != null && selectedFromNodeId != null && selectedDestinationId != null) {
                 List<String> ids = new ArrayList<>();
@@ -373,6 +531,7 @@ public class HomeActivity extends BaseActivity {
             }
         } else {
             if (navTts != null) navTts.stop();
+            if (navControls != null) navControls.setVisibility(View.GONE);
             stepsContainer.setVisibility(View.GONE);
             guidanceText.setText(getString(R.string.web_route_ready));
             showStatus(getString(R.string.web_navigation_ended), false);
@@ -387,25 +546,33 @@ public class HomeActivity extends BaseActivity {
             navTts = new TextToSpeech(getApplicationContext(), status -> {
                 if (status == TextToSpeech.SUCCESS) {
                     navTtsReady = true;
-                    if (navigationStarted) {
-                        speakCurrentStep();
+                    if (navigationStarted && pendingTtsStepIndex != null) {
+                        int idx = pendingTtsStepIndex;
+                        pendingTtsStepIndex = null;
+                        speakStep(idx);
                     }
                 }
             });
         }
     }
 
-    private void speakCurrentStep() {
+    private void speakStep(int index) {
         if (!prefs.getBoolean(Prefs.KEY_VOICE_GUIDANCE, true)) return;
-        if (currentRoute == null || currentRoute.size() < 2) return;
-        initNavTts();
-        Node first = currentRoute.get(0);
-        Node second = currentRoute.get(1);
-        double dist = calculateDistance(first, second);
-        String text = getString(R.string.web_continue_for, Math.round(dist)) + " " + getString(R.string.web_follow_toward, safeLabel(second));
-        if (navTts != null && navTtsReady) {
+        List<String> stepTexts = buildStepTexts(currentRoute);
+        if (stepTexts.isEmpty() || index < 0 || index >= stepTexts.size()) return;
+        if (!navTtsReady) {
+            pendingTtsStepIndex = index;
+            initNavTts();
+            return;
+        }
+        String text = stepTexts.get(index);
+        if (navTts != null) {
             navTts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "nav_step_" + System.currentTimeMillis());
         }
+    }
+
+    private void speakCurrentStep() {
+        speakStep(currentStepIndex);
     }
 
     @Override
@@ -419,8 +586,9 @@ public class HomeActivity extends BaseActivity {
 
     private void renderSteps(List<Node> route) {
         stepsContainer.removeAllViews();
-        for (int i = 0; i < route.size(); i++) {
-            Node node = route.get(i);
+        List<Node> stops = namedStops(route);
+        for (int i = 0; i < stops.size(); i++) {
+            Node node = stops.get(i);
             View stepView = getLayoutInflater().inflate(R.layout.item_route_step, stepsContainer, false);
             TextView numberText = stepView.findViewById(R.id.stepNumberText);
             ImageView iconView = stepView.findViewById(R.id.stepIcon);
@@ -429,19 +597,21 @@ public class HomeActivity extends BaseActivity {
 
             numberText.setText(String.valueOf(i + 1));
 
-            if (i == route.size() - 1) {
+            if (i == stops.size() - 1) {
                 iconView.setImageResource(R.drawable.ic_flag);
                 titleText.setText(getString(R.string.web_arrive_at, safeLabel(node)));
                 subtitleText.setText(R.string.web_main_entrance);
             } else {
-                double distance = calculateDistance(node, route.get(i + 1));
+                Node nextStop = stops.get(i + 1);
+                double distance = routeDistance(route, route.indexOf(node), route.indexOf(nextStop));
                 iconView.setImageResource(R.drawable.ic_next);
                 titleText.setText(getString(R.string.web_continue_for, Math.round(distance)));
-                subtitleText.setText(getString(R.string.web_follow_toward, safeLabel(route.get(i + 1))));
+                subtitleText.setText(getString(R.string.web_follow_toward, safeLabel(nextStop)));
             }
             stepsContainer.addView(stepView);
         }
         stepsContainer.setVisibility(View.VISIBLE);
+        highlightCurrentStep();
     }
 
     private String safeLabel(Node node) { return node.displayName(); }
@@ -452,7 +622,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void autoDetectLocation() {
-        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_mu84hhsut");
+        String homeNode = prefs.getString(Prefs.KEY_HOME_NODE_ID, "nd_muosnjmh6h");
         selectedFromNodeId = findNodeOrFirst(homeNode);
         restoreSpinnerSelections();
         showStatus(getString(R.string.home_toast_location_detected), false);

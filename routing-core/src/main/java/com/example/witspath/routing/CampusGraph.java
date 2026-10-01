@@ -33,9 +33,24 @@ public final class CampusGraph {
             String id = str(f.get("floorId"));
             if (id == null) throw new IllegalArgumentException("Floor without floorId");
             Double mpp = num(f.get("metresPerPixel"));
+            String viewBox = str(f.get("viewBox"));
+            double originX = 0;
+            double originY = 0;
+            if (viewBox != null) {
+                String[] parts = viewBox.trim().split("[,\\s]+");
+                if (parts.length >= 4) {
+                    try {
+                        originX = Double.parseDouble(parts[0]);
+                        originY = Double.parseDouble(parts[1]);
+                    } catch (NumberFormatException ignored) {
+                        originX = 0;
+                        originY = 0;
+                    }
+                }
+            }
             g.floors.put(id, new Floor(id, orEmpty(str(f.get("name"))),
                     (int) num(f.get("level"), 0), (int) num(f.get("imageWidth"), 0),
-                    (int) num(f.get("imageHeight"), 0), mpp == null ? 1.0 : mpp));
+                    (int) num(f.get("imageHeight"), 0), mpp == null ? 1.0 : mpp, originX, originY));
         }
 
         int index = 0;

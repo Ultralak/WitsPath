@@ -46,4 +46,9 @@ Indlela</string>
     <string name="units_minutes">Imizuzu</string>
     <string name="field_email">Ikheli le-imeyili</string>
     <string name="other">Okhunye</string>
+    <!-- Navigation step controls -->
+    <!-- TODO: check translation -->
+    <string name="nav_previous_step">Igxathu eliphelileyo</string>
+    <!-- TODO: check translation -->
+    <string name="nav_next_step">Igxathu elilandelako</string>
 </resources>

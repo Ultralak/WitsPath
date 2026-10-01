@@ -46,4 +46,9 @@ Ndlela</string>
     <string name="units_minutes">Timinete</string>
     <string name="field_email">Adirese ya imeyili</string>
     <string name="other">Swin’wana</string>
+    <!-- Navigation step controls -->
+    <!-- TODO: check translation -->
+    <string name="nav_previous_step">Goza leri nga hundza</string>
+    <!-- TODO: check translation -->
+    <string name="nav_next_step">Goza leri landzelaka</string>
 </resources>

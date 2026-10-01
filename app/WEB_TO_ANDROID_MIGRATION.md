@@ -6,7 +6,7 @@ The Android Home screen has been migrated to match the supplied WitsPath website
 - Website-style WitsPath header and navigation bar.
 - Responsive phone/portrait layout with stacked route panel and map.
 - Tablet and landscape layout with a desktop-style route panel beside the map.
-- Existing Android `campusmap.jpeg` drawable reused for the campus map.
+- Existing Android `campusmap.webp` drawable reused for the campus map.
 - Existing Android icons reused where appropriate, with native vector drawables added only for website-specific icons that did not already exist.
 - Website four-mode route selector:
   - Wheelchair Accessible

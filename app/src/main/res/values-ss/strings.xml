@@ -46,4 +46,9 @@ Indlela</string>
     <string name="units_minutes">Emaminithi</string>
     <string name="field_email">Likheli le-imeyili</string>
     <string name="other">Lokunye</string>
+    <!-- Navigation step controls -->
+    <!-- TODO: check translation -->
+    <string name="nav_previous_step">Ligalelo leledlule</string>
+    <!-- TODO: check translation -->
+    <string name="nav_next_step">Ligalelo lelilandzelako</string>
 </resources>

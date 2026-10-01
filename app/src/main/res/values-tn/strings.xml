@@ -234,4 +234,7 @@ Tsela</string>
     <string name="web_arrive_at">Fitlha kwa %1$s</string>
     <string name="web_continue_for">Tswelela ka %1$d m</string>
     <string name="web_follow_toward">Latela tsela e e fitlhelegang go ya kwa %1$s</string>
+    <!-- Navigation step controls -->
+    <string name="nav_previous_step">Kgato e e fetileng</string>
+    <string name="nav_next_step">Kgato e e latelang</string>
 </resources>

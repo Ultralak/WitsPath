@@ -8,14 +8,22 @@ public final class Floor {
     public final int imageWidth;
     public final int imageHeight;
     public final double metresPerPixel;
+    public final double originX;
+    public final double originY;
 
     public Floor(String floorId, String name, int level, int imageWidth, int imageHeight, double metresPerPixel) {
+        this(floorId, name, level, imageWidth, imageHeight, metresPerPixel, 0, 0);
+    }
+
+    public Floor(String floorId, String name, int level, int imageWidth, int imageHeight, double metresPerPixel, double originX, double originY) {
         this.floorId = floorId;
         this.name = name;
         this.level = level;
         this.imageWidth = imageWidth;
         this.imageHeight = imageHeight;
         this.metresPerPixel = metresPerPixel;
+        this.originX = originX;
+        this.originY = originY;
     }
 
     public double pixelsToMetres(double px) {

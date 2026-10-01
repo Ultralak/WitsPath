@@ -234,4 +234,7 @@ Umzila</string>
     <string name="web_arrive_at">Fika e-%1$s</string>
     <string name="web_continue_for">Qhubeka ngo-%1$d m</string>
     <string name="web_follow_toward">Landela umzila ofinyelelekayo oya e-%1$s</string>
+    <!-- Navigation step controls -->
+    <string name="nav_previous_step">Isinyathelo esedlule</string>
+    <string name="nav_next_step">Isinyathelo esilandelayo</string>
 </resources>

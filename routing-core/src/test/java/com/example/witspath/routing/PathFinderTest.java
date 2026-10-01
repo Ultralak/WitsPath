@@ -250,6 +250,32 @@ public class PathFinderTest {
     }
 
     @Test
+    public void modeSpecificNodeAndEdgeSelection() {
+        CampusGraph g = new GraphBuilder()
+                .node("a", 0, 0)
+                .node("s", "f1", "stairs", 10, 0)
+                .node("b", 20, 0)
+                .node("r", "f1", "ramp", 10, 10)
+                .edgeWith("a", "s", 10, "accessibilityCost", 1.0)
+                .edgeWith("s", "b", 10, "accessibilityCost", 999.0)
+                .edgeWith("a", "r", 40, "accessibilityCost", 1.0)
+                .edgeWith("r", "b", 40, "accessibilityCost", 1.0)
+                .build();
+
+        List<String> wheelchair = route(g, "a", "b", new RouteOptions("wheelchair", false, false, false));
+        assertEquals(Arrays.asList("a", "r", "b"), wheelchair);
+
+        List<String> lowVision = route(g, "a", "b", new RouteOptions("low_vision", false, false, false));
+        assertEquals(Arrays.asList("a", "r", "b"), lowVision);
+
+        List<String> walkingAid = route(g, "a", "b", new RouteOptions("walking_aid", false, false, false));
+        assertEquals(Arrays.asList("a", "s", "b"), walkingAid);
+
+        List<String> noPreference = route(g, "a", "b", new RouteOptions("none", false, false, false));
+        assertEquals(Arrays.asList("a", "s", "b"), noPreference);
+    }
+
+    @Test
     public void commerceLibraryToBusinessSciencesRegression() throws Exception {
         CampusGraph g = RealGraph.load();
         Node from = g.node("nd_mu83zm0ga");

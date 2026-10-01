@@ -398,6 +398,47 @@
                         android:paddingEnd="16dp"
                         android:visibility="gone" />
 
+                    <LinearLayout
+                        android:id="@+id/navStepControls"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPrevStep"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            android:minHeight="48dp"
+                            android:text="@string/nav_previous_step"
+                            android:textColor="@color/colorTextPrimary"
+                            app:icon="@drawable/ic_previous"
+                            app:iconGravity="textStart"
+                            app:iconTint="@color/colorBrandPrimary"
+                            app:strokeColor="@color/colorBorder" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnNextStep"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_weight="1"
+                            android:minHeight="48dp"
+                            android:text="@string/nav_next_step"
+                            android:textColor="@color/colorTextPrimary"
+                            app:icon="@drawable/ic_next"
+                            app:iconGravity="textEnd"
+                            app:iconTint="@color/colorBrandPrimary"
+                            app:strokeColor="@color/colorBorder" />
+                    </LinearLayout>
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/navigateButton"
                         android:layout_width="match_parent"

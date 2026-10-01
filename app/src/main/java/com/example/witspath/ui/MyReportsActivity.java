@@ -1,5 +1,6 @@
 package com.example.witspath.ui;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.witspath.R;
 import com.example.witspath.model.ReportEntry;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -59,6 +63,74 @@ public class MyReportsActivity extends BaseActivity {
         emptyText = findViewById(R.id.myReportsEmptyText);
         signInPromptText = findViewById(R.id.myReportsSignInPromptText);
         errorText = findViewById(R.id.myReportsErrorText);
+
+        ImageButton btnAddReport = findViewById(R.id.btnAddReport);
+        if (btnAddReport != null) {
+            btnAddReport.setOnClickListener(v -> onAddReportClicked());
+        }
+    }
+
+    private void onAddReportClicked() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null || user.isAnonymous()) {
+            Toast.makeText(this, R.string.my_reports_sign_in_prompt, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
+        showReportSheet(user.getUid());
+    }
+
+    private void showReportSheet(String userId) {
+        BottomSheetDialog sheetDialog =
+                new BottomSheetDialog(this);
+        View view = getLayoutInflater().inflate(R.layout.sheet_report_issue, null);
+        sheetDialog.setContentView(view);
+
+        RadioGroup radioGroup = view.findViewById(R.id.issueTypeRadioGroup);
+        View submitBtn = view.findViewById(R.id.submitReportButton);
+
+        if (radioGroup != null && submitBtn != null) {
+            submitBtn.setEnabled(radioGroup.getCheckedRadioButtonId() != -1);
+            radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                submitBtn.setEnabled(checkedId != -1);
+            });
+
+            submitBtn.setOnClickListener(v -> {
+                int checkedId = radioGroup.getCheckedRadioButtonId();
+                if (checkedId == -1) return;
+
+                String issueType = "other";
+                if (checkedId == R.id.issueBrokenLiftRadio) {
+                    issueType = "broken_lift";
+                } else if (checkedId == R.id.issueBlockedRampRadio) {
+                    issueType = "blocked_or_broken_ramp";
+                } else if (checkedId == R.id.issuePathObstructedRadio) {
+                    issueType = "path_obstructed";
+                } else if (checkedId == R.id.issueOtherRadio) {
+                    issueType = "other";
+                }
+
+                Map<String, Object> report = new HashMap<>();
+                report.put("userId", userId);
+                report.put("issueType", issueType);
+                report.put("source", "android-app");
+                report.put("timestamp", FieldValue.serverTimestamp());
+
+                submitBtn.setEnabled(false);
+                FirebaseFirestore.getInstance().collection("reports").add(report)
+                        .addOnSuccessListener(doc -> {
+                            sheetDialog.dismiss();
+                            Toast.makeText(MyReportsActivity.this, R.string.report_success, Toast.LENGTH_SHORT).show();
+                            loadReports();
+                        })
+                        .addOnFailureListener(e -> {
+                            submitBtn.setEnabled(true);
+                            Toast.makeText(MyReportsActivity.this, R.string.report_failed, Toast.LENGTH_SHORT).show();
+                        });
+            });
+        }
+
+        sheetDialog.show();
     }
 
     @Override

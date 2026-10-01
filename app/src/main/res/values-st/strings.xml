@@ -234,4 +234,7 @@ Tsela</string>
     <string name="web_arrive_at">Fihla ho %1$s</string>
     <string name="web_continue_for">Tswela pele ka %1$d m</string>
     <string name="web_follow_toward">Latela tsela e fumanehang ho ya %1$s</string>
+    <!-- Navigation step controls -->
+    <string name="nav_previous_step">Mohato o fetileng</string>
+    <string name="nav_next_step">Mohato o latelang</string>
 </resources>

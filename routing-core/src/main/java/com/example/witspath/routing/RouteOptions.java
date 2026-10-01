@@ -14,9 +14,34 @@ public final class RouteOptions {
 
     public RouteOptions(String mobilityProfile, boolean stepFree, boolean preferLifts, boolean avoidSteepRamps) {
         this.mobilityProfile = normaliseProfile(mobilityProfile);
-        this.stepFree = WHEELCHAIR.equals(this.mobilityProfile) || stepFree;
+        this.stepFree = WHEELCHAIR.equals(this.mobilityProfile) || LOW_VISION.equals(this.mobilityProfile) || stepFree;
         this.preferLifts = preferLifts;
         this.avoidSteepRamps = avoidSteepRamps;
+    }
+
+    /*
+      profile      | excluded node types | stairsMultiplier()
+      WHEELCHAIR   | "stairs"            | Double.POSITIVE_INFINITY (never use stairs)
+      LOW_VISION   | "stairs"            | Double.POSITIVE_INFINITY (never use stairs)
+      WALKING_AID  | none                | 3.0
+      NONE         | none                | 1.2
+     */
+    public boolean allowsNodeType(String type) {
+        if (type == null) return true;
+        if (WHEELCHAIR.equals(mobilityProfile) || LOW_VISION.equals(mobilityProfile)) {
+            return !"stairs".equalsIgnoreCase(type.trim());
+        }
+        return true;
+    }
+
+    public double stairsMultiplier() {
+        if (WHEELCHAIR.equals(mobilityProfile) || LOW_VISION.equals(mobilityProfile)) {
+            return Double.POSITIVE_INFINITY;
+        }
+        if (WALKING_AID.equals(mobilityProfile)) {
+            return 3.0;
+        }
+        return 1.2;
     }
 
     public static RouteOptions accessible(boolean requireAccessible) {

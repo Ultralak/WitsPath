@@ -45,11 +45,8 @@ public class FloorPlanActivity extends BaseActivity {
 
         zoomContainer = findViewById(R.id.floorPlanZoomContainer);
         routeView = findViewById(R.id.floorPlanRouteView);
-        ImageView imageView = findViewById(R.id.floorPlanImageView);
         fromText = findViewById(R.id.fromText);
         toText = findViewById(R.id.toText);
-
-        routeView.setOnFitMatrixChangeListener(imageView::setImageMatrix);
 
         findViewById(R.id.btnZoomIn).setOnClickListener(v -> zoomContainer.zoomIn());
         findViewById(R.id.btnZoomOut).setOnClickListener(v -> zoomContainer.zoomOut());
