@@ -26,6 +26,7 @@ import com.example.witspath.routing.CampusGraph;
 import com.example.witspath.routing.Floor;
 import com.example.witspath.routing.Node;
 import com.example.witspath.routing.PhraseBook;
+import com.example.witspath.routing.PlaceResolver;
 import com.example.witspath.routing.RouteOptions;
 import com.example.witspath.routing.TravelTimeConfig;
 import com.example.witspath.util.FirestorePopulator;
@@ -135,22 +136,28 @@ public class HomeActivity extends BaseActivity {
         String fromNode = intent.getStringExtra("from_node");
         String toNode = intent.getStringExtra("to_node");
         boolean autoStart = intent.getBooleanExtra("start_navigation", false) || intent.getBooleanExtra("startNav", false);
+        boolean hasFrom = fromNode != null && !fromNode.isEmpty();
+        boolean hasTo = toNode != null && !toNode.isEmpty();
+        if (!hasFrom && !hasTo) return;
 
-        if (fromNode != null && !fromNode.isEmpty()) {
-            selectedFromNodeId = findNodeOrFirst(fromNode);
+        // The ids may come from another copy of the map (the companion's backend). Never swap in a different
+        // place if one cannot be found: say so and leave the current route alone.
+        Node from = hasFrom ? PlaceResolver.resolve(graph, fromNode, intent.getStringExtra("from_label")) : null;
+        Node to = hasTo ? PlaceResolver.resolve(graph, toNode, intent.getStringExtra("to_label")) : null;
+        if ((hasFrom && from == null) || (hasTo && to == null)) {
+            showStatus(getString(R.string.route_unknown_places), true);
+            return;
         }
-        if (toNode != null && !toNode.isEmpty()) {
-            selectedDestinationId = findNodeOrSecond(toNode);
-        }
-        if (fromNode != null || toNode != null) {
-            restoreSpinnerSelections();
-            requestRoute(false);
-            if (autoStart) {
-                if (!navigationStarted) {
-                    toggleNavigation();
-                } else {
-                    speakCurrentStep();
-                }
+
+        if (from != null) selectedFromNodeId = from.nodeId;
+        if (to != null) selectedDestinationId = to.nodeId;
+        restoreSpinnerSelections();
+        requestRoute(false);
+        if (autoStart) {
+            if (!navigationStarted) {
+                toggleNavigation();
+            } else {
+                speakCurrentStep();
             }
         }
     }

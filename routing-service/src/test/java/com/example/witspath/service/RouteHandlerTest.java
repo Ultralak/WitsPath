@@ -14,11 +14,11 @@ import org.junit.Test;
 
 public class RouteHandlerTest {
 
-    @SuppressWarnings("unchecked")
+    /** A fixed copy of the original West Campus map, so these exact-route tests do not depend on the app's current map. */
     private static Map<String, Object> realGraph() throws Exception {
-        String json = new String(Files.readAllBytes(
-                Paths.get("..", "app", "src", "main", "assets", "graph_data.json")), StandardCharsets.UTF_8);
-        return Json.parseObject(json);
+        try (java.io.InputStream in = RouteHandlerTest.class.getResourceAsStream("/west-campus-graph.json")) {
+            return Json.parseObject(new String(in.readAllBytes(), StandardCharsets.UTF_8));
+        }
     }
 
     private static Map<String, Object> request(Map<String, Object> graph, String from, String to, String profile) {

@@ -277,7 +277,7 @@ public class PathFinderTest {
 
     @Test
     public void commerceLibraryToBusinessSciencesRegression() throws Exception {
-        CampusGraph g = RealGraph.load();
+        CampusGraph g = RealGraph.loadWestCampus();
         Node from = g.node("nd_mu83zm0ga");
         Node to = g.node("nd_mu842ho1e");
         assertNotNull(from);

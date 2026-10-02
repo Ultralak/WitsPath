@@ -352,4 +352,5 @@ Route</string>
     <string name="language_venda_native">Tshivenda</string>
     <string name="language_tsonga">itsonga</string>
     <string name="language_tsonga_native">itsonga</string>
+    <string name="route_unknown_places">This route was made with a different version of the campus map, so it can\'t be shown here. Please choose the places on the home screen.</string>
 </resources>
