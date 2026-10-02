@@ -41,6 +41,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.witspath.R;
+import com.example.witspath.routing.CampusGraph;
+import com.example.witspath.routing.Node;
+import com.example.witspath.routing.PlaceResolver;
+import com.example.witspath.util.GraphStore;
 import com.example.witspath.companion.CompanionClient;
 import com.example.witspath.companion.CloudTranscriber;
 import com.example.witspath.companion.CompanionEndpoint;
@@ -547,6 +551,29 @@ public class CompanionActivity extends BaseActivity {
         return out;
     }
 
+    /**
+     * Opens the route on the home screen. The ids in the card come from the backend's copy of the map, so they
+     * are checked against the app's own map first. If a place is not there, say so instead of showing a
+     * different route.
+     */
+    private void openRoute(CompanionReply.RouteCard c, boolean startNavigation) {
+        CampusGraph graph = GraphStore.get(this);
+        Node from = PlaceResolver.resolve(graph, c.fromNodeId, c.from);
+        Node to = PlaceResolver.resolve(graph, c.toNodeId, c.to);
+        if (from == null || to == null) {
+            Toast.makeText(this, R.string.route_unknown_places, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("from_node", from.nodeId);
+        intent.putExtra("to_node", to.nodeId);
+        intent.putExtra("from_label", from.label);
+        intent.putExtra("to_label", to.label);
+        intent.putExtra("start_navigation", startNavigation);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+    }
+
     private void shareChat() {
         StringBuilder sb = new StringBuilder("WitsPath AI Companion Chat Transcript:\n\n");
         for (ChatItem item : items) {
@@ -721,23 +748,8 @@ public class CompanionActivity extends BaseActivity {
                     }
                     ch.detail.setText(detail);
 
-                    View.OnClickListener showOnMap = v -> {
-                        Intent intent = new Intent(CompanionActivity.this, HomeActivity.class);
-                        intent.putExtra("from_node", c.fromNodeId);
-                        intent.putExtra("to_node", c.toNodeId);
-                        intent.putExtra("start_navigation", false);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        startActivity(intent);
-                    };
-
-                    View.OnClickListener startNav = v -> {
-                        Intent intent = new Intent(CompanionActivity.this, HomeActivity.class);
-                        intent.putExtra("from_node", c.fromNodeId);
-                        intent.putExtra("to_node", c.toNodeId);
-                        intent.putExtra("start_navigation", true);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        startActivity(intent);
-                    };
+                    View.OnClickListener showOnMap = v -> openRoute(c, false);
+                    View.OnClickListener startNav = v -> openRoute(c, true);
 
                     ch.showOnMap.setOnClickListener(showOnMap);
                     ch.startNav.setOnClickListener(startNav);
